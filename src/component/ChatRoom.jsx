@@ -120,7 +120,10 @@ const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const { initialMessage, type, petId: petIdFromState } = location.state || {};
   const [receiverName, setReceiverName] = useState('');
+const [confirmedMessageIds, setConfirmedMessageIds] = useState([]);
+const [adoptedPetIds, setAdoptedPetIds] = useState([]);
 
+const actualPetId = petIdFromState || petId;
 
 useEffect(() => {
     const fetchUserId = async () => {
@@ -163,7 +166,8 @@ useEffect(() => {
       senderId,
       receiverId,
       content: initialMessage,
-      petId: petIdFromState,
+    petId: actualPetId ? Number(actualPetId) : null,
+
       type: type || "text", // <---- ⚠️ This might fallback to "text"
     };
 console.log("Sending initial message:", { initialMessage, type });
@@ -210,6 +214,10 @@ console.log("Sending initial message:", { initialMessage, type });
     };
   }, [senderId, receiverId]);
 
+
+
+
+  
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -221,7 +229,7 @@ console.log("Sending initial message:", { initialMessage, type });
   senderId,
   receiverId,
 content: input.trim(),
-  petId: petIdFromState,
+  petId: actualPetId ? Number(actualPetId) : null,
   type: type || "text",
 };
 
@@ -256,7 +264,7 @@ content: input.trim(),
         senderId,
         receiverId,
         content: imageUrl,
-        petId,
+      petId: actualPetId ? Number(actualPetId) : null,
         type: "Image",
       };
 
@@ -280,7 +288,7 @@ content: input.trim(),
           senderId,
           receiverId,
           content: `${position.coords.latitude},${position.coords.longitude}`,
-          petId,
+          petId: actualPetId ? Number(actualPetId) : null,
           type: "LOCATION",
         };
 
@@ -297,22 +305,25 @@ content: input.trim(),
     );
   };
 
-  const handleConfirmAdoption = async (adopterId, petId) => {
-  const confirm = window.confirm(
-    "URGENT: You will lose your pet file if you proceed. Are you sure?"
-  );
+ const handleConfirmAdoption = async (adopterId, petId, msgId) => {
+  if (adoptedPetIds.includes(petId)) {
+    alert("This pet is already adopted.");
+    return;
+  }
 
-  if (!confirm) return; // User canceled
+  const confirm = window.confirm("URGENT: You will lose your pet file if you proceed. Are you sure?");
+  if (!confirm) return;
 
   try {
     await userService.confirmAdoption(adopterId, petId);
     alert("Adoption confirmed!");
+    setConfirmedMessageIds((prev) => [...prev, msgId]);
+    setAdoptedPetIds((prev) => [...prev, petId]);
   } catch (err) {
     console.error("Failed to confirm adoption:", err);
     alert("Error confirming adoption.");
   }
 };
-
   const handleCancelAdoption = async (petId) => {
     try {
       await userService.cancelForAdoption(petId);
@@ -433,17 +444,33 @@ content: input.trim(),
                     mt: 1,
                     alignSelf: 'flex-start'
                   }}>
-                    <AdoptionButton
-                      variant="contained"
-                      startIcon={<CheckCircle />}
-                      onClick={() => handleConfirmAdoption(msg.senderId, msg.petId)}
-                      sx={{
-                        bgcolor: '#4CAF50',
-                        '&:hover': { bgcolor: '#388E3C' }
-                      }}
-                    >
-                      Confirm Adoption
-                    </AdoptionButton>
+                 {confirmedMessageIds.includes(msg.id) ? (
+  <AdoptionButton
+    variant="contained"
+    startIcon={<CheckCircle />}
+    disabled
+    sx={{
+      bgcolor: '#4CAF50',
+      color: 'white',
+      '&:hover': { bgcolor: '#4CAF50' }
+    }}
+  >
+    Confirmed
+  </AdoptionButton>
+) : (
+  <AdoptionButton
+    variant="contained"
+    startIcon={<CheckCircle />}
+    onClick={() => handleConfirmAdoption(msg.senderId, msg.petId, msg.id)}
+    sx={{
+      bgcolor: '#4CAF50',
+      '&:hover': { bgcolor: '#388E3C' }
+    }}
+  >
+    Confirm
+  </AdoptionButton>
+)}
+
                     <AdoptionButton
                       variant="contained"
                       startIcon={<Cancel />}

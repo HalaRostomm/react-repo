@@ -56,21 +56,23 @@ const Orders = () => {
   };
 
   const getFilteredOrders = () => {
-    return Object.entries(orderStatuses).filter(([orderId, order]) => {
+    return Object.entries(orderStatuses).filter(([_, order]) => {
       if (selectedFilter === 'done') return order.done;
       if (selectedFilter === 'undone') return !order.done;
       return true;
     });
   };
 
-  const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
-  };
+  const handleFilterChange = (filter) => setSelectedFilter(filter);
+
+  const primary = '#FCA311';
+  const black = '#000000';
+  const white = '#FFFFFF';
 
   if (loading) {
     return (
-      <div className="text-center mt-5" style={{ fontFamily: 'Roboto Slab', color: '#7F7B72' }}>
-        <Spinner animation="border" variant="warning" />
+      <div className="text-center mt-5" style={{ fontFamily: 'Poppins, sans-serif', color: black }}>
+        <Spinner animation="border" style={{ color: primary }} />
         <p>Loading orders...</p>
       </div>
     );
@@ -80,30 +82,54 @@ const Orders = () => {
     <div style={{
       minHeight: '100vh',
       padding: '40px 20px',
-      fontFamily: 'Roboto Slab',
-      backgroundColor: '#F7F0E0',
-      color: '#000000'
+      fontFamily: 'Poppins, sans-serif',
+      backgroundColor: white,
+      color: black
     }}>
       <div style={{ maxWidth: '960px', margin: 'auto' }}>
-        <h1 style={{ color: '#7F7B72', fontWeight: 'bold', fontSize: '3rem', marginBottom: '40px', textAlign: 'center' }}>
+        <h1 style={{
+          color: primary,
+          fontWeight: 'bold',
+          fontSize: '3rem',
+          marginBottom: '40px',
+          textAlign: 'center'
+        }}>
           Orders
         </h1>
 
         <div className="d-flex justify-content-center gap-3 mb-4">
           <Button
-            variant={selectedFilter === 'done' ? 'success' : 'outline-success'}
+            style={{
+              backgroundColor: selectedFilter === 'done' ? primary : white,
+              color: selectedFilter === 'done' ? black : primary,
+              border: `2px solid ${primary}`,
+              fontWeight: '600',
+              borderRadius: '8px'
+            }}
             onClick={() => handleFilterChange('done')}
           >
             Done
           </Button>
           <Button
-            variant={selectedFilter === 'undone' ? 'danger' : 'outline-danger'}
+            style={{
+              backgroundColor: selectedFilter === 'undone' ? primary : white,
+              color: selectedFilter === 'undone' ? black : primary,
+              border: `2px solid ${primary}`,
+              fontWeight: '600',
+              borderRadius: '8px'
+            }}
             onClick={() => handleFilterChange('undone')}
           >
             Undone
           </Button>
           <Button
-            variant={selectedFilter === 'all' ? 'warning' : 'outline-warning'}
+            style={{
+              backgroundColor: selectedFilter === 'all' ? primary : white,
+              color: selectedFilter === 'all' ? black : primary,
+              border: `2px solid ${primary}`,
+              fontWeight: '600',
+              borderRadius: '8px'
+            }}
             onClick={() => handleFilterChange('all')}
           >
             All
@@ -121,8 +147,8 @@ const Orders = () => {
                 className="card mb-3 p-3 shadow-sm"
                 style={{
                   borderRadius: '20px',
-                  border: '1px solid #ddd',
-                  backgroundColor: '#F1EADC',
+                  border: `1px solid ${primary}`,
+                  backgroundColor: white,
                   cursor: 'pointer',
                   transition: 'transform 0.2s',
                 }}
@@ -134,20 +160,20 @@ const Orders = () => {
                       width: 56,
                       height: 56,
                       borderRadius: '50%',
-                      backgroundColor: '#E5DED4',
+                      backgroundColor: primary,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: 16,
                       fontSize: 24,
-                      color: '#7F7B72'
+                      color: black
                     }}
                   >
                     <i className="bi bi-receipt"></i>
                   </div>
                   <div className="flex-grow-1">
-                    <h5 className="mb-1" style={{ color: '#000000' }}>{customer?.fullName || 'Customer'}</h5>
-                    <p className="mb-0" style={{ color: '#7F7B72' }}>Order No: {orderId}</p>
+                    <h5 className="mb-1" style={{ color: black }}>{customer?.fullName || 'Customer'}</h5>
+                    <p className="mb-0" style={{ color: primary }}>Order No: {orderId}</p>
                   </div>
                   <div>
                     <input

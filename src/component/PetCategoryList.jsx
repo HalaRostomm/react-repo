@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import adminService from "../service/adminService";
 import { FaPaw, FaEdit, FaTrashAlt } from "react-icons/fa";
 
+const COLORS = {
+  BACKGROUND: "#D0D5CE",
+  TEXT: "#000000",
+  CARD: "#ffffff",
+  PRIMARY: "#000000",
+  SECONDARY: "#444444",
+  BORDER: "#cccccc",
+};
+
 const PetCategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState("");
@@ -45,41 +54,43 @@ const PetCategoryList = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: COLORS.CARD,
         padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: COLORS.BACKGROUND,
+        fontFamily: "'Raleway', sans-serif",
       }}
     >
       <div
         style={{
           maxWidth: "1100px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: COLORS.CARD,
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
+          border: `1px solid ${COLORS.BORDER}`,
         }}
       >
         {/* Header */}
         <div
-          style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
-            padding: "20px 30px",
-            borderTopLeftRadius: "12px",
-            borderTopRightRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <FaPaw size={26} />
-          <div>
-            <h2 style={{ margin: 0, fontWeight: "700" }}>Pet Categories</h2>
-            <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
-              Manage types of pets available in the system
-            </p>
-          </div>
-        </div>
+  style={{
+    background: "#D0D5CE",
+    padding: "20px 30px",
+    borderTopLeftRadius: "12px",
+    borderTopRightRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    color: "#000000",
+  }}
+>
+  <FaPaw size={26} />
+  <div>
+    <h2 style={{ margin: 0, fontWeight: "700" }}>Pet Categories</h2>
+    <p style={{ margin: 0, color: "#444444", fontWeight: "400" }}>
+      Manage types of pets available in the system
+    </p>
+  </div>
+</div>
 
         {/* Alert */}
         {message && (
@@ -88,9 +99,10 @@ const PetCategoryList = () => {
             style={{
               margin: "0",
               borderRadius: 0,
-              color: messageType === "danger" ? "#f8d7da" : "#d4edda",
-              backgroundColor: messageType === "danger" ? "#721c24" : "#155724",
-              border: "none",
+              color: messageType === "danger" ? "#721c24" : "#155724",
+              backgroundColor: messageType === "danger" ? "#f8d7da" : "#d4edda",
+              border: `1px solid ${COLORS.BORDER}`,
+              fontFamily: "'Raleway', sans-serif",
             }}
           >
             {message}
@@ -101,30 +113,31 @@ const PetCategoryList = () => {
         <div style={{ padding: "30px" }}>
           {/* Add Button */}
           <div className="text-end mb-4">
-            <button
-              className="btn"
-              style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
-                fontWeight: "600",
-                padding: "8px 20px",
-                borderRadius: "30px",
-                border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
-              }}
-              onClick={() => navigate("/admin/addpetcategory")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
-            >
-              ➕ Add Pet Category
-            </button>
+          <button
+  className="btn"
+  style={{
+    background: "#D0D5CE",
+    color: "#000000",
+    fontWeight: "600",
+    padding: "8px 20px",
+    borderRadius: "30px",
+    border: "none",
+    fontFamily: "'Raleway', sans-serif",
+    transition: "background 0.3s",
+  }}
+  onClick={() => navigate("/admin/addpetcategory")}
+  onMouseEnter={(e) => (e.target.style.opacity = 0.85)}
+  onMouseLeave={(e) => (e.target.style.opacity = 1)}
+>
+  ➕ Add Pet Category
+</button>
           </div>
 
           {/* Table */}
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", color: "#e0e0e0" }}>
+            <table style={{ width: "100%", color: COLORS.TEXT }}>
               <thead>
-                <tr style={{ color: "#c3baf0", textAlign: "center" }}>
+                <tr style={{ textAlign: "center", borderBottom: `1px solid ${COLORS.BORDER}` }}>
                   <th style={{ padding: "10px" }}>ID</th>
                   <th>Category Name</th>
                   <th>Key</th>
@@ -137,12 +150,12 @@ const PetCategoryList = () => {
                     <tr
                       key={category.category_category_id || index}
                       style={{
-                        borderTop: "1px solid #334155",
+                        borderTop: `1px solid ${COLORS.BORDER}`,
                         textAlign: "center",
                         transition: "background-color 0.3s",
                       }}
                       onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#1a2235")
+                        (e.currentTarget.style.backgroundColor = "#f0f0f0")
                       }
                       onMouseLeave={(e) =>
                         (e.currentTarget.style.backgroundColor = "transparent")
@@ -154,30 +167,41 @@ const PetCategoryList = () => {
                       <td>{category.mscategory || "No Name"}</td>
                       <td>{category.mscategory_key || "N/A"}</td>
                       <td>
-                        <button
-                          className="btn btn-sm me-2 text-white"
-                          style={{ backgroundColor: "#845ef7", border: "none" }}
-                          onClick={() =>
-                            navigate(`/admin/updatecategory/${category.category_category_id}`)
-                          }
-                        >
-                          <FaEdit className="me-1" /> Edit
-                        </button>
-                        <button
-                          className="btn btn-sm"
-                          style={{ backgroundColor: "#e53935", color: "#fff", border: "none" }}
-                          onClick={() =>
-                            deleteCategory(category.category_category_id)
-                          }
-                        >
-                          <FaTrashAlt className="me-1" /> Delete
-                        </button>
+                       <button
+  className="btn btn-sm me-2"
+  style={{
+    background: "#D0D5CE",
+    color: "#000000",
+    border: "none",
+    fontFamily: "'Raleway', sans-serif",
+  }}
+  onClick={() =>
+    navigate(`/admin/updatepetcategory/${category.category_category_id}`)
+  }
+>
+  <FaEdit className="me-1" /> Edit
+</button>
+                       <button
+  className="btn btn-sm"
+  style={{
+    backgroundColor: "#8B0000",
+    color: "#D0D5CE",
+    border: "none",
+    fontFamily: "'Raleway', sans-serif"
+  }}
+  onClick={() =>
+    deleteCategory(category.category_category_id)
+  }
+>
+  <FaTrashAlt className="me-1" /> Delete
+</button>
+
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="text-center text-muted py-3">
+                    <td colSpan="4" className="text-center py-3 text-muted">
                       No pet categories found.
                     </td>
                   </tr>

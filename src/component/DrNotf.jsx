@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import doctorservice from "../service/doctorservice";
 
+const ACCENT_COLOR = "#64B5F6";
+const TEXT_COLOR = "#000000";
+
 const DrNotf = () => {
   const { doctorId } = useParams();
   const [notifications, setNotifications] = useState([]);
@@ -30,13 +33,13 @@ const DrNotf = () => {
       fetchNotifications();
     }
   }, [doctorId]);
-  useEffect(() => {
-  document.body.style.backgroundColor = "#0D1B2A";
-  return () => {
-    document.body.style.backgroundColor = null; // Reset on unmount
-  };
-}, []);
 
+  useEffect(() => {
+    document.body.style.backgroundColor = "#ffffff";
+    return () => {
+      document.body.style.backgroundColor = null;
+    };
+  }, []);
 
   const handleMarkRead = async (id) => {
     setActionLoading(true);
@@ -89,8 +92,8 @@ const DrNotf = () => {
               key={id}
               style={{
                 ...styles.notification,
-                backgroundColor: read ? "#E0E1DD" : "#415A77",
-                color: read ? "#1B263B" : "#E0E1DD",
+                backgroundColor: read ? "#f1f1f1" : ACCENT_COLOR,
+                color: read ? TEXT_COLOR : "#ffffff",
               }}
               title={`Received at ${new Date(createdAt).toLocaleString()}`}
             >
@@ -100,7 +103,7 @@ const DrNotf = () => {
                   <button
                     disabled={actionLoading}
                     onClick={() => handleMarkRead(id)}
-                    style={{ ...styles.button, backgroundColor: "#778DA9" }}
+                    style={{ ...styles.button, backgroundColor: ACCENT_COLOR }}
                   >
                     Mark as Read
                   </button>
@@ -121,31 +124,31 @@ const DrNotf = () => {
   );
 };
 
-// Font injection (just once)
+// Load Poppins font
 const link = document.createElement("link");
-link.href = "https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap";
+link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap";
 link.rel = "stylesheet";
 document.head.appendChild(link);
 
 const styles = {
   container: {
     padding: "2rem",
-    fontFamily: "'Crimson Pro', serif",
-    color: "#E0E1DD",
-    backgroundColor: "#0D1B2A", // DARK BACKGROUND FOR WHOLE PAGE
-    minHeight: "100vh",         // ENSURE FULL VIEW HEIGHT
+    fontFamily: "'Poppins', sans-serif",
+    color: TEXT_COLOR,
+    backgroundColor: "#ffffff",
+    minHeight: "100vh",
     maxWidth: "800px",
     margin: "0 auto",
   },
   heading: {
-    color: "#E0E1DD",
+    color: TEXT_COLOR,
     fontWeight: "700",
     fontSize: "2rem",
     marginBottom: "1.5rem",
   },
   unread: {
     fontSize: "1rem",
-    color: "#778DA9",
+    color: ACCENT_COLOR,
   },
   list: {
     listStyle: "none",
@@ -156,7 +159,7 @@ const styles = {
     borderRadius: "10px",
     padding: "1rem",
     marginBottom: "1rem",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -180,17 +183,19 @@ const styles = {
     cursor: "pointer",
     fontSize: "0.9rem",
     fontWeight: "500",
+    fontFamily: "'Poppins', sans-serif",
   },
   loading: {
     textAlign: "center",
     marginTop: "2rem",
-    fontFamily: "'Crimson Pro', serif",
-    color: "#778DA9",
+    fontFamily: "'Poppins', sans-serif",
+    color: ACCENT_COLOR,
   },
   noNotifications: {
     textAlign: "center",
-    color: "#ccc",
+    color: "#888",
     fontStyle: "italic",
+    fontFamily: "'Poppins', sans-serif",
   },
 };
 

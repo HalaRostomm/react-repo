@@ -5,6 +5,12 @@ import userservice from "../service/userservice";
 import authService from "../service/authService";
 import { FaBell, FaCommentDots, FaPlus, FaComment } from "react-icons/fa";
 
+// Inject Poppins font
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
+
 const UserHome = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
@@ -67,18 +73,19 @@ const UserHome = () => {
 
   const styles = {
     header: {
-      backgroundColor: "#14213D",
-      color: "#FFFFFF",
+      backgroundColor: "rgba(19, 182, 185, 1.0)",
+      color: "#000000",
       padding: "0.8rem 2rem",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      fontFamily: "'Tinos', serif",
+      fontFamily: "'Poppins', sans-serif",
     },
     title: {
       fontSize: "1.8rem",
       fontWeight: "bold",
       letterSpacing: "1px",
+      fontFamily: "'Poppins', sans-serif",
     },
     iconContainer: {
       display: "flex",
@@ -89,7 +96,7 @@ const UserHome = () => {
       position: "absolute",
       top: "-6px",
       right: "-6px",
-      backgroundColor: "#FCA311",
+      backgroundColor: "rgba(255, 161, 0, 1.0)",
       color: "#FFFFFF",
       borderRadius: "50%",
       padding: "2px 6px",
@@ -100,10 +107,10 @@ const UserHome = () => {
       maxWidth: "1200px",
       margin: "0 auto",
       padding: "2rem 1rem",
-      fontFamily: "'Tinos', serif",
+      fontFamily: "'Poppins', sans-serif",
     },
     createPostButton: {
-      backgroundColor: "#FCA311",
+      backgroundColor: "rgba(255, 161, 0, 1.0)",
       color: "#FFFFFF",
       border: "none",
       borderRadius: "5px",
@@ -115,6 +122,7 @@ const UserHome = () => {
       gap: "8px",
       fontWeight: "bold",
       margin: "0 auto 2rem",
+      fontFamily: "'Poppins', sans-serif",
     },
     postGrid: {
       display: "grid",
@@ -122,7 +130,7 @@ const UserHome = () => {
       gap: "1.5rem",
     },
     postCard: {
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "rgba(19, 182, 185, 0.2)",
       borderRadius: "8px",
       boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
       border: "1px solid #ccc",
@@ -137,7 +145,7 @@ const UserHome = () => {
       height: "40px",
       borderRadius: "50%",
       marginRight: "10px",
-      backgroundColor: "#FCA311",
+      backgroundColor: "rgba(255, 161, 0, 1.0)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -151,11 +159,13 @@ const UserHome = () => {
       fontWeight: "bold",
       margin: 0,
       color: "#000000",
+      fontFamily: "'Poppins', sans-serif",
     },
     postTime: {
       color: "#14213D",
       fontSize: "0.8rem",
       margin: 0,
+      fontFamily: "'Poppins', sans-serif",
     },
     postContent: {
       padding: "0 16px 12px",
@@ -165,6 +175,7 @@ const UserHome = () => {
       fontSize: "1rem",
       lineHeight: "1.4",
       color: "#000000",
+      fontFamily: "'Poppins', sans-serif",
     },
     postImages: {
       display: "grid",
@@ -193,14 +204,32 @@ const UserHome = () => {
       cursor: "pointer",
       color: "#14213D",
       fontWeight: "bold",
+      fontFamily: "'Poppins', sans-serif",
     },
     postTypeBadge: {
-      backgroundColor: "#FCA311",
+      backgroundColor: "rgba(255, 161, 0, 1.0)",
       color: "#FFFFFF",
       padding: "4px 8px",
       borderRadius: "4px",
       fontSize: "0.8rem",
       marginLeft: "8px",
+      fontFamily: "'Poppins', sans-serif",
+    },
+    statusOutOfStock: {
+      backgroundColor: "#808080",
+      color: "#FFFFFF",
+      padding: "4px 8px",
+      borderRadius: "4px",
+      fontSize: "0.8rem",
+      fontFamily: "'Poppins', sans-serif",
+    },
+    statusAvailable: {
+      backgroundColor: "rgba(19, 182, 185, 1.0)",
+      color: "#FFFFFF",
+      padding: "4px 8px",
+      borderRadius: "4px",
+      fontSize: "0.8rem",
+      fontFamily: "'Poppins', sans-serif",
     },
   };
 
@@ -211,9 +240,7 @@ const UserHome = () => {
   return (
     <div style={{ backgroundColor: "#E5E5E5", minHeight: "100vh" }}>
       <header style={styles.header}>
-        <h1 style={styles.title}
-         
-         >Home Page </h1>
+        <h1 style={styles.title}>Home Page</h1>
         <div style={styles.iconContainer}>
           <div style={{ position: "relative", cursor: "pointer" }} onClick={() => navigate(`/user/getnotifications/${userId}`)}>
             <FaBell size={24} />
@@ -226,10 +253,9 @@ const UserHome = () => {
       </header>
 
       <div style={styles.container}>
-  <button style={styles.createPostButton} onClick={handleGoToPost}>
-    😊 What's on your mind? Share with us <span style={{ marginLeft: "6px", fontWeight: "bold" }}>→</span>
-  </button>
-
+        <button style={styles.createPostButton} onClick={handleGoToPost}>
+          😊 What's on your mind? Share with us <span style={{ marginLeft: "6px", fontWeight: "bold" }}>→</span>
+        </button>
 
         {loading && <p>Loading posts...</p>}
         {!loading && posts.length === 0 && (
@@ -253,7 +279,6 @@ const UserHome = () => {
                   <div style={styles.postUserInfo}>
                     <h3 style={styles.postUserName}>
                       {isMyPost ? "You" : `${post.appUser.firstname} ${post.appUser.lastname}`}
-                      <span style={styles.postTypeBadge}>{post.type}</span>
                     </h3>
                     <p style={styles.postTime}>
                       {new Date(post.createdAt).toLocaleString([], {
@@ -268,6 +293,9 @@ const UserHome = () => {
                 </div>
                 <div style={styles.postContent}>
                   <p style={styles.postText}>{post.content}</p>
+                  <div style={{ marginBottom: "10px" }}>
+                    <span style={styles.postTypeBadge}>{post.type}</span>
+                  </div>
                   {post.images?.length > 0 && (
                     <div style={styles.postImages}>
                       {post.images.map((img, idx) => (
@@ -285,9 +313,7 @@ const UserHome = () => {
                   {!isMyPost && (
                     <div
                       style={styles.postAction}
-                      onClick={() =>
-                        handleChatClick(post.appUser.appUserId, post.type, post.petId)
-                      }
+                      onClick={() => handleChatClick(post.appUser.appUserId, post.type, post.petId)}
                     >
                       <FaComment /> {isAdoption ? "Adopt" : "Message"}
                     </div>

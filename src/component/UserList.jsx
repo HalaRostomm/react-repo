@@ -75,32 +75,32 @@ const UserList = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: "#ffffff",
         padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        fontFamily: "'Raleway', sans-serif",
+        color: "#000",
       }}
     >
       <div
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: "#f5f5f5",
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
         }}
       >
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
+            backgroundColor: "#D0D5CE",
             padding: "20px 30px",
             borderTopLeftRadius: "12px",
             borderTopRightRadius: "12px",
           }}
         >
-          <h2 style={{ margin: 0, fontWeight: "700" }}>Pet Owner List</h2>
-          <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
+          <h2 style={{ margin: 0, fontWeight: "700", color: "#000" }}>Pet Owner List</h2>
+          <p style={{ margin: 0, color: "#333", fontWeight: "400" }}>
             Manage all registered pet owners
           </p>
         </div>
@@ -108,13 +108,14 @@ const UserList = () => {
         {/* Message */}
         {message && (
           <div
-            className={`alert text-center fw-semibold`}
+            className="alert text-center fw-semibold"
             style={{
               margin: "0",
               borderRadius: 0,
-              color: message.includes("❌") ? "#f8d7da" : "#d4edda",
-              backgroundColor: message.includes("❌") ? "#721c24" : "#155724",
-              border: "none",
+              padding: "12px",
+              color: message.includes("❌") ? "#721c24" : "#155724",
+              backgroundColor: message.includes("❌") ? "#f8d7da" : "#d4edda",
+              fontWeight: "600",
             }}
           >
             {message}
@@ -127,17 +128,14 @@ const UserList = () => {
             <button
               className="btn"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
+                backgroundColor: "#D0D5CE",
+                color: "#000",
                 fontWeight: "600",
                 padding: "8px 20px",
                 borderRadius: "30px",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
               }}
               onClick={() => navigate("/admin/adduser")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
             >
               ➕ Add Pet Owner
             </button>
@@ -149,31 +147,34 @@ const UserList = () => {
             </div>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", color: "#e0e0e0" }}>
-                <thead>
-                  <tr style={{ color: "#c3baf0", textAlign: "center" }}>
-                    <th style={{ padding: "10px" }}>ID</th>
-                    <th>Name</th>
-                    <th>Profile</th>
-                    <th>Birth Date</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
+              <table style={{ width: "100%", color: "#000" }}>
+               <thead>
+  <tr style={{ backgroundColor: "#D0D5CE", color: "#000", textAlign: "center" }}>
+    {["ID", "Name", "Profile", "Birth Date", "Email", "Address", "Phone", "Actions"].map((col, i, arr) => (
+      <th
+        key={col}
+        style={{
+          padding: "12px",
+          borderRight: i !== arr.length - 1 ? "1px solid #ccc" : "none",
+        }}
+      >
+        {col}
+      </th>
+    ))}
+  </tr>
+</thead>
+
                 <tbody>
                   {users.length > 0 ? (
                     users.map((user) => (
                       <tr
                         key={user.appUserId}
                         style={{
-                          borderTop: "1px solid #334155",
+                          borderTop: "1px solid #ccc",
                           textAlign: "center",
-                          transition: "background-color 0.3s",
                         }}
                         onMouseEnter={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#1a2235")
+                          (e.currentTarget.style.backgroundColor = "#f0f0f0")
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget.style.backgroundColor = "transparent")
@@ -191,7 +192,7 @@ const UserList = () => {
                                 height: "45px",
                                 borderRadius: "50%",
                                 objectFit: "cover",
-                                border: "2px solid #9c27b0",
+                                border: "2px solid #D0D5CE",
                               }}
                             />
                           ) : (
@@ -202,12 +203,12 @@ const UserList = () => {
                         <td>{user.username}</td>
                         <td>{user.resolvedAddress}</td>
                         <td>{user.phone}</td>
-                        <td style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                        <td style={{ display: "flex", gap: "10px", justifyContent: "center" ,   padding: "12px",}}>
                           <button
                             onClick={() => navigate(`/admin/dashuser/${user.appUserId}`)}
                             style={{
-                              backgroundColor: "#6f42c1",
-                              color: "#fff",
+                              backgroundColor: "#D0D5CE",
+                              color: "#000",
                               padding: "6px 12px",
                               border: "none",
                               borderRadius: "6px",
@@ -222,8 +223,8 @@ const UserList = () => {
                           <button
                             onClick={() => deleteUser(user.appUserId)}
                             style={{
-                              backgroundColor: "#e53935",
-                              color: "#fff",
+                              backgroundColor: "#D0D5CE",
+                              color: "#000",
                               padding: "6px 12px",
                               border: "none",
                               borderRadius: "6px",

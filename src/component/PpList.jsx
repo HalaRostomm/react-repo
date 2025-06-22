@@ -29,7 +29,6 @@ const PpList = () => {
 
   const deletePP = (id) => {
     if (!window.confirm("Are you sure you want to delete this provider?")) return;
-
     adminService
       .deletePP(id)
       .then(() => {
@@ -46,52 +45,52 @@ const PpList = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: "#ffffff",
         padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: "#333",
+        fontFamily: "'Raleway', sans-serif",
       }}
     >
       <div
         style={{
           maxWidth: "1300px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: "#FFFFFF",
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
         }}
       >
-       <div
-  style={{
-    background: "linear-gradient(90deg, #9c27b0, #d63384)",
-    padding: "20px 30px",
-    borderTopLeftRadius: "12px",
-    borderTopRightRadius: "12px",
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  }}
->
-  <FaBoxOpen size={26} />
-  <div>
-    <h2 style={{ margin: 0, fontWeight: "700" }}>Product Provider List</h2>
-    <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
-      View and manage registered product providers
-    </p>
-  </div>
-</div>
+        <div
+          style={{
+            background: "#D0D5CE",
+            padding: "20px 30px",
+            borderTopLeftRadius: "12px",
+            borderTopRightRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            color: "#000000",
+          }}
+        >
+          <FaBoxOpen size={26} />
+          <div>
+            <h2 style={{ margin: 0, fontWeight: "700" }}>Product Provider List</h2>
+            <p style={{ margin: 0, color: "#000000" }}>
+              View and manage registered product providers
+            </p>
+          </div>
+        </div>
 
-
-        {/* Message */}
         {message && (
           <div
             className={`alert text-center fw-semibold`}
             style={{
               margin: "0",
               borderRadius: 0,
-              color: message.includes("❌") ? "#f8d7da" : "#d4edda",
-              backgroundColor: message.includes("❌") ? "#721c24" : "#155724",
+              color: message.includes("❌") ? "#721c24" : "#155724",
+              backgroundColor: message.includes("❌") ? "#f8d7da" : "#d4edda",
               border: "none",
+              fontFamily: "'Raleway', sans-serif",
             }}
           >
             {message}
@@ -99,37 +98,33 @@ const PpList = () => {
         )}
 
         <div style={{ padding: "30px" }}>
-          {/* Add Button */}
           <div className="text-end mb-4">
             <button
               className="btn"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
+                backgroundColor: "#D0D5CE",
+                color: "#000000",
                 fontWeight: "600",
                 padding: "8px 20px",
                 borderRadius: "30px",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
+                fontFamily: "'Raleway', sans-serif",
               }}
               onClick={() => navigate("/admin/addpp")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
             >
               ➕ Add Product Provider
             </button>
           </div>
 
-          {/* Table */}
           {loading ? (
             <div className="text-center text-muted fs-5">
               <i className="fas fa-spinner fa-spin me-2"></i> Loading...
             </div>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", color: "#e0e0e0" }}>
+              <table style={{ width: "100%", color: "#333", fontFamily: "'Raleway', sans-serif" }}>
                 <thead>
-                  <tr style={{ color: "#c3baf0", textAlign: "center" }}>
+                  <tr style={{ color: "#000000", textAlign: "center" }}>
                     <th style={{ padding: "10px" }}>ID</th>
                     <th>Full Name</th>
                     <th>Profile</th>
@@ -146,12 +141,13 @@ const PpList = () => {
                       <tr
                         key={provider.appUserId}
                         style={{
-                          borderTop: "1px solid #334155",
+                          borderTop: "1px solid #ccc",
                           textAlign: "center",
                           transition: "background-color 0.3s",
+                          fontFamily: "'Raleway', sans-serif",
                         }}
                         onMouseEnter={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#1a2235")
+                          (e.currentTarget.style.backgroundColor = "#f0f0f0")
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget.style.backgroundColor = "transparent")
@@ -169,12 +165,11 @@ const PpList = () => {
                                 height: "45px",
                                 borderRadius: "50%",
                                 objectFit: "cover",
-                                border: "2px solid #9c27b0",
+                                border: "2px solid #D05ECE",
                               }}
                             />
                           ) : (
-                            <FaUserCircle size={45} color="#ffffff" />
-
+                            <FaUserCircle size={45} color="#555" />
                           )}
                         </td>
                         <td>{provider.username}</td>
@@ -185,13 +180,14 @@ const PpList = () => {
                           <button
                             onClick={() => navigate(`/admin/dashpp/${provider.appUserId}`)}
                             style={{
-                              backgroundColor: "#6f42c1",
-                              color: "#fff",
+                              backgroundColor: "#D0D5CE",
+                              color: "#000000",
                               padding: "6px 12px",
                               border: "none",
                               borderRadius: "6px",
                               marginRight: "8px",
                               fontWeight: "500",
+                              fontFamily: "'Raleway', sans-serif",
                             }}
                           >
                             Stats
@@ -199,12 +195,13 @@ const PpList = () => {
                           <button
                             onClick={() => deletePP(provider.appUserId)}
                             style={{
-                              backgroundColor: "#e53935",
-                              color: "#fff",
+                              backgroundColor: "#8B0000",
+                              color: "#D0D5CE",
                               padding: "6px 12px",
                               border: "none",
                               borderRadius: "6px",
                               fontWeight: "500",
+                              fontFamily: "'Raleway', sans-serif",
                             }}
                           >
                             Delete

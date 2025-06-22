@@ -5,14 +5,14 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);
-
 const COLORS = {
-  dark: "#0D1B2A",
-  deep: "#1B263B",
-  steel: "#415A77",
-  soft: "#778DA9",
-  light: "#E0E1DD",
+  primary: "#64B5F6",
+  background: "#FFFFFF",
+  card: "#F3F6FA",
+  text: "#000000",
+  border: "#CFE8FC",
 };
+
 
 const AddAppointment = () => {
   const { doctorId } = useParams();
@@ -147,66 +147,69 @@ const AddAppointment = () => {
     }
   };
 
-  const containerStyle = {
-    maxWidth: 500,
-    margin: "40px auto",
-    padding: 24,
-    fontFamily: "'Crimson Pro', serif",
-    backgroundColor: COLORS.deep,
-    color: COLORS.light,
-    borderRadius: 12,
-    boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
-  };
+ const containerStyle = {
+  maxWidth: 500,
+  margin: "40px auto",
+  padding: 24,
+  fontFamily: "'Poppins', sans-serif",
+  backgroundColor: COLORS.card,
+  color: COLORS.text,
+  borderRadius: 12,
+  boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+};
 
-  const headingStyle = {
-    marginBottom: 24,
-    color: COLORS.soft,
-    fontWeight: 700,
-    fontSize: 28,
-    textAlign: "center",
-  };
+ 
+const headingStyle = {
+  marginBottom: 24,
+  color: COLORS.primary,
+  fontWeight: 700,
+  fontSize: 28,
+  textAlign: "center",
+};
+const labelStyle = {
+  display: "block",
+  marginBottom: 6,
+  color: COLORS.text,
+  fontWeight: 600,
+};
 
-  const labelStyle = {
-    display: "block",
-    marginBottom: 6,
-    color: COLORS.soft,
-    fontWeight: 600,
-  };
+const inputStyle = {
+  width: "100%",
+  padding: "10px 14px",
+  fontSize: 16,
+  fontFamily: "'Poppins', sans-serif",
+  backgroundColor: "#fff",
+  color: COLORS.text,
+  border: `2px solid ${COLORS.border}`,
+  borderRadius: 6,
+  outline: "none",
+  marginBottom: 20,
+  transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+};
 
-  const inputStyle = {
-    width: "100%",
-    padding: "10px 14px",
-    fontSize: 16,
-    fontFamily: "'Crimson Pro', serif",
-    backgroundColor: COLORS.light,
-    border: `2px solid ${COLORS.soft}`,
-    borderRadius: 6,
-    outline: "none",
-    marginBottom: 20,
-    transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-  };
 
   const buttonStyle = {
-    marginTop: 8,
-    width: "100%",
-    padding: "14px 0",
-    fontSize: 18,
-    fontFamily: "'Crimson Pro', serif",
-    fontWeight: 600,
-    color: COLORS.light,
-    backgroundColor: COLORS.steel,
-    border: "none",
-    borderRadius: 8,
-    cursor: "pointer",
-    transition: "background-color 0.3s ease, box-shadow 0.3s ease",
-  };
+  marginTop: 8,
+  width: "100%",
+  padding: "14px 0",
+  fontSize: 18,
+  fontFamily: "'Poppins', sans-serif",
+  fontWeight: 600,
+  color: "#fff",
+  backgroundColor: COLORS.primary,
+  border: "none",
+  borderRadius: 8,
+  cursor: "pointer",
+  transition: "background-color 0.3s ease, box-shadow 0.3s ease",
+};
 
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap"
-        rel="stylesheet"
-      />
+     <link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+  rel="stylesheet"
+/>
+
       <div style={containerStyle}>
         <h2 style={headingStyle}>Add Appointment</h2>
         <form onSubmit={handleSubmit}>

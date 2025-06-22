@@ -5,7 +5,10 @@ import DoctorService from '../service/doctorservice';
 import { Container, Card, Spinner, Row, Col, Badge } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
 import { MdNotificationsNone, MdMessage } from 'react-icons/md';
-import { jwtDecode } from 'jwt-decode';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
+import {jwtDecode} from 'jwt-decode';  // fixed import from { jwtDecode } to jwtDecode
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,24 +22,14 @@ import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-// Register Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Localizer
 const localizer = momentLocalizer(moment);
 
-// Add font to head
-const crimsonFont = document.createElement('link');
-crimsonFont.href = 'https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap';
-crimsonFont.rel = 'stylesheet';
-document.head.appendChild(crimsonFont);
-
 const COLORS = {
-  DARK: '#0D1B2A',
-  MID: '#1B263B',
-  ACCENT: '#415A77',
-  TEXT: '#778DA9',
-  LIGHT: '#E0E1DD',
+  ACCENT: '#64B5F6',  // your main blue color
+  TEXT: '#000000',    // black font color
+  LIGHT: '#FFFFFF',   // white background for cards or light areas
 };
 
 function DrDashboard() {
@@ -49,6 +42,9 @@ function DrDashboard() {
   const [availableCount, setAvailableCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [bookingPercentage, setBookingPercentage] = useState(0);
+  const [attendancePercentage, setAttendancePercentage] = useState(0);
+  const [uniqueUsersCount, setUniqueUsersCount] = useState(0);
 
   useEffect(() => {
     async function init() {
@@ -62,12 +58,24 @@ function DrDashboard() {
 
   async function loadData(userId) {
     try {
-      const [docRes, appsRes, bookedRes, unreadRes] = await Promise.all([
+      const [
+        docRes,
+        appsRes,
+        bookedRes,
+        unreadRes,
+        bookingPercentageRes,
+        attendancePercentageRes,
+        uniqueUsersRes,
+      ] = await Promise.all([
         DoctorService.getDoctorById(userId),
         DoctorService.getAppointments(userId),
         DoctorService.getBookedAppointments(userId),
         DoctorService.getUnreadCount(userId),
+        DoctorService.getPercentageOfBookings(userId),
+        DoctorService.getPercentageOfAttendance(userId),
+        DoctorService.getNumberOfDifferentUsers(userId),
       ]);
+
       setDoctorInfo(docRes.data);
       const all = appsRes.data || [];
       const bookedArr = bookedRes.data || [];
@@ -75,29 +83,16 @@ function DrDashboard() {
       setBookedCount(bookedArr.length);
       setAvailableCount(all.length - bookedArr.length);
       setUnreadCount(unreadRes.data || 0);
-      filterToday(all, new Date());
+      setBookingPercentage(bookingPercentageRes.data || 0);
+      setAttendancePercentage(attendancePercentageRes.data || 0);
+      setUniqueUsersCount(uniqueUsersRes.data || 0);
+      filterByDate(all, new Date());
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   }
-
-  function filterToday(list, date) {
-    const filtered = list.filter(
-      a =>
-        a.booked &&
-        new Date(a.selectedDate).toDateString() === date.toDateString()
-    );
-    setTodayAppointments(
-      filtered.sort((a, b) => a.startTime.localeCompare(b.startTime))
-    );
-    setSelectedDate(date);
-  }
-
-  const handleNotifications = doctorId => navigate(`/doctor/getnotifications/${doctorId}`);
-  const handleChat = doctorId => navigate(`/doctor/chats/${doctorId}`);
-  const updateDate = date => filterToday(appointments, date);
 
   function buildChart() {
     const data = [];
@@ -106,34 +101,68 @@ function DrDashboard() {
       d.setDate(d.getDate() + i);
       data.push({
         date: moment(d).format('D/M'),
-        booked: appointments.filter(a => a.booked && new Date(a.selectedDate).toDateString() === d.toDateString()).length,
-        available: appointments.filter(a => !a.booked && new Date(a.selectedDate).toDateString() === d.toDateString()).length,
+        booked: appointments.filter(
+          (a) =>
+            a.booked &&
+            new Date(a.selectedDate).toDateString() === d.toDateString()
+        ).length,
+        available: appointments.filter(
+          (a) =>
+            !a.booked &&
+            new Date(a.selectedDate).toDateString() === d.toDateString()
+        ).length,
       });
     }
     return {
-      labels: data.map(d => d.date),
+      labels: data.map((d) => d.date),
       datasets: [
         {
           label: 'Available',
-          data: data.map(d => d.available),
+          data: data.map((d) => d.available),
           backgroundColor: COLORS.ACCENT,
         },
         {
           label: 'Booked',
-          data: data.map(d => d.booked),
-          backgroundColor: COLORS.TEXT,
+          data: data.map((d) => d.booked),
+          backgroundColor: '#444444',
         },
       ],
     };
   }
 
+  function filterByDate(list, date) {
+    const sameDayAppointments = list.filter(
+      (a) => new Date(a.selectedDate).toDateString() === date.toDateString()
+    );
+    setTodayAppointments(
+      sameDayAppointments.sort((a, b) => a.startTime.localeCompare(b.startTime))
+    );
+    setSelectedDate(date);
+  }
+
+  const handleNotifications = (doctorId) =>
+    navigate(`/doctor/getnotifications/${doctorId}`);
+  const handleChat = (doctorId) => navigate(`/doctor/chats/${doctorId}`);
+  const updateDate = (date) => filterByDate(appointments, date);
+
   const events = appointments
-    .filter(app => app?.selectedDate && app?.startTime && app?.endTime)
-    .map(app => ({
-      title: app.petName || 'Appointment',
-      start: new Date(`${app.selectedDate}T${app.startTime}`),
-      end: new Date(`${app.selectedDate}T${app.endTime}`),
-    }));
+    .filter((app) => app?.selectedDate && app?.startTime && app?.endTime)
+    .map((app) => {
+      const start = new Date(`${app.selectedDate}T${app.startTime}`);
+      const end = new Date(`${app.selectedDate}T${app.endTime}`);
+
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        console.warn('Invalid event dates', app);
+        return null;
+      }
+
+      return {
+        title: app.petName || 'Appointment',
+        start,
+        end,
+      };
+    })
+    .filter((event) => event !== null);
 
   if (loading) {
     return (
@@ -144,20 +173,32 @@ function DrDashboard() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: COLORS.LIGHT, fontFamily: "'Crimson Pro', serif" }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: COLORS.LIGHT,
+        fontFamily: "'Poppins', sans-serif",
+        color: COLORS.TEXT,
+      }}
+    >
       {/* Header */}
       <div
         className="d-flex justify-content-between align-items-center px-4 py-3"
-        style={{ backgroundColor: COLORS.DARK, color: COLORS.LIGHT }}
+        style={{ backgroundColor: COLORS.ACCENT, color: COLORS.TEXT }}
       >
         <h5 style={{ margin: 0, fontWeight: '700' }}>Doctor Dashboard</h5>
         <div className="d-flex gap-3 align-items-center">
-          <div style={{ cursor: 'pointer' }} onClick={() => handleChat(doctorInfo?.appUserId)}>
-  <MdMessage size={24} />
-</div>
-
-          <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => handleNotifications(doctorInfo?.appUserId)}>
-            <MdNotificationsNone size={24} />
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleChat(doctorInfo?.appUserId)}
+          >
+            <MdMessage size={24} color={COLORS.TEXT} />
+          </div>
+          <div
+            style={{ position: 'relative', cursor: 'pointer' }}
+            onClick={() => handleNotifications(doctorInfo?.appUserId)}
+          >
+            <MdNotificationsNone size={24} color={COLORS.TEXT} />
             {unreadCount > 0 && (
               <span
                 className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -170,37 +211,76 @@ function DrDashboard() {
         </div>
       </div>
 
-      {/* Main */}
+      {/* Main Content */}
       <Container fluid className="py-4">
-        <Row className="g-3 mb-4">
-          <Col md={3}>
-            <Card className="shadow-sm text-white" style={{ backgroundColor: COLORS.MID }}>
-              <Card.Body className="text-center">
-                <h6>Booked</h6>
-                <h3>{bookedCount}</h3>
-                <p style={{ fontSize: '0.85rem' }}>Today: {todayAppointments.length}</p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3}>
-            <Card className="shadow-sm text-white" style={{ backgroundColor: COLORS.ACCENT }}>
-              <Card.Body className="text-center">
-                <h6>Available</h6>
-                <h3>{availableCount}</h3>
-                <p style={{ fontSize: '0.85rem' }}>This week</p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className="shadow-sm" style={{ backgroundColor: '#fff' }}>
+        {/* Calendar Row */}
+        <Row className="g-3 mb-2">
+          <Col md={12}>
+            <Card className="shadow-sm h-100" style={{ backgroundColor: COLORS.LIGHT }}>
               <Card.Body>
-                <h6 className="mb-3" style={{ color: COLORS.DARK }}>Today's Appointments</h6>
+                <h6 style={{ color: COLORS.TEXT }} className="mb-3">
+                  Appointment Calendar
+                </h6>
+                <div style={{ height: '400px' }}>
+                  <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    selectable
+                    onSelectEvent={(event) => updateDate(new Date(event.start))}
+                    onSelectSlot={(slotInfo) => updateDate(new Date(slotInfo.start))}
+                    onNavigate={(date) => updateDate(date)}
+                    views={['month']}
+                    eventPropGetter={() => ({
+                      style: {
+                        backgroundColor: COLORS.ACCENT,
+                        borderRadius: '4px',
+                        color: COLORS.TEXT,
+                        border: 'none',
+                        padding: '2px 4px',
+                      },
+                    })}
+                    style={{ fontFamily: "'Poppins', sans-serif", color: COLORS.TEXT }}
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* Smaller Appointment Box Below Calendar */}
+        <Row className="g-3 mb-4 justify-content-center">
+          <Col md={4}>
+            <Card
+              className="shadow-sm"
+              style={{
+                maxHeight: '150px',
+                overflowY: 'auto',
+                backgroundColor: COLORS.LIGHT,
+                color: COLORS.TEXT,
+                fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              <Card.Body>
+                <h6 className="mb-3" style={{ fontSize: '1rem' }}>
+                  {selectedDate.toDateString() === new Date().toDateString()
+                    ? "Today's Appointments:"
+                    : `Appointments on ${selectedDate.toDateString()}:`}
+                </h6>
                 {todayAppointments.length === 0 ? (
-                  <p className="text-muted">No appointments today</p>
+                  <p className="text-muted" style={{ fontSize: '0.85rem' }}>
+                    No appointments
+                  </p>
                 ) : (
                   <div className="d-flex flex-wrap gap-2">
-                    {todayAppointments.map(a => (
-                      <Badge key={a.appointmentId} bg="dark" className="p-2">
+                    {todayAppointments.map((a) => (
+                      <Badge
+                        key={a.appointmentId}
+                        bg="primary"
+                        className="p-2"
+                        style={{ fontSize: '0.8rem', fontFamily: "'Poppins', sans-serif" }}
+                      >
                         {a.startTime} – {a.petName}
                       </Badge>
                     ))}
@@ -211,27 +291,23 @@ function DrDashboard() {
           </Col>
         </Row>
 
-        <Row className="g-3">
-          <Col md={8}>
-            <Card className="shadow-sm h-100">
+        {/* Booking, Attendance, Visitors */}
+        <Row className="g-3 mb-4">
+          <Col md={4}>
+            <Card className="shadow-sm text-center" style={{ backgroundColor: COLORS.LIGHT }}>
               <Card.Body>
-                <h6 style={{ color: COLORS.DARK }} className="mb-3">Appointment Calendar</h6>
-                <div style={{ height: '400px' }}>
-                  <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    onSelectEvent={event => updateDate(new Date(event.start))}
-                    onNavigate={date => updateDate(date)}
-                    eventPropGetter={() => ({
-                      style: {
-                        backgroundColor: COLORS.ACCENT,
-                        borderRadius: '4px',
-                        color: 'white',
-                        border: 'none',
-                        padding: '2px 4px',
-                      },
+                <h6 style={{ color: COLORS.TEXT, fontFamily: "'Poppins', sans-serif" }}>
+                  Booking %
+                </h6>
+                <div style={{ width: 100, margin: 'auto' }}>
+                  <CircularProgressbar
+                    value={bookingPercentage}
+                    text={`${bookingPercentage.toFixed(0)}%`}
+                    styles={buildStyles({
+                      textColor: COLORS.TEXT,
+                      pathColor: COLORS.ACCENT,
+                      trailColor: '#ccc',
+                      fontFamily: "'Poppins', sans-serif",
                     })}
                   />
                 </div>
@@ -240,9 +316,49 @@ function DrDashboard() {
           </Col>
 
           <Col md={4}>
-            <Card className="shadow-sm h-100">
+            <Card className="shadow-sm text-center" style={{ backgroundColor: COLORS.LIGHT }}>
               <Card.Body>
-                <h6 style={{ color: COLORS.DARK }} className="mb-3">Weekly Overview</h6>
+                <h6 style={{ color: COLORS.TEXT, fontFamily: "'Poppins', sans-serif" }}>
+                  Attendance %
+                </h6>
+                <div style={{ width: 100, margin: 'auto' }}>
+                  <CircularProgressbar
+                    value={attendancePercentage}
+                    text={`${attendancePercentage.toFixed(0)}%`}
+                    styles={buildStyles({
+                      textColor: COLORS.TEXT,
+                      pathColor: COLORS.ACCENT,
+                      trailColor: '#ccc',
+                      fontFamily: "'Poppins', sans-serif",
+                    })}
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md={4}>
+            <Card className="shadow-sm text-center" style={{ backgroundColor: COLORS.LIGHT }}>
+              <Card.Body>
+                <h6 style={{ color: COLORS.TEXT, fontFamily: "'Poppins', sans-serif" }}>
+                  Visitors
+                </h6>
+                <h3 style={{ color: COLORS.TEXT, fontFamily: "'Poppins', sans-serif" }}>
+                  {uniqueUsersCount}
+                </h3>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* Weekly Chart */}
+        <Row className="g-3">
+          <Col md={12}>
+            <Card className="shadow-sm h-100" style={{ backgroundColor: COLORS.LIGHT }}>
+              <Card.Body>
+                <h6 style={{ color: COLORS.TEXT, fontFamily: "'Poppins', sans-serif" }} className="mb-3">
+                  Weekly Overview
+                </h6>
                 <div style={{ height: '400px' }}>
                   <Bar
                     data={buildChart()}
@@ -253,20 +369,26 @@ function DrDashboard() {
                         legend: {
                           position: 'bottom',
                           labels: {
-                            color: COLORS.DARK,
-                            font: { size: 12 },
+                            color: COLORS.TEXT,
+                            font: { family: "'Poppins', sans-serif", size: 12 },
                           },
                         },
                       },
                       scales: {
                         x: {
-                          ticks: { color: COLORS.DARK },
+                          ticks: { color: COLORS.TEXT },
                           grid: { display: false },
                         },
-                        y: {
-                          ticks: { color: COLORS.DARK },
-                          grid: { color: 'rgba(0,0,0,0.05)' },
-                        },
+                       y: {
+  min: 0, // ✅ Force Y-axis to start from 1
+  ticks: {
+    color: COLORS.TEXT,
+    stepSize: 1.0, 
+    interval: 1, 
+  },
+  grid: { color: 'rgba(0,0,0,0.05)' },
+}
+
                       },
                     }}
                   />

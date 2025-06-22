@@ -19,6 +19,7 @@ class MessageService {
     });
   }
 
+
   // Send a new message
   sendMessage(chatMessage) {
     return this.authAxios.post("/send", chatMessage);

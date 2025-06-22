@@ -42,156 +42,217 @@ const ServiceCategoryList = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0f172a",
-        padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
+    <>
+      {/* Import Raleway font */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+
       <div
         style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          backgroundColor: "#1e293b",
-          borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          minHeight: "100vh",
+          backgroundColor: "#ffffff",
+          padding: "50px",
+          color: "#000000",
+          fontFamily: "'Raleway', sans-serif",
         }}
       >
-        {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
-            padding: "20px 30px",
-            borderTopLeftRadius: "12px",
-            borderTopRightRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
+            maxWidth: "1100px",
+            margin: "0 auto",
+            backgroundColor: "#FFFF",
+            borderRadius: "12px",
+            boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
           }}
         >
-          <FaWrench size={26} />
-          <div>
-            <h2 style={{ margin: 0, fontWeight: "700" }}>Service Categories</h2>
-            <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
-              Manage available service types
-            </p>
-          </div>
-        </div>
-
-        {/* Message */}
-        {message && (
+          {/* Header */}
           <div
-            className="alert text-center fw-semibold"
             style={{
-              margin: 0,
-              borderRadius: 0,
-              color: messageType === "danger" ? "#f8d7da" : "#d4edda",
-              backgroundColor: messageType === "danger" ? "#721c24" : "#155724",
-              border: "none",
+              background: "#D0D5CE", // pastel gradient
+              padding: "20px 30px",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              color: "#000000", // light color for contrast
             }}
           >
-            {message}
+            <FaWrench size={26} />
+            <div>
+              <h2 style={{ margin: 0, fontWeight: "700" }}>Service Categories</h2>
+              <p style={{ margin: 0, fontWeight: "400", opacity: 0.8 }}>
+                Manage available service types
+              </p>
+            </div>
           </div>
-        )}
 
-        {/* Body */}
-        <div style={{ padding: "30px" }}>
-          {/* Add Button */}
-          <div className="text-end mb-4">
-            <button
-              className="btn"
+          {/* Message */}
+          {message && (
+            <div
+              className="alert text-center fw-semibold"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
-                fontWeight: "600",
-                padding: "8px 20px",
-                borderRadius: "30px",
+                margin: 0,
+                borderRadius: 0,
+                color: messageType === "danger" ? "#721c24" : "#155724",
+                backgroundColor: messageType === "danger" ? "#f8d7da" : "#d4edda",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
+                fontWeight: "600",
+                padding: "12px 0",
               }}
-              onClick={() => navigate("/admin/addservicecategory")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
             >
-              ➕ Add Service Category
-            </button>
-          </div>
+              {message}
+            </div>
+          )}
 
-          {/* Table */}
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", color: "#e0e0e0" }}>
-              <thead>
-                <tr style={{ color: "#c3baf0", textAlign: "center" }}>
-                  <th style={{ padding: "10px" }}>ID</th>
-                  <th>Category Name</th>
-                  <th>Key</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.length > 0 ? (
-                  categories.map((category, index) => (
-                    <tr
-                      key={category.category_category_id || index}
-                      style={{
-                        borderTop: "1px solid #334155",
-                        textAlign: "center",
-                        transition: "background-color 0.3s",
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#1a2235")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.backgroundColor = "transparent")
-                      }
-                    >
-                      <td style={{ padding: "10px" }}>
-                        {category.category_category_id || "No ID"}
-                      </td>
-                      <td>{category.mscategory || "No Name"}</td>
-                      <td>{category.mscategory_key || "N/A"}</td>
-                      <td>
-                        <button
-                          className="btn btn-sm me-2 text-white"
-                          style={{ backgroundColor: "#845ef7", border: "none" }}
-                          onClick={() =>
-                            navigate(`/admin/updatecategory/${category.category_category_id}`)
-                          }
-                        >
-                          <FaEdit className="me-1" /> Edit
-                        </button>
-                        <button
-                          className="btn btn-sm"
-                          style={{
-                            backgroundColor: "#e53935",
-                            color: "#fff",
-                            border: "none",
-                          }}
-                          onClick={() =>
-                            deleteCategory(category.category_category_id)
-                          }
-                        >
-                          <FaTrashAlt className="me-1" /> Delete
-                        </button>
+          {/* Body */}
+          <div style={{ padding: "30px" }}>
+            {/* Add Button */}
+            <div className="text-end mb-4">
+              <button
+                className="btn"
+                style={{
+                  backgroundColor: "#D0D5CE",
+                  color: "#000000",
+                  fontWeight: "600",
+                  padding: "8px 20px",
+                  borderRadius: "30px",
+                  border: "none",
+                  boxShadow: "0 4px 12px rgba(142, 154, 146, 0.6)",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s ease",
+                  fontFamily: "'Raleway', sans-serif",
+                }}
+                onClick={() => navigate("/admin/addservicecategory")}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#727c73")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#8e9a92")}
+              >
+                ➕ Add Service Category
+              </button>
+            </div>
+
+            {/* Table */}
+            <div style={{ overflowX: "auto" }}>
+              <table
+                style={{
+                  width: "100%",
+                  color: "#000000",
+                  borderCollapse: "collapse",
+                  fontFamily: "'Raleway', sans-serif",
+                }}
+              >
+                <thead>
+                  <tr
+                    style={{
+                      color: "#555a4e",
+                      textAlign: "center",
+                      borderBottom: "2px solid #9aa398",
+                    }}
+                  >
+                    <th style={{ padding: "12px" }}>ID</th>
+                    <th>Category Name</th>
+                    <th>Key</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.length > 0 ? (
+                    categories.map((category, index) => (
+                      <tr
+                        key={category.category_category_id || index}
+                        style={{
+                          borderTop: "1px solid #bfc9bd",
+                          textAlign: "center",
+                          transition: "background-color 0.3s",
+                          cursor: "default",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#c5ccc9")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.backgroundColor = "transparent")
+                        }
+                      >
+                        <td style={{ padding: "10px" }}>
+                          {category.category_category_id || "No ID"}
+                        </td>
+                        <td>{category.mscategory || "No Name"}</td>
+                        <td>{category.mscategory_key || "N/A"}</td>
+                        <td>
+                          <button
+                            className="btn btn-sm me-2"
+                            style={{
+                              backgroundColor: "#D0D5CE",
+                              color: "#000000",
+                              border: "none",
+                              padding: "6px 12px",
+                              borderRadius: "6px",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                              transition: "background-color 0.3s ease",
+                              marginRight: "8px",
+                            }}
+                            onClick={() =>
+                              navigate(
+                                `/admin/updateservicecategory/${category.category_category_id}`
+                              )
+                            }
+                            onMouseEnter={(e) =>
+                              (e.currentTarget.style.backgroundColor = "#5c6c54")
+                            }
+                            onMouseLeave={(e) =>
+                              (e.currentTarget.style.backgroundColor = "#7a8b74")
+                            }
+                          >
+                            <FaEdit style={{ marginRight: "6px" }} /> Edit
+                          </button>
+                          <button
+                            className="btn btn-sm"
+                            style={{
+                              backgroundColor: "#8B0000",
+                              color: "#FFFFFF",
+                              border: "none",
+                              padding: "6px 12px",
+                              borderRadius: "6px",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                              transition: "background-color 0.3s ease",
+                            }}
+                            onClick={() =>
+                              deleteCategory(category.category_category_id)
+                            }
+                            onMouseEnter={(e) =>
+                              (e.currentTarget.style.backgroundColor = "#a84746")
+                            }
+                            onMouseLeave={(e) =>
+                              (e.currentTarget.style.backgroundColor = "#d1605f")
+                            }
+                          >
+                            <FaTrashAlt style={{ marginRight: "6px" }} /> Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="text-center text-muted py-3"
+                        style={{ color: "#555a4e", padding: "20px 0" }}
+                      >
+                        No service categories found.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="text-center text-muted py-3">
-                      No service categories found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

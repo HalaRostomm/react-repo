@@ -9,11 +9,12 @@ import {
   FaServicestack, FaClipboard, FaChevronDown, FaChevronUp
 } from "react-icons/fa";
 
-// Inject Tinos font
+// Inject Poppins font
 const fontLink = document.createElement("link");
-fontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap"; // ⬅️ CHANGED FONT
 fontLink.rel = "stylesheet";
 document.head.appendChild(fontLink);
+
 
 const SideUser = () => {
   const [userId, setUserId] = useState(null);
@@ -119,25 +120,23 @@ const SideUser = () => {
       </div>
 
       <style>{`
-       .sidebar-user {
-  width: 260px;
-  background: #14213D;
-  color: #E5E5E5;
-  min-height: 100vh;
-  padding: 20px;
-  font-family: 'Tinos', serif;
-  position: fixed;
-  top: 0;
-  left: -270px;
-  z-index: 1000;
-  transition: 0.3s ease-in-out;
-
-  /* 👇 Scroll fix */
-  overflow-y: auto;
-  max-height: 100vh;
-  scrollbar-width: thin;
-  scrollbar-color: #FCA311 transparent;
-}
+  .sidebar-user {
+    width: 260px;
+    background: #14213D;
+    color: #E5E5E5;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif; /* ⬅️ CHANGED FONT */
+    position: fixed;
+    top: 0;
+    left: -270px;
+    z-index: 1000;
+    transition: 0.3s ease-in-out;
+    overflow-y: auto;
+    max-height: 100vh;
+    scrollbar-width: thin;
+    scrollbar-color: #3FEDF1 transparent; /* updated to match header color */
+  }
         .sidebar-user.open {
           left: 0;
         }
@@ -148,7 +147,7 @@ const SideUser = () => {
           font-size: 24px;
           background: none;
           border: none;
-          color: #FCA311;
+            color: #3FEDF1; /* ⬅️ HEADER COLOR */
           z-index: 1100;
         }
         .close-btn {
@@ -158,23 +157,24 @@ const SideUser = () => {
           background: none;
           border: none;
           font-size: 22px;
-          color: #FCA311;
+           color: #3FEDF1; /* ⬅️ HEADER COLOR */
         }
         .sidebar-header {
           text-align: center;
           margin-bottom: 20px;
+             color: #3FEDF1; /* ⬅️ HEADER COLOR */
         }
         .sidebar-avatar {
           width: 70px;
           height: 70px;
           border-radius: 50%;
           object-fit: cover;
-          border: 2px solid #FCA311;
+         border: 2px solid #3FEDF1; /* ⬅️ HEADER COLOR */
         }
         .sidebar-header p {
           margin-top: 8px;
           font-weight: bold;
-          color: #FCA311;
+          color: #3FEDF1; /* ⬅️ HEADER COLOR */
         }
         .sidebar-links {
           display: flex;
@@ -194,22 +194,22 @@ const SideUser = () => {
           transition: 0.3s;
         }
         .sidebar-button:hover {
-          background: #FCA311;
+         background: #3FEDF1; /* ⬅️ HEADER COLOR */
           color: #000000;
         }
         .sidebar-sub {
           margin-left: 20px;
           font-size: 14px;
-          background: #E5E5E5;
+           background: rgba(63, 237, 241, 0.22); /* ⬅️ CARD COLOR */
           color: #14213D;
           padding-left: 10px;
         }
         .sidebar-sub:hover {
-          background: #FCA311;
+            background: #3FEDF1; /* ⬅️ HEADER COLOR */
           color: #000000;
         }
         .logout-btn {
-          background-color: #FCA311;
+         background-color: #3FEDF1; /* ⬅️ HEADER COLOR */
           color: #000000;
           border: none;
           padding: 10px;
@@ -220,7 +220,7 @@ const SideUser = () => {
           margin-top: 20px;
         }
         .logout-btn:hover {
-          background-color: #ffb347;
+              background-color: #88f8fc;
         }
       `}</style>
     </>

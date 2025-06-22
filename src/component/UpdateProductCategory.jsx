@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import adminService from "../service/adminService";
-import { FaEdit, FaListAlt, FaKey, FaTag } from "react-icons/fa";
+import { FaEdit, FaListAlt, FaTag } from "react-icons/fa";
 
-const UpdatePetCategory = () => {
+const UpdateProductCategory = () => {
   const { id } = useParams();
   const [category, setCategory] = useState({
-    categoryId: "",
-    type: "PET",
+    category_category_id: "",
     mscategory_key: "",
     mscategory: {},
   });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [originalKey, setOriginalKey] = useState("");
-
-  const predefinedKeys = [
-    "Bird", "Cat", "Dog", "Ferret", "Fish", "Guinea Pig", "Hamster",
-    "Lizard", "Rabbit", "Rat", "Snake", "Turtle"
-  ];
 
   useEffect(() => {
     adminService.getCategoryById(id)
@@ -29,10 +22,8 @@ const UpdatePetCategory = () => {
           const key = Object.keys(mscategory)[0];
           const value = mscategory[key];
 
-          setOriginalKey(key);
           setCategory({
-            categoryId: response.data.categoryId,
-            type: response.data.type || "PET",
+            category_category_id: response.data.category_category_id,
             mscategory_key: key,
             mscategory: { [key]: value },
           });
@@ -72,9 +63,14 @@ const UpdatePetCategory = () => {
         return;
       }
 
-      await adminService.updateCategory(id, category, token);
+      await adminService.updateCategory(id, {
+        category_category_id: category.category_category_id,
+        mscategory_key: category.mscategory_key,
+        mscategory: category.mscategory,
+      }, token);
+
       setMessage("✅ Category updated successfully!");
-      setTimeout(() => navigate("/admin/getpetcategories"), 1500);
+      setTimeout(() => navigate("/admin/getproductcategories"), 1500);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "❌ Failed to update category.";
       setMessage(errorMessage);
@@ -85,17 +81,13 @@ const UpdatePetCategory = () => {
     <>
       <style>
         {`
-          * {
-            font-family: 'Raleway', sans-serif;
-          }
-
           input::placeholder {
             color: rgba(0, 0, 0, 0.6);
           }
-
           input:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-            -webkit-text-fill-color: black !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            -webkit-text-fill-color: #000000 !important;
+            transition: background-color 9999s ease-in-out 0s;
           }
         `}
       </style>
@@ -106,7 +98,8 @@ const UpdatePetCategory = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "30px"
+        padding: "30px",
+        fontFamily: "'Raleway', sans-serif"
       }}>
         <div style={{
           backgroundColor: "#D0D5CE",
@@ -114,19 +107,19 @@ const UpdatePetCategory = () => {
           borderRadius: "16px",
           width: "100%",
           maxWidth: "600px",
-          color: "#000",
-          boxShadow: "0 6px 16px rgba(0,0,0,0.1)"
+          color: "#000000",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.2)"
         }}>
           <h3 style={{ textAlign: "center", color: "#000000", marginBottom: 25 }}>
             <FaEdit style={{ marginRight: 8 }} />
-            Update Pet Category
+            Update Category
           </h3>
 
           {message && (
             <div className={`alert ${message.startsWith("✅") ? "alert-success" : "alert-danger"}`}
               style={{
-                backgroundColor: message.startsWith("✅") ? "#e0f2f1" : "#ffebee",
-                color: message.startsWith("✅") ? "#00695c" : "#c62828",
+                backgroundColor: message.startsWith("✅") ? "#c8e6c9" : "#ffcdd2",
+                color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
                 padding: "10px",
                 borderRadius: "8px",
                 textAlign: "center",
@@ -142,34 +135,22 @@ const UpdatePetCategory = () => {
                 <FaListAlt style={{ marginRight: 6 }} />
                 Category Key
               </label>
-              {originalKey && (
-                <div className="mb-2" style={{ color: "#333" }}>
-                  <small>
-                    <FaKey style={{ marginRight: "6px" }} />
-                    <strong>Previous Key:</strong> {originalKey}
-                  </small>
-                </div>
-              )}
-
-              <select
+              <input
+                type="text"
                 name="mscategory_key"
-                className="form-select"
+                className="form-control"
                 value={category.mscategory_key}
                 onChange={handleChange}
                 required
                 style={{
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  border: "1px solid #000000",
                   borderRadius: "8px",
-                  padding: "10px"
+                  padding: "10px",
+                  caretColor: "black"
                 }}
-              >
-                <option value="">-- Select Category Key --</option>
-                {predefinedKeys.map((key) => (
-                  <option key={key} value={key}>{key}</option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="mb-4">
@@ -186,11 +167,12 @@ const UpdatePetCategory = () => {
                 placeholder="Enter category name"
                 required
                 style={{
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "1px solid #ccc",
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  border: "1px solid #000000",
                   borderRadius: "8px",
-                  padding: "10px"
+                  padding: "10px",
+                  caretColor: "black"
                 }}
               />
             </div>
@@ -199,11 +181,11 @@ const UpdatePetCategory = () => {
               type="submit"
               className="btn w-100 fw-bold"
               style={{
-                backgroundColor: "#000",
+                backgroundColor: "#000000",
+                border: "none",
                 color: "#fff",
                 padding: "10px",
-                borderRadius: "8px",
-                fontWeight: "600"
+                borderRadius: "8px"
               }}
             >
               Save Changes
@@ -215,4 +197,4 @@ const UpdatePetCategory = () => {
   );
 };
 
-export default UpdatePetCategory;
+export default UpdateProductCategory;

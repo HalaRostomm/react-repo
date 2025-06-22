@@ -46,7 +46,6 @@ const AddPp = () => {
 
   const AddNewPP = async (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("jwt_token");
     if (token) {
       const decoded = jwtDecode(token);
@@ -65,68 +64,53 @@ const AddPp = () => {
       });
     } catch (error) {
       console.error("Error adding product provider:", error);
-      if (error.response && error.response.data) {
-        setMessage(`❌ ${error.response.data}`);
-      } else {
-        setMessage("❌ Failed to add Product Provider. Please try again.");
-      }
+      setMessage(
+        `❌ ${
+          error.response?.data || "Failed to add Product Provider. Please try again."
+        }`
+      );
     }
   };
 
   return (
     <>
-      {/* Make placeholders white */}
       <style>
         {`
-          input::placeholder, select:required:invalid {
-            color: rgba(255, 255, 255, 0.8);
+          input::placeholder,
+          select::placeholder {
+            color: rgba(0, 0, 0, 0.6);
           }
 
           input:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
-            -webkit-text-fill-color: white !important;
-            transition: background-color 9999s ease-in-out 0s;
+            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+            -webkit-text-fill-color: #000 !important;
           }
         `}
       </style>
-<style>
-  {`
-    input::placeholder,
-    select::placeholder,
-    textarea::placeholder {
-      color: rgba(255, 255, 255, 0.85) !important;
-    }
 
-    input:-webkit-autofill,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:hover {
-      -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
-      -webkit-text-fill-color: white !important;
-    }
-  `}
-</style>
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: "#0f172a",
+          backgroundColor: "#ffffff",
           padding: "50px 20px",
-          fontFamily: "'Segoe UI', sans-serif",
-          color: "#e0e0e0",
+          fontFamily: "'Raleway', sans-serif",
+          color: "#000",
         }}
       >
         <div
           style={{
             maxWidth: "600px",
             margin: "0 auto",
-            backgroundColor: "#1e293b",
+            backgroundColor: "#D0D5CE",
             borderRadius: "12px",
-            boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+            boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+            border: "1px solid #D0D5CE",
           }}
         >
           {/* Header */}
           <div
             style={{
-              background: "linear-gradient(90deg, #9c27b0, #d63384)",
+              backgroundColor: "#D0D5CE",
               padding: "20px 30px",
               borderTopLeftRadius: "12px",
               borderTopRightRadius: "12px",
@@ -135,7 +119,8 @@ const AddPp = () => {
               justifyContent: "center",
               alignItems: "center",
               gap: "10px",
-              color: "#fff",
+              color: "#000000",
+              borderBottom: "1px solid #D0D5CE",
             }}
           >
             <FaBoxOpen size={24} />
@@ -147,10 +132,8 @@ const AddPp = () => {
             <div
               className="text-center fw-semibold"
               style={{
-                backgroundColor: message.startsWith("✅")
-                  ? "#c8e6c9"
-                  : "#f8d7da",
-                color: message.startsWith("✅") ? "#256029" : "#842029",
+                backgroundColor: message.startsWith("✅") ? "#e0f2f1" : "#fce4ec",
+                color: message.startsWith("✅") ? "#004d40" : "#880e4f",
                 padding: "12px",
                 fontWeight: "600",
               }}
@@ -165,11 +148,16 @@ const AddPp = () => {
               <input
                 type="email"
                 name="username"
-                className="form-control bg-dark text-white"
+                className="form-control"
                 placeholder="Email"
                 value={productProvider.username}
                 onChange={handleChange}
                 required
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#000",
+                  border: "1px solid #D0D5CE",
+                }}
               />
             </div>
 
@@ -177,21 +165,31 @@ const AddPp = () => {
               <input
                 type="password"
                 name="password"
-                className="form-control bg-dark text-white"
+                className="form-control"
                 placeholder="Password"
                 value={productProvider.password}
                 onChange={handleChange}
                 required
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#000",
+                  border: "1px solid #D0D5CE",
+                }}
               />
             </div>
 
             <div className="mb-4">
               <select
                 name="company"
-                className="form-select bg-dark text-white"
+                className="form-select"
                 value={productProvider.company?.companyId || ""}
                 onChange={handleChange}
                 required
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#000",
+                  border: "1px solid #D0D5CE",
+                }}
               >
                 <option value="">-- Select Company --</option>
                 {companies.map((company) => (
@@ -206,8 +204,8 @@ const AddPp = () => {
               type="submit"
               className="btn w-100"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
+                backgroundColor: "#000000",
+                color: "#ffffff",
                 fontWeight: "600",
                 padding: "10px",
                 borderRadius: "8px",

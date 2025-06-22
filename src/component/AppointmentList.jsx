@@ -5,11 +5,12 @@ import authService from "../service/authService";
 import { jwtDecode } from "jwt-decode";
 
 const COLORS = {
-  dark: "#0D1B2A",
-  deep: "#1B263B",
-  steel: "#415A77",
-  soft: "#778DA9",
-  light: "#E0E1DD",
+  primary: "#64B5F6",     // Light blue
+  background: "#FFFFFF",  // White background
+  card: "#F3F6FA",         // Light card background
+  text: "#000000",        // Black text
+  warning: "#f0ad4e",     // Orange for Edit
+  danger: "#d9534f",      // Red for Delete
 };
 
 const AppointmentList = () => {
@@ -119,8 +120,8 @@ const AppointmentList = () => {
               key={f}
               style={{
                 ...styles.filterBtn,
-                backgroundColor: filter === f ? COLORS.steel : COLORS.light,
-                color: filter === f ? COLORS.light : COLORS.steel,
+                backgroundColor: filter === f ? COLORS.primary : COLORS.background,
+                color: filter === f ? "#fff" : COLORS.primary,
               }}
               onClick={() => setFilter(f)}
             >
@@ -165,23 +166,23 @@ const AppointmentList = () => {
                 <td>
                   {appointment.booked ? (
                     <button
-                      style={{ ...styles.actionBtn, backgroundColor: COLORS.soft }}
+                      style={{ ...styles.actionBtn, backgroundColor: COLORS.primary }}
                       onClick={() =>
                         navigate(`/doctor/getappointmentbyid/${appointment.appointmentId}`)
                       }
                     >
-                      👁️ View 
+                       View 
                     </button>
                   ) : (
                     <>
                       <button
-                        style={{ ...styles.actionBtn, backgroundColor: "#f0ad4e" }}
+                        style={{ ...styles.actionBtn, backgroundColor:  COLORS.warning }}
                         onClick={() => handleUpdate(appointment.appointmentId, appointment)}
                       >
                          Edit
                       </button>
                       <button
-                        style={{ ...styles.actionBtn, backgroundColor: "#d9534f" }}
+                        style={{ ...styles.actionBtn, backgroundColor: COLORS.danger }}
                         onClick={() => handleDelete(appointment.appointmentId)}
                       >
                          Delete
@@ -199,18 +200,17 @@ const AppointmentList = () => {
     </div>
   );
 };
-
 const styles = {
   container: {
-    fontFamily: "'Crimson Pro', serif",
-    backgroundColor: COLORS.dark,
-    color: COLORS.light,
+    fontFamily: "'Poppins', sans-serif",
+    backgroundColor: COLORS.background,
+    color: COLORS.text,
     padding: "2rem",
     minHeight: "100vh",
   },
   heading: {
     textAlign: "center",
-    color: COLORS.soft,
+    color: COLORS.primary,
     marginBottom: "2rem",
     fontWeight: 600,
   },
@@ -222,28 +222,31 @@ const styles = {
   },
   filterBtn: {
     padding: "0.5rem 1rem",
-    border: `2px solid ${COLORS.steel}`,
+    border: `2px solid ${COLORS.primary}`,
     borderRadius: "8px",
     marginRight: "0.5rem",
     fontWeight: "bold",
     cursor: "pointer",
-    fontFamily: "'Crimson Pro', serif",
+    backgroundColor: COLORS.background,
+    color: COLORS.primary,
+    fontFamily: "'Poppins', sans-serif",
   },
   addBtn: {
-    backgroundColor: COLORS.steel,
-    color: COLORS.light,
+    backgroundColor: COLORS.primary,
+    color: "#fff",
     border: "none",
     borderRadius: "8px",
     padding: "0.5rem 1rem",
     fontWeight: "bold",
     cursor: "pointer",
-    fontFamily: "'Crimson Pro', serif",
+    fontFamily: "'Poppins', sans-serif",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
-    backgroundColor: COLORS.deep,
-    color: COLORS.light,
+    backgroundColor: COLORS.card,
+    color: COLORS.text,
+    boxShadow: "0 0 10px rgba(0, 0, 0, 0.05)",
   },
   actionBtn: {
     color: "#fff",
@@ -253,22 +256,23 @@ const styles = {
     margin: "0 0.2rem",
     fontWeight: "bold",
     cursor: "pointer",
-    fontFamily: "'Crimson Pro', serif",
+    fontFamily: "'Poppins', sans-serif",
   },
   message: {
     marginBottom: "1rem",
     padding: "1rem",
-    backgroundColor: "#fff3cd",
-    borderLeft: "6px solid #ffeeba",
+    backgroundColor: "#e3f2fd",
+    borderLeft: `6px solid ${COLORS.primary}`,
     borderRadius: "5px",
-    color: "#0D1B2A",
+    color: COLORS.text,
   },
   noData: {
     textAlign: "center",
     marginTop: "2rem",
     fontWeight: "bold",
-    color: COLORS.soft,
+    color: COLORS.primary,
   },
 };
+
 
 export default AppointmentList;

@@ -43,155 +43,161 @@ const AdminProfile = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-5 text-primary">Loading...</div>;
+    return <div className="text-center mt-5" style={{ color: '#333' }}>Loading...</div>;
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(to right, #141e30, #243b55)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem',
-      }}
-    >
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+
       <div
         style={{
-          backgroundColor: '#1e1e2f',
-          color: '#fff',
-          borderRadius: '16px',
-          padding: '2.5rem',
-          width: '100%',
-          maxWidth: '850px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-          position: 'relative',
+          height: '100vh',           // Full viewport height
+          width: '100vw',            // Full viewport width
+          backgroundColor: '#fff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+          fontFamily: "'Raleway', sans-serif",
+          boxSizing: 'border-box',
+          overflowY: 'auto',         // Scroll vertically if needed
         }}
       >
-       
+        <div
+          style={{
+            backgroundColor: '#D0D5CE',
+            color: '#333',
+            borderRadius: '20px',
+            padding: '3rem',
+            width: '90vw',          // Take most of viewport width
+            maxWidth: '1200px',     // max width for very large screens
+            height: '85vh',         // fill most vertical space
+            boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+            display: 'flex',
+            gap: '3rem',
+            overflowY: 'auto',     // scroll inside card if content grows
+          }}
+        >
+          {/* Profile Image */}
+         {userInfo.image && (
+  <img
+    src={`data:image/jpeg;base64,${userInfo.image}`}
+    alt="Profile"
+    style={{
+      width: '200px',
+      height: '200px',
+      objectFit: 'cover',
+      borderRadius: '50%',
+      border: '4px solid #121212',  // dark black border
+      flexShrink: 0,
+      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+    }}
+  />
+)}
 
-        {/* Profile Image + Name */}
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {userInfo.image && (
-            <img
-              src={`data:image/jpeg;base64,${userInfo.image}`}
-              alt="Profile"
-              style={{
-                width: '100px',
-                height: '100px',
-                objectFit: 'cover',
-                borderRadius: '50%',
-                marginRight: '1.5rem',
-                border: '3px solid #6f42c1',
-              }}
-            />
-          )}
-          <div>
+          {/* Profile Details */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div
               style={{
-                fontSize: '0.9rem',
+                fontSize: '1rem',
                 textTransform: 'uppercase',
-                color: '#888',
+                color: '#666',
                 fontWeight: '500',
+                marginBottom: '0.5rem',
               }}
             >
               CEO / CO-FOUNDER
             </div>
-            <h2
+           <h2
+  style={{
+    fontSize: '3rem',
+    fontWeight: '700',
+    marginBottom: '1.5rem',
+    color: '#121212',  // dark black text
+  }}
+>
+  {userInfo.firstname} {userInfo.lastname}
+</h2>
+
+            <div
               style={{
-                fontSize: '2rem',
-                fontWeight: '700',
-                marginBottom: '0.5rem',
+                fontSize: '1.3rem',
+                lineHeight: '1.8',
+                color: '#444',
+                maxWidth: '700px',
               }}
             >
-              {userInfo.firstname} {userInfo.lastname}
-            </h2>
+              <div><strong>Email:</strong> {userInfo.username}</div>
+              <div><strong>Phone:</strong> {userInfo.phone}</div>
+              <div><strong>Gender:</strong> {userInfo.gender}</div>
+              <div><strong>Birth Date:</strong> {userInfo.birthDate}</div>
+              <div><strong>Address:</strong> {userInfo.address}</div>
+            </div>
 
+            {/* Buttons */}
+            <div
+              style={{
+                marginTop: '3rem',
+                display: 'flex',
+                gap: '1.5rem',
+                flexWrap: 'wrap',
+                justifyContent: 'flex-start',
+              }}
+            >
+             <button
+  style={{
+    backgroundColor: '#121212', // dark black button
+    color: '#fff',
+    borderRadius: '24px',
+    padding: '0.8rem 2.4rem',
+    fontWeight: 'bold',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '1.1rem',
+  }}
+  onClick={() => navigate(`/admin/updateadmin/${userInfo.appUserId}`)}
+>
+  Edit Profile
+</button>
+              <button
+                style={{
+                  backgroundColor: '#6c757d',
+                  color: '#fff',
+                  borderRadius: '24px',
+                  padding: '0.8rem 2.4rem',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1.1rem',
+                }}
+                onClick={() => navigate('/admin/updatePassword')}
+              >
+                Update Password
+              </button>
+              <button
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: '#fff',
+                  borderRadius: '24px',
+                  padding: '0.8rem 2.4rem',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1.1rem',
+                }}
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* User Info */}
-        <div
-          style={{
-            marginTop: '2rem',
-            fontSize: '1rem',
-            lineHeight: '1.8',
-            color: '#ccc',
-          }}
-        >
-          <div>
-            <strong>Email:</strong> {userInfo.username}
-          </div>
-          <div>
-            <strong>Phone:</strong> {userInfo.phone}
-          </div>
-          <div>
-            <strong>Gender:</strong> {userInfo.gender}
-          </div>
-          <div>
-            <strong>Birth Date:</strong> {userInfo.birthDate}
-          </div>
-          <div>
-            <strong>Address:</strong> {userInfo.address}
-          </div>
-        </div>
-
-        {/* CTA Buttons */}
-        <div
-          style={{
-            marginTop: '2rem',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1rem',
-            flexWrap: 'wrap',
-          }}
-        >
-          <button
-            className="btn"
-            style={{
-              backgroundColor: '#af48c7',
-              color: '#fff',
-              borderRadius: '20px',
-              padding: '0.6rem 1.8rem',
-              fontWeight: 'bold',
-              border: 'none',
-            }}
-            onClick={() => navigate(`/admin/updateadmin/${userInfo.appUserId}`)}
-          >
-            Edit Profile
-          </button>
-          <button
-            className="btn"
-            style={{
-              backgroundColor: '#6c757d',
-              color: '#fff',
-              borderRadius: '20px',
-              padding: '0.6rem 1.8rem',
-              fontWeight: 'bold',
-              border: 'none',
-            }}
-            onClick={() => navigate('/admin/updatePassword')}
-          >
-            Update Password
-          </button>
-          <button
-            className="btn"
-            style={{
-              backgroundColor: '#dc3545',
-              color: '#fff',
-              borderRadius: '20px',
-              padding: '0.6rem 1.8rem',
-              fontWeight: 'bold',
-              border: 'none',
-            }}
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

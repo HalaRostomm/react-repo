@@ -10,7 +10,7 @@ import Navbar from './component/Navbar';
 import UpdateAdmin from './component/UpdateAdmin';
 import UserProfile from './component/UserProfile';
 import PpProfile from './component/PpProfile';
-import Home from './component/Home';
+
 import ProductList from './component/ProductList';
 import AddProduct from './component/AddProduct';
 import UpdateProduct from './component/UpdateProduct';
@@ -117,7 +117,8 @@ import SpDashAdmin from './component/SpDashAdmin'
 import DrDashAdmin from './component/DrDashAdmin'
 import ReschSp from './component/ReschSp';
 import Reschedule from './component/Reschedule';
-
+import UpdateProductCategory from './component/UpdateProductCategory';
+import UpdateServiceCategory from './component/UpdateServiceCategory';
 
 function App() {
     const Navigate = useNavigate();
@@ -133,7 +134,7 @@ function App() {
         <Route path="/login" element={<Login />} />
      
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
 
 <Route path="/api/:verify-code/:email/:code" element={<EmailVerification />} />
 
@@ -145,6 +146,9 @@ function App() {
 
 
 
+        <Route path='/admin/updatepetcategory/:id' element={<UpdatePetCategory token={localStorage.getItem("jwt_token")}/>}></Route>
+        <Route path='/admin/updateproductcategory/:id' element={<UpdateProductCategory token={localStorage.getItem("jwt_token")}/>}></Route>
+        <Route path='/admin/updateservicecategory/:id' element={<UpdateServiceCategory token={localStorage.getItem("jwt_token")}/>}></Route>
 
 
 
@@ -183,7 +187,6 @@ function App() {
         <Route path="/admin/getallcompanies" element={<CompanyList token={localStorage.getItem("jwt_token")} />} />
         <Route path="/admin/getpetcategories" element={<PetCategoryList token={localStorage.getItem("jwt_token")} />} />
         <Route path='/admin/addpetcategory' element={<AddPetCategory token={localStorage.getItem("jwt_token")}/>}></Route>
-        <Route path='/admin/updatecategory/:id' element={<UpdatePetCategory token={localStorage.getItem("jwt_token")}/>}></Route>
         <Route path="/user/getserviceappointments/:serviceId" element={<SpAppoi token={localStorage.getItem("jwt_token")} />} />
 
         <Route path="/user/getspecializeddoctors/:specialization" element={<SpeciDr token={localStorage.getItem("jwt_token")} />} />

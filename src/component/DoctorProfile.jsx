@@ -13,22 +13,20 @@ import { styled } from '@mui/material/styles';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 const COLORS = {
-  dark: '#0D1B2A',
-  deep: '#1B263B',
-  steel: '#415A77',
-  soft: '#778DA9',
-  light: '#E0E1DD',
+  primary: '#64B5F6',
+  light: '#ffffff',
+  text: '#000000',
 };
 
 const ProfileContainer = styled(Box)(({ theme }) => ({
-  fontFamily: '"Crimson Pro", serif',
+  fontFamily: '"Poppins", sans-serif',
   maxWidth: '900px',
   margin: '40px auto',
   padding: theme.spacing(4),
-  backgroundColor: COLORS.deep,
-  color: COLORS.light,
+  backgroundColor: COLORS.light,
+  color: COLORS.text,
   borderRadius: '16px',
-  boxShadow: '0 12px 24px rgba(0,0,0,0.25)',
+  boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
 }));
 
 const HeaderSection = styled(Box)({
@@ -41,24 +39,24 @@ const ProfileAvatar = styled(Avatar)({
   width: '120px',
   height: '120px',
   marginRight: '32px',
-  border: `4px solid ${COLORS.soft}`,
+  border: `4px solid ${COLORS.primary}`,
 });
 
 const InfoItem = styled(Box)({
   marginBottom: '16px',
   '& .label': {
     fontWeight: 600,
-    color: COLORS.soft,
+    color: COLORS.primary,
     marginBottom: '4px',
   },
   '& .value': {
-    color: COLORS.light,
+    color: COLORS.text,
   },
 });
 
 const AvailabilityChip = styled(Box)({
   display: 'inline-block',
-  backgroundColor: COLORS.steel,
+  backgroundColor: COLORS.primary,
   color: COLORS.light,
   padding: '4px 12px',
   borderRadius: '16px',
@@ -74,17 +72,17 @@ const ActionButton = styled(Button)(({ theme }) => ({
   textTransform: 'none',
   fontWeight: 600,
   fontSize: '0.9rem',
-  fontFamily: '"Crimson Pro", serif',
+  fontFamily: '"Poppins", sans-serif',
   '&.edit': {
-    backgroundColor: COLORS.steel,
+    backgroundColor: COLORS.primary,
     color: COLORS.light,
     '&:hover': {
-      backgroundColor: COLORS.soft,
+      backgroundColor: '#42A5F5',
     },
   },
   '&.password': {
-    borderColor: COLORS.soft,
-    color: COLORS.soft,
+    borderColor: COLORS.primary,
+    color: COLORS.primary,
   },
   '&.logout': {
     color: '#f44336',
@@ -97,8 +95,8 @@ const DoctorProfile = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [resolvedAddress, setResolvedAddress] = useState('');
+  const [showUrgentAlert, setShowUrgentAlert] = useState(true);
   const navigate = useNavigate();
-const [showUrgentAlert, setShowUrgentAlert] = useState(true);
 
   useEffect(() => {
     const fetchDoctorProfile = async () => {
@@ -111,7 +109,6 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
         setLoading(false);
       }
     };
-
     fetchDoctorProfile();
   }, []);
 
@@ -139,7 +136,7 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <CircularProgress style={{ color: COLORS.soft }} />
+        <CircularProgress style={{ color: COLORS.primary }} />
       </Box>
     );
   }
@@ -155,38 +152,39 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
   return (
     <ProfileContainer component={Paper} elevation={6}>
       {doctorInfo?.urgent && showUrgentAlert && (
-  <Alert 
-    severity="warning" 
-    sx={{ 
-      mb: 3,
-      backgroundColor: '#ffc107', 
-      color: '#0D1B2A', 
-      fontFamily: 'Crimson Pro, serif', 
-      borderRadius: '8px',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-    }}
-    icon={<WarningAmberIcon sx={{ color: '#0D1B2A' }} />}
-    action={
-      <IconButton
-        aria-label="close"
-        color="inherit"
-        size="small"
-        onClick={() => setShowUrgentAlert(false)}
-      >
-        <CloseIcon fontSize="inherit" />
-      </IconButton>
-    }
-  >
-    You are currently accepting urgent cases.
-    <Button 
-      variant="text" 
-      sx={{ color: '#0D1B2A', textDecoration: 'underline', ml: 1 }}
-      onClick={() => navigate(`/doctor/updatedoctor/${doctorInfo.appUserId}`)}
-    >
-      Update Urgent
-    </Button>
-  </Alert>
-)}
+        <Alert
+          severity="warning"
+          sx={{
+            mb: 3,
+            backgroundColor: COLORS.primary,
+            color: COLORS.text,
+            fontFamily: 'Poppins, sans-serif',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}
+          icon={<WarningAmberIcon sx={{ color: COLORS.text }} />}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowUrgentAlert(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          You are currently accepting urgent cases.
+          <Button
+            variant="text"
+            sx={{ color: COLORS.text, textDecoration: 'underline', ml: 1 }}
+            onClick={() => navigate(`/doctor/updatedoctor/${doctorInfo.appUserId}`)}
+          >
+            Update Urgent
+          </Button>
+        </Alert>
+      )}
+
       <HeaderSection>
         <ProfileAvatar
           src={doctorInfo.image ? `data:image/jpeg;base64,${doctorInfo.image}` : '/default-avatar.jpg'}
@@ -196,7 +194,7 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
           <Typography variant="h4" component="h1" style={{ fontWeight: 700 }}>
             Dr. {doctorInfo.username.split('@')[0]}
           </Typography>
-          <Typography variant="subtitle1" style={{ color: COLORS.soft }}>
+          <Typography variant="subtitle1" style={{ color: COLORS.primary }}>
             {doctorInfo.specialization}
           </Typography>
           <Box mt={2}>
@@ -213,11 +211,11 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
         </Box>
       </HeaderSection>
 
-      <Divider style={{ backgroundColor: COLORS.steel, marginBottom: '24px' }} />
+      <Divider style={{ backgroundColor: COLORS.primary, marginBottom: '24px' }} />
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <Typography variant="h6" style={{ color: COLORS.soft, marginBottom: '16px' }}>
+          <Typography variant="h6" style={{ color: COLORS.primary, marginBottom: '16px' }}>
             Personal Information
           </Typography>
 
@@ -243,7 +241,7 @@ const [showUrgentAlert, setShowUrgentAlert] = useState(true);
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6" style={{ color: COLORS.soft, marginBottom: '16px' }}>
+          <Typography variant="h6" style={{ color: COLORS.primary, marginBottom: '16px' }}>
             Professional Information
           </Typography>
 

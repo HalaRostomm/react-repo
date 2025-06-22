@@ -28,19 +28,25 @@ const UpdatePassPp = () => {
     <div
       className="container mt-5"
       style={{
-        fontFamily: "'Roboto Slab', serif",
-        backgroundColor: "#F7F0E0",
+        fontFamily: "'Poppins', sans-serif",
+        backgroundColor: "#FFFFFF",
         padding: "40px",
         borderRadius: "20px",
         maxWidth: "600px",
         boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+        color: "#000000",
       }}
     >
       <div
         className="text-center mb-4"
-        style={{ backgroundColor: "#7F7B72", color: "#fff", padding: "20px", borderRadius: "16px" }}
+        style={{
+          backgroundColor: "#FCA311",
+          color: "#000000",
+          padding: "20px",
+          borderRadius: "16px",
+        }}
       >
-        <h2>
+        <h2 style={{ fontWeight: 700 }}>
           <FaLock style={{ marginRight: "10px" }} />
           Update Password
         </h2>
@@ -48,7 +54,7 @@ const UpdatePassPp = () => {
 
       <form onSubmit={handlePasswordUpdate}>
         <div className="mb-3">
-          <label className="form-label text-dark fw-bold">
+          <label className="form-label fw-bold" style={{ color: "#000000" }}>
             <FaUnlockAlt style={{ marginRight: "6px" }} />
             Old Password
           </label>
@@ -58,12 +64,16 @@ const UpdatePassPp = () => {
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
             required
-            style={{ backgroundColor: "#F1EADC", border: "1px solid #7F7B72" }}
+            style={{
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #000000",
+              color: "#000000",
+            }}
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label text-dark fw-bold">
+          <label className="form-label fw-bold" style={{ color: "#000000" }}>
             <FaLock style={{ marginRight: "6px" }} />
             New Password
           </label>
@@ -73,12 +83,16 @@ const UpdatePassPp = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            style={{ backgroundColor: "#F1EADC", border: "1px solid #7F7B72" }}
+            style={{
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #000000",
+              color: "#000000",
+            }}
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label text-dark fw-bold">
+          <label className="form-label fw-bold" style={{ color: "#000000" }}>
             <FaCheckDouble style={{ marginRight: "6px" }} />
             Confirm New Password
           </label>
@@ -88,7 +102,11 @@ const UpdatePassPp = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            style={{ backgroundColor: "#F1EADC", border: "1px solid #7F7B72" }}
+            style={{
+              backgroundColor: "#FFFFFF",
+              border: "1px solid #000000",
+              color: "#000000",
+            }}
           />
         </div>
 
@@ -97,8 +115,8 @@ const UpdatePassPp = () => {
             type="submit"
             className="btn"
             style={{
-              backgroundColor: "#7F7B72",
-              color: "#fff",
+              backgroundColor: "#FCA311",
+              color: "#000000",
               fontWeight: "bold",
               padding: "10px 30px",
               borderRadius: "30px",
@@ -112,14 +130,14 @@ const UpdatePassPp = () => {
 
       {message && (
         <div
-          className={`alert mt-4 ${
-            message.includes("✅") ? "alert-success" : "alert-danger"
-          } text-center`}
+          className="alert mt-4 text-center"
           style={{
             fontWeight: "bold",
-            backgroundColor: "#E5DED4",
-            border: "1px solid #7F7B72",
-            color: "#000",
+            backgroundColor: "#FFFFFF",
+            border: "2px solid #FCA311",
+            color: "#000000",
+            borderRadius: "10px",
+            padding: "15px",
           }}
         >
           {message}

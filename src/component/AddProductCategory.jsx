@@ -37,141 +37,116 @@ const AddProductCategory = () => {
   };
 
   return (
-    <>
-    <style>
-  {`
-    input::placeholder {
-      color: white !important;
-      opacity: 1 !important;
-    }
-
-    input:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
-      -webkit-text-fill-color: white !important;
-    }
-  `}
-</style>
-
-      <style>
-        {`
-          input::placeholder {
-            color: rgba(255, 255, 255, 0.75);
-          }
-          input:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
-            -webkit-text-fill-color: white !important;
-          }
-        `}
-      </style>
-
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+        fontFamily: "'Raleway', sans-serif",
+        color: "#000000",
+      }}
+    >
       <div
         style={{
-          backgroundColor: "#0f172a",
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
+          backgroundColor: "#D0D5CE",
+          padding: "40px",
+          borderRadius: "16px",
+          width: "100%",
+          maxWidth: "600px",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
         }}
       >
-        <div
+        <h3
           style={{
-            backgroundColor: "#1e293b",
-            padding: "40px",
-            borderRadius: "16px",
-            width: "100%",
-            maxWidth: "600px",
-            color: "#fff",
-            boxShadow: "0 6px 16px rgba(0,0,0,0.4)",
+            textAlign: "center",
+            color: "#000000",
+            marginBottom: "25px",
           }}
         >
-          <h3
+          <FaTags style={{ marginRight: 8 }} />
+          Add Product Category
+        </h3>
+
+        {message && (
+          <div
+            className={`alert ${
+              message.startsWith("✅") ? "alert-success" : "alert-danger"
+            }`}
             style={{
+              backgroundColor: message.startsWith("✅") ? "#c8e6c9" : "#ffcdd2",
+              color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
               textAlign: "center",
-              color: "#8e6dda",
-              marginBottom: "25px",
+              padding: "10px",
+              borderRadius: "8px",
+              marginBottom: "20px",
+              fontFamily: "'Raleway', sans-serif",
             }}
           >
-            <FaTags style={{ marginRight: 8 }} />
-            Add Product Category
-          </h3>
+            {message}
+          </div>
+        )}
 
-          {message && (
-            <div
-              className={`alert ${
-                message.startsWith("✅") ? "alert-success" : "alert-danger"
-              }`}
+        <form onSubmit={handleSubmit}>
+          <label className="form-label fw-semibold mb-2">
+            Key & Category Name
+          </label>
+          <div className="d-flex flex-column flex-md-row gap-3 mb-4">
+            <input
+              type="text"
+              name="key"
+              className="form-control"
+              placeholder="Key"
+              value={category.MSCategory.key}
+              onChange={handleChange}
+              required
               style={{
-                backgroundColor: message.startsWith("✅") ? "#c8e6c9" : "#ffcdd2",
-                color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
-                textAlign: "center",
-                padding: "10px",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                border: "1px solid #000000",
                 borderRadius: "8px",
-                marginBottom: "20px",
+                padding: "10px",
+                fontFamily: "'Raleway', sans-serif",
               }}
-            >
-              {message}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
-            <label className="form-label fw-semibold mb-2">
-              Key & Category Name
-            </label>
-            <div className="d-flex flex-column flex-md-row gap-3 mb-4">
-              <input
-                type="text"
-                name="key"
-                className="form-control"
-                placeholder="Key"
-                value={category.MSCategory.key}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#0f172a",
-                  color: "white",
-                  border: "1px solid #6f42c1",
-                  borderRadius: "8px",
-                  padding: "10px",
-                  caretColor: "white",
-                }}
-              />
-              <input
-                type="text"
-                name="value"
-                className="form-control"
-                placeholder="Category Name"
-                value={category.MSCategory.value}
-                onChange={handleChange}
-                required
-                style={{
-                  backgroundColor: "#0f172a",
-                  color: "white",
-                  border: "1px solid #6f42c1",
-                  borderRadius: "8px",
-                  padding: "10px",
-                  caretColor: "white",
-                }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="btn w-100 fw-bold"
+            />
+            <input
+              type="text"
+              name="value"
+              className="form-control"
+              placeholder="Category Name"
+              value={category.MSCategory.value}
+              onChange={handleChange}
+              required
               style={{
-                backgroundColor: "#6f42c1",
-                border: "none",
-                color: "#fff",
-                padding: "10px",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                border: "1px solid #000000",
                 borderRadius: "8px",
+                padding: "10px",
+                fontFamily: "'Raleway', sans-serif",
               }}
-            >
-              Save Category
-            </button>
-          </form>
-        </div>
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn w-100 fw-bold"
+            style={{
+              backgroundColor: "#000000",
+              border: "none",
+              color: "#ffffff",
+              padding: "10px",
+              borderRadius: "8px",
+              fontFamily: "'Raleway', sans-serif",
+            }}
+          >
+            Save Category
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

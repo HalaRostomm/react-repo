@@ -2,9 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import userservice from "../service/userservice";
 
+// Inject Poppins font
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
+
 const accentColor = "#FCA311";
 const primaryText = "#14213D";
 const background = "#E5E5E5";
+const headerColor = "#3FEDF1";
+const cardColor = "rgba(63, 237, 241, 0.22)";
 
 const UserChats = ({ token }) => {
   const { appuserid } = useParams();
@@ -44,14 +52,11 @@ const UserChats = ({ token }) => {
   };
 
   return (
-    <div style={{ maxWidth: 900, margin: "2rem auto", fontFamily: "Tinos, serif", background: background, padding: "1rem" }}>
-      {/* Google Font Import */}
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');`}</style>
-
+    <div style={{ maxWidth: 900, margin: "2rem auto", fontFamily: "'Poppins', sans-serif", background: background, padding: "1rem" }}>
       <header
         style={{
-          backgroundColor: primaryText,
-          color: "#FFFFFF",
+          backgroundColor: headerColor,
+          color: "#000000",
           padding: "1rem",
           textAlign: "center",
           borderRadius: 6,
@@ -76,7 +81,7 @@ const UserChats = ({ token }) => {
             backgroundColor: "#FFFFFF",
             fontSize: 16,
             outline: "none",
-            fontFamily: "Tinos, serif",
+            fontFamily: "'Poppins', sans-serif",
           }}
         />
       </div>
@@ -104,7 +109,7 @@ const UserChats = ({ token }) => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: cardColor,
                   borderRadius: 16,
                   boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                   marginBottom: 16,

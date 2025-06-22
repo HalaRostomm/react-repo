@@ -3,11 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import DoctorService from "../service/doctorservice";
 
 const COLORS = {
-  dark: "#0D1B2A",
-  deep: "#1B263B",
-  steel: "#415A77",
-  soft: "#778DA9",
-  light: "#E0E1DD",
+  primary: "#64B5F6", // updated color
+  black: "#000000",
 };
 
 const UpdateProfileDoctor = () => {
@@ -142,24 +139,24 @@ const UpdateProfileDoctor = () => {
     <div
       className="container mt-4"
       style={{
-        backgroundColor: COLORS.dark,
-        color: COLORS.light,
-        fontFamily: "'Crimson Pro', serif",
+        backgroundColor: COLORS.primary,
+        color: COLORS.black,
+        fontFamily: "'Poppins', sans-serif",
         padding: "2rem",
         borderRadius: "12px",
         maxWidth: "700px",
       }}
     >
-      <h3 className="text-center mb-4" style={{ color: COLORS.soft }}>
+      <h3 className="text-center mb-4" style={{ color: COLORS.black }}>
         Update Doctor Profile
       </h3>
 
-      <div className="card shadow-lg" style={{ backgroundColor: COLORS.deep, border: "none" }}>
+      <div className="card shadow-lg" style={{ backgroundColor: "#BBDEFB", border: "none" }}>
         <div
           className="card-header text-center"
           style={{
-            backgroundColor: COLORS.steel,
-            color: COLORS.light,
+            backgroundColor: "#90CAF9",
+            color: COLORS.black,
             fontSize: "1.25rem",
             fontWeight: "600",
           }}
@@ -172,6 +169,7 @@ const UpdateProfileDoctor = () => {
               className={`alert ${
                 message.startsWith("✅") ? "alert-success" : "alert-danger"
               } text-center`}
+              style={{ color: COLORS.black }}
             >
               {message}
             </div>
@@ -179,7 +177,11 @@ const UpdateProfileDoctor = () => {
 
           {isLoading ? (
             <div className="text-center">
-              <div className="spinner-border text-light" role="status">
+              <div
+                className="spinner-border"
+                role="status"
+                style={{ color: COLORS.black }}
+              >
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
@@ -193,7 +195,12 @@ const UpdateProfileDoctor = () => {
                 { label: "Address", name: "address", type: "text" },
               ].map((field) => (
                 <div className="mb-3" key={field.name}>
-                  <label className="form-label">{field.label}</label>
+                  <label
+                    className="form-label"
+                    style={{ color: COLORS.black }}
+                  >
+                    {field.label}
+                  </label>
                   <input
                     type={field.type}
                     className="form-control"
@@ -201,6 +208,7 @@ const UpdateProfileDoctor = () => {
                     value={doctor[field.name]}
                     onChange={handleInputChange}
                     required
+                    style={{ color: COLORS.black }}
                   />
                 </div>
               ))}
@@ -208,7 +216,7 @@ const UpdateProfileDoctor = () => {
               <div className="mb-3">
                 <button
                   type="button"
-                  className="btn btn-outline-light btn-sm"
+                  className="btn btn-outline-dark btn-sm"
                   onClick={getCurrentLocation}
                 >
                   Get Current Location
@@ -216,13 +224,16 @@ const UpdateProfileDoctor = () => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Gender</label>
+                <label className="form-label" style={{ color: COLORS.black }}>
+                  Gender
+                </label>
                 <select
                   className="form-control"
                   name="gender"
                   value={doctor.gender}
                   onChange={handleInputChange}
                   required
+                  style={{ color: COLORS.black }}
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -231,18 +242,31 @@ const UpdateProfileDoctor = () => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Specialization</label>
+                <label className="form-label" style={{ color: COLORS.black }}>
+                  Specialization
+                </label>
                 <select
                   className="form-control"
                   name="specialization"
                   value={doctor.specialization}
                   onChange={handleInputChange}
                   required
+                  style={{ color: COLORS.black }}
                 >
                   <option value="">Select Specialization</option>
                   {[
-                    "Bird", "Cat", "Dog", "Ferret", "Fish", "Guinea Pig",
-                    "Hamster", "Lizard", "Rabbit", "Rat", "Snake", "Turtle",
+                    "Bird",
+                    "Cat",
+                    "Dog",
+                    "Ferret",
+                    "Fish",
+                    "Guinea Pig",
+                    "Hamster",
+                    "Lizard",
+                    "Rabbit",
+                    "Rat",
+                    "Snake",
+                    "Turtle",
                   ].map((spec) => (
                     <option key={spec} value={spec}>
                       {spec}
@@ -252,7 +276,9 @@ const UpdateProfileDoctor = () => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Years of Experience</label>
+                <label className="form-label" style={{ color: COLORS.black }}>
+                  Years of Experience
+                </label>
                 <input
                   type="number"
                   className="form-control"
@@ -260,11 +286,14 @@ const UpdateProfileDoctor = () => {
                   value={doctor.experienceYears}
                   onChange={handleInputChange}
                   required
+                  style={{ color: COLORS.black }}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Upload Image</label>
+                <label className="form-label" style={{ color: COLORS.black }}>
+                  Upload Image
+                </label>
                 <input
                   type="file"
                   className="form-control"
@@ -274,7 +303,9 @@ const UpdateProfileDoctor = () => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Urgent Cases</label>
+                <label className="form-label" style={{ color: COLORS.black }}>
+                  Urgent Cases
+                </label>
                 <div className="form-check form-switch">
                   <input
                     className="form-check-input"
@@ -283,7 +314,11 @@ const UpdateProfileDoctor = () => {
                     onChange={toggleUrgentStatus}
                     id="urgentSwitch"
                   />
-                  <label className="form-check-label" htmlFor="urgentSwitch">
+                  <label
+                    className="form-check-label"
+                    htmlFor="urgentSwitch"
+                    style={{ color: COLORS.black }}
+                  >
                     {doctor.urgent
                       ? "Currently accepting urgent cases"
                       : "Not accepting urgent cases"}
@@ -296,7 +331,7 @@ const UpdateProfileDoctor = () => {
 
               <button
                 type="submit"
-                className="btn btn-success w-100"
+                className="btn btn-dark w-100"
                 disabled={isLoading}
               >
                 {isLoading ? "Updating..." : "Save Changes"}

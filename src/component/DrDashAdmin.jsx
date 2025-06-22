@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import adminService from '../service/adminService';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import { Bar, Line } from 'react-chartjs-2';
-import 'react-circular-progressbar/dist/styles.css';
+import LiquidFillGauge from 'react-liquid-gauge';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { FaChartLine, FaUserFriends, FaCalendarCheck } from "react-icons/fa";
+import { FaCalendarCheck, FaUserFriends } from "react-icons/fa";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend
 );
+
 const DrDashAdmin = () => {
   const { doctorId } = useParams();
   const [booked, setBooked] = useState(0);
@@ -72,17 +70,19 @@ const DrDashAdmin = () => {
     setIsLoading(false);
   };
 
+  const maxY = Math.ceil(Math.max(...originalData.map(d => d.value), 1) * 2.5 / 5) * 5;
+
   const chartData = {
     labels: originalData.map(d => d.label),
     datasets: [
       {
         label: 'Appointments',
         data: originalData.map(d => d.value),
-        borderColor: '#8e6dda',
-        backgroundColor: 'rgba(142,109,218,0.3)',
+        borderColor: '#FFA100',
+        backgroundColor: 'rgba(255, 161, 0, 0.3)',
         fill: true,
-        tension: 0.4,
-        pointBackgroundColor: '#fff'
+        tension: 0,
+        pointBackgroundColor: '#FFA100'
       }
     ]
   };
@@ -93,73 +93,97 @@ const DrDashAdmin = () => {
     scales: {
       y: {
         beginAtZero: true,
-        ticks: { color: '#e0e0e0' },
-        grid: { color: '#334155' }
+        min: 0,
+        max: maxY,
+        ticks: { stepSize: 2, color: '#000' },
+        grid: { color: '#ccc' }
       },
       x: {
-        ticks: { color: '#e0e0e0' },
-        grid: { color: '#334155' }
+        ticks: { color: '#000' },
+        grid: { color: '#ccc' }
       }
     },
     plugins: {
-      legend: {
-        labels: { color: '#c3baf0' }
-      },
+      legend: { labels: { color: '#000' } },
       tooltip: {
-        backgroundColor: '#1e293b',
-        borderColor: '#8e6dda',
+        backgroundColor: '#D0D5CE',
+        borderColor: '#000',
         borderWidth: 1
       }
     }
   };
 
+  // Individual wave stat components
+  const AttendanceStat = (
+    <WaveCircleStat
+      title="Attendance Activity"
+      value={attendance}
+      color="#13b6b9"
+    />
+  );
+
+  const PercentageStat = (
+    <WaveCircleStat
+      title="Percentage Of Activity %"
+      value={percentage}
+      color="#13b6b9"
+    />
+  );
+
   return (
     <div style={{
       minHeight: "100vh",
-      backgroundColor: "#0f172a",
+      backgroundColor: "#ffffff",
       padding: "40px 20px",
-      color: "#fff",
-      fontFamily: "'Segoe UI', sans-serif"
+      color: "#000",
+      fontFamily: "'Raleway', sans-serif"
     }}>
-      <h3 style={{ textAlign: "center", marginBottom: 30, color: "#8e6dda", fontWeight: 700 }}>
-        🩺 Doctor Dashboard
+      <h3 style={{ textAlign: "center", marginBottom: 30, color: "#D0D5CE", fontWeight: 700 }}>
+        🩺 Doctor Insights
       </h3>
 
+      {/* Stat Cards */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
         gap: "20px",
         marginBottom: "40px"
       }}>
-        <StatCard icon={<FaCalendarCheck />} title="Booked" value={booked} color="#6f42c1" />
-        <StatCard icon={<FaCalendarCheck />} title="Available" value={available} color="#8e6dda" />
-        <StatCard icon={<FaUserFriends />} title="Unique Users" value={users} color="#00bcd4" />
-        <CircleStat title="Attendance" value={attendance} color="#00bcd4" />
+        <StatCard icon={<FaCalendarCheck />} title="Booked" value={booked} color="#000" />
+        <StatCard icon={<FaCalendarCheck />} title="Available" value={available} color="#000" />
+        <StatCard icon={<FaUserFriends />} title="Visitors" value={users} color="#000" />
       </div>
 
-      {/* New: Side-by-side chart + activity percentage */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '20px',
-        justifyContent: 'space-between',
-        marginBottom: 40
-      }}>
-        <CircleStat title="Activity %" value={percentage} color="#8e6dda" />
+     <div style={{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '30px',
+  flexWrap: 'wrap',
+  marginBottom: '40px'
+}}>
+  <WaveCircleStat title="Attendance Activity" value={attendance} color="#13b6b9" />
+  <WaveCircleStat title="Percentage Of Activity %" value={percentage} color="#13b6b9" />
+</div>
 
-        <div style={{
-          flex: 1,
-          minWidth: 300,
-          backgroundColor: '#1e293b',
-          borderRadius: 16,
-          padding: 16,
-          height: 280,
-          boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
-        }}>
-          <h2 style={{ color: '#8e6dda', textAlign: 'center', fontSize: 18, marginBottom: 10 }}>Booked Appointments</h2>
-          <div style={{ height: 200 }}>
-            <Line data={chartData} options={chartOptions} />
-          </div>
+
+
+      {/* Line chart section */}
+      <div style={{
+        width: "600px",
+        maxWidth: "100%",
+        margin: "0 auto",
+        backgroundColor: '#f5f5f5',
+        borderRadius: 16,
+        padding: 16,
+        height: 300,
+        boxShadow: '0 3px 6px rgba(0,0,0,0.1)'
+      }}>
+        <h2 style={{ color: '#000000', textAlign: 'center', fontSize: 16, marginBottom: 10 }}>
+          Booked Appointments / Date
+        </h2>
+        <div style={{ height: 200 }}>
+          <Line data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>
@@ -168,42 +192,72 @@ const DrDashAdmin = () => {
 
 const StatCard = ({ icon, title, value, color }) => (
   <div style={{
-    backgroundColor: "#1e293b",
+    backgroundColor: "#f5f5f5",
     padding: "20px",
     borderRadius: "12px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
   }}>
     <div style={{ fontSize: 22, color, marginBottom: 10 }}>{icon}</div>
     <div style={{ fontSize: 28, fontWeight: 700 }}>{value}</div>
-    <div style={{ fontSize: 14, color: "#ccc", marginTop: 6 }}>{title}</div>
+    <div style={{ fontSize: 14, color: "#333", marginTop: 6 }}>{title}</div>
   </div>
 );
+const WaveCircleStat = ({ title, value, color }) => {
+  const radius = 80;
+  const size = radius * 2;
 
-const CircleStat = ({ title, value, color }) => (
-  <div style={{
-    backgroundColor: "#1e293b",
-    padding: "20px",
-    borderRadius: "12px",
-    textAlign: "center",
-    minWidth: 220,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
-  }}>
-    <div style={{ width: 100, height: 100, margin: "0 auto 10px" }}>
-      <CircularProgressbar
-        value={value}
-        text={`${value.toFixed(1)}%`}
-        styles={buildStyles({
-          pathColor: color,
-          textColor: "#fff",
-          trailColor: "#2e374c"
-        })}
-      />
+  return (
+    <div style={{
+      backgroundColor: "#f5f5f5",
+      borderRadius: "12px",
+      padding: "20px",
+      width: size + 40,
+      height: size + 70,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+      boxSizing: 'border-box',
+      overflow: 'hidden'
+    }}>
+      <div style={{
+        width: size,
+        height: size,
+      }}>
+        <LiquidFillGauge
+          width={size}
+          height={size}
+          radius={radius}
+          value={value}
+          percent="%"
+          textStyle={{ fontSize: 24, fill: "#000" }}
+          waveTextStyle={{ fill: "#fff", fontSize: 22 }}
+          riseAnimation
+          waveAnimation
+          waveFrequency={2}
+          waveAmplitude={3}
+          circleStyle={{ fill: "#fff" }}
+          waveColor={color}
+          textColor="#000"
+        />
+      </div>
+      <div style={{
+        marginTop: 12,
+        fontWeight: 600,
+        fontSize: 14,
+        textAlign: "center",
+        color: "#000"
+      }}>
+        {title}
+      </div>
     </div>
-    <div style={{ color: "#ccc", fontWeight: "500", marginTop: 6 }}>{title}</div>
-  </div>
-);
+  );
+};
+
+
 
 export default DrDashAdmin;

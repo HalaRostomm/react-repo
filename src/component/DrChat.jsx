@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import doctorservice from "../service/doctorservice";
 
 const colors = {
-  background: "#0D1B2A",
-  container: "#1B263B",
-  card: "#415A77",
-  accent: "#778DA9",
-  text: "#E0E1DD",
+  background: "#ffffff",
+  container: "#f5faff",
+  card: "#64B5F6", // primary blue
+  accent: "#2196f3",
+  text: "#000000",
 };
 
 const DrChat = ({ token }) => {
@@ -55,13 +55,13 @@ const DrChat = ({ token }) => {
       style={{
         maxWidth: 900,
         margin: "2rem auto",
-        fontFamily: "'Crimson Pro', serif",
+        fontFamily: "'Poppins', sans-serif",
         backgroundColor: colors.container,
         padding: "2rem",
         borderRadius: "12px",
         color: colors.text,
         minHeight: "90vh",
-        boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
       }}
     >
       <header
@@ -71,7 +71,6 @@ const DrChat = ({ token }) => {
           padding: "1rem",
           textAlign: "center",
           borderRadius: 6,
-          boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
           fontWeight: "bold",
           fontSize: 22,
         }}
@@ -89,11 +88,11 @@ const DrChat = ({ token }) => {
             width: "100%",
             padding: "0.75rem 1rem",
             borderRadius: 15,
-            border: "none",
-            backgroundColor: colors.text,
-            color: colors.background,
+            border: `2px solid ${colors.card}`,
+            backgroundColor: "#fff",
+            color: colors.text,
             fontSize: 16,
-            boxSizing: "border-box",
+            fontFamily: "'Poppins', sans-serif",
             outline: "none",
           }}
         />
@@ -121,19 +120,19 @@ const DrChat = ({ token }) => {
                   alignItems: "center",
                   backgroundColor: colors.card,
                   borderRadius: 16,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                   marginBottom: 16,
                   padding: 12,
                   cursor: "pointer",
-                  transition: "transform 0.2s ease, boxShadow 0.2s ease",
+                  transition: "all 0.2s ease-in-out",
+                  fontFamily: "'Poppins', sans-serif",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateX(5px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateX(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
                 <div
@@ -141,13 +140,14 @@ const DrChat = ({ token }) => {
                     width: 70,
                     height: 70,
                     borderRadius: "50%",
-                    backgroundColor: colors.accent,
+                    backgroundColor: "#fff",
                     overflow: "hidden",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                     marginRight: 16,
                     flexShrink: 0,
+                    border: `2px solid ${colors.accent}`,
                   }}
                 >
                   {avatarSrc ? (
@@ -159,7 +159,7 @@ const DrChat = ({ token }) => {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      fill={colors.background}
+                      fill={colors.accent}
                       viewBox="0 0 24 24"
                       width="40px"
                       height="40px"
@@ -180,15 +180,15 @@ const DrChat = ({ token }) => {
                   >
                     {user.firstname} {user.lastname}
                   </div>
-                  <div style={{ fontSize: 14, color: colors.accent }}>
+                  <div style={{ fontSize: 14, color: "#333" }}>
                     Tap to view conversation
                   </div>
                 </div>
 
-                <div style={{ color: colors.accent }}>
+                <div style={{ color: "#333" }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    fill={colors.accent}
+                    fill={colors.text}
                     height="24"
                     viewBox="0 0 24 24"
                     width="24"

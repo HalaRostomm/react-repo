@@ -34,96 +34,142 @@ const AddCompany = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0f172a",
-        padding: "50px 20px",
-        fontFamily: "'Segoe UI', sans-serif",
-        color: "#e0e0e0",
-      }}
-    >
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+
       <div
         style={{
-          maxWidth: "600px",
-          margin: "0 auto",
-          backgroundColor: "#1e293b",
-          borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          minHeight: "100vh",
+          backgroundColor: "#ffffff",
+          padding: "50px 20px",
+          fontFamily: "'Raleway', sans-serif",
+          color: "#000000",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
-            padding: "20px 30px",
-            borderTopLeftRadius: "12px",
-            borderTopRightRadius: "12px",
-            textAlign: "center",
+            maxWidth: "800px",
+            width: "100%",
+            backgroundColor: "#fff",
+            borderRadius: "18px",
+            boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+            color: "#D0D5CE", // muted greenish text color
           }}
         >
-          <h2 style={{ margin: 0, fontWeight: "700" }}>Add New Company</h2>
-          <p style={{ margin: 0, color: "#f3e5f5" }}>Enter company details</p>
-        </div>
-
-        {/* Message */}
-        {message && (
+          {/* Header */}
           <div
-            className="text-center fw-semibold"
             style={{
-              backgroundColor: messageType === "success" ? "#2e7d32" : "#c62828",
-              color: "#fff",
-              padding: "10px",
-              borderRadius: 0,
+              backgroundColor: "#D0D5CE",  // muted greenish background
+              padding: "20px 30px",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+              textAlign: "center",
+              color: "#000000",
             }}
           >
-            {message}
-          </div>
-        )}
-
-        {/* Form */}
-        <form onSubmit={createCompany} style={{ padding: "30px" }}>
-          <div className="mb-4">
-            <label className="form-label">Company Name</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-white"
-              name="companyName"
-              value={company.companyName}
-              onChange={handleChange}
-              required
-            />
+            <h2 style={{ margin: 0, fontWeight: "700" }}>Add New Company</h2>
+            <p style={{ margin: 0, color: "#000000" }}>Enter company details</p>
           </div>
 
-          <div className="mb-4">
-            <label className="form-label">Company Address</label>
-            <input
-              type="text"
-              className="form-control bg-dark text-white"
-              name="companyAddress"
-              value={company.companyAddress}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {/* Message */}
+          {message && (
+            <div
+              className="text-center fw-semibold"
+              style={{
+                backgroundColor: messageType === "success" ? "#2e7d32" : "#c62828",
+                color: "#fff",
+                padding: "10px",
+                borderRadius: 0,
+              }}
+            >
+              {message}
+            </div>
+          )}
 
-          <button
-            type="submit"
-            className="btn"
-            style={{
-              backgroundColor: "#9c27b0",
-              color: "#fff",
-              padding: "10px",
-              width: "100%",
-              fontWeight: "600",
-              borderRadius: "8px",
-            }}
-          >
-            Add Company
-          </button>
-        </form>
+          {/* Form */}
+          <form onSubmit={createCompany} style={{ padding: "30px" }}>
+            <div className="mb-4">
+              <label
+                className="form-label"
+                style={{ color: "#000", fontWeight: "600" }}
+              >
+                Company Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="companyName"
+                value={company.companyName}
+                onChange={handleChange}
+                required
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  width: "100%",
+                  fontFamily: "'Raleway', sans-serif",
+                  fontWeight: "500",
+                }}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                className="form-label"
+                style={{ color: "#000", fontWeight: "600" }}
+              >
+                Company Address
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="companyAddress"
+                value={company.companyAddress}
+                onChange={handleChange}
+                required
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  width: "100%",
+                  fontFamily: "'Raleway', sans-serif",
+                  fontWeight: "500",
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn"
+              style={{
+                backgroundColor: "#000000",
+                color: "#fff",
+                padding: "10px",
+                width: "100%",
+                fontWeight: "600",
+                borderRadius: "8px",
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: "1rem",
+                cursor: "pointer",
+                border: "none",
+              }}
+            >
+              Add Company
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

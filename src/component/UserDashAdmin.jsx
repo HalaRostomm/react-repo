@@ -30,6 +30,7 @@ const UserDashAdmin = () => {
   const [pets, setPets] = useState(0);
   const [appointments, setAppointments] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [purchaseMaxY, setPurchaseMaxY] = useState(10);
 
   useEffect(() => {
     adminService.getNumberOfPosts(userId).then(res => setPosts(res.data));
@@ -46,6 +47,11 @@ const UserDashAdmin = () => {
         value: item.total,
       }));
       setPurchases(formatted);
+
+      // Calculate max Y based on formula: ceil(max * 2.5 / 5) * 5
+      const max = Math.max(...formatted.map(item => item.value), 1);
+      const scaled = Math.ceil((max * 2.5) / 5) * 5;
+      setPurchaseMaxY(scaled);
     });
   }, [userId]);
 
@@ -55,12 +61,12 @@ const UserDashAdmin = () => {
       {
         label,
         data: data.map(d => d.value),
-        backgroundColor: isLine ? "rgba(142, 109, 218, 0.2)" : "#8e6dda",
-        borderColor: "#8e6dda",
+        backgroundColor: isLine ? "rgba(255, 161, 0, 0.2)" : "#FFA100",
+        borderColor: "#FFA100",
         fill: isLine,
-        tension: 0.4,
+        tension: isLine ? 0 : 0.4,
         pointRadius: 4,
-        pointBackgroundColor: "#fff",
+        pointBackgroundColor: "#FFA100",
       },
     ],
   });
@@ -68,80 +74,109 @@ const UserDashAdmin = () => {
   return (
     <div
       style={{
-        backgroundColor: "#0f172a",
+        backgroundColor: "#ffffff",
         minHeight: "100vh",
         padding: "30px 16px",
-        color: "#e0e0e0",
-        fontFamily: "'Segoe UI', sans-serif",
+        color: "#000",
+        fontFamily: "'Raleway', sans-serif",
       }}
     >
-      <h3 style={{ color: "#8e6dda", textAlign: "center", fontWeight: 700, marginBottom: 30 }}>
+      <h3 style={{ color: "#D0D5CE", textAlign: "center", fontWeight: 700, marginBottom: 30 }}>
         👤 User Insights Dashboard
       </h3>
 
       {/* Info cards */}
-      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: 30 }}>
-        <div
-          style={{
-            flex: "1",
-            minWidth: "160px",
-            backgroundColor: "#1e293b",
-            padding: "20px",
-            borderRadius: "10px",
-            borderLeft: "4px solid #34d399",
-          }}
-        >
-          <h6 style={{ color: "#6ee7b7", marginBottom: "8px" }}>
-            <FaClipboardList style={{ marginRight: "6px" }} />
-            Posts
-          </h6>
-          <div style={{ fontSize: "24px", fontWeight: "bold" }}>{posts}</div>
-        </div>
-
-        <div
-          style={{
-            flex: "1",
-            minWidth: "160px",
-            backgroundColor: "#1e293b",
-            padding: "20px",
-            borderRadius: "10px",
-            borderLeft: "4px solid #8e6dda",
-          }}
-        >
-          <h6 style={{ color: "#c4b5fd", marginBottom: "8px" }}>
-            <FaPaw style={{ marginRight: "6px" }} />
-            Pets
-          </h6>
-          <div style={{ fontSize: "24px", fontWeight: "bold" }}>{pets}</div>
-        </div>
+      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center", marginBottom: 40 }}>
+        {[
+          { label: "Posts", value: posts, icon: <FaClipboardList /> },
+          { label: "Pets", value: pets, icon: <FaPaw /> },
+        ].map(({ label, value, icon }) => (
+          <div
+            key={label}
+            style={{
+              flex: "0 1 180px",
+              backgroundColor: "#D0D5CE",
+              padding: "16px",
+              borderRadius: "10px",
+              textAlign: "center",
+            }}
+          >
+            <h6 style={{ color: "#000000", marginBottom: "8px" }}>
+              {icon} {label}
+            </h6>
+            <div style={{ fontSize: "22px", fontWeight: "bold", color: "#000000" }}>{value}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Appointments Chart */}
-      <div
-        style={{
-          backgroundColor: "#1e293b",
-          padding: "20px",
-          borderRadius: "10px",
-          marginBottom: "30px",
-        }}
-      >
-        <h6 style={{ marginBottom: "12px", color: "#6ee7b7" }}>📅 Appointments</h6>
-        <div style={{ maxWidth: "100%", height: "250px" }}>
-          <Bar data={getChartData(appointments, "Appointments")} options={{ responsive: true, maintainAspectRatio: false }} />
+      {/* Charts section */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
+        {/* Appointments Chart */}
+        <div
+          style={{
+            flex: "1 1 400px",
+            maxWidth: "500px",
+            backgroundColor: "#f4f4f4",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h6 style={{ marginBottom: "12px", color: "#D0D5CE" }}>📅 Appointments</h6>
+          <div style={{ height: "220px" }}>
+            <Bar
+              data={getChartData(appointments, "Appointments")}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { labels: { color: "#000" } },
+                },
+                scales: {
+                  x: { ticks: { color: "#000" } },
+                  y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: 10,
+                    ticks: { stepSize: 2, color: "#000" },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Purchases Chart */}
-      <div
-        style={{
-          backgroundColor: "#1e293b",
-          padding: "20px",
-          borderRadius: "10px",
-        }}
-      >
-        <h6 style={{ marginBottom: "12px", color: "#8e6dda" }}>💸 Purchases</h6>
-        <div style={{ maxWidth: "100%", height: "250px" }}>
-          <Line data={getChartData(purchases, "Purchases", true)} options={{ responsive: true, maintainAspectRatio: false }} />
+        {/* Purchases Line Chart */}
+        <div
+          style={{
+            flex: "1 1 400px",
+            maxWidth: "500px",
+            backgroundColor: "#f4f4f4",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h6 style={{ marginBottom: "12px", color: "#D0D5CE" }}>💸 Purchases</h6>
+          <div style={{ height: "220px" }}>
+            <Line
+              data={getChartData(purchases, "Purchases", true)}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { labels: { color: "#000" } },
+                },
+                scales: {
+                  x: { ticks: { color: "#000" } },
+                  y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: purchaseMaxY,
+                    ticks: { stepSize: 5, color: "#000" },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

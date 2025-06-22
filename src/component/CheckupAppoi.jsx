@@ -5,13 +5,14 @@ import authService from "../service/authService";
 import { jwtDecode } from "jwt-decode";
 
 const COLORS = {
-  bg: "#0D1B2A",
-  card: "#1B263B",
-  button: "#415A77",
-  text: "#E0E1DD",
-  soft: "#778DA9",
+  bg: "#F3F6FA",
+  card: "#FFFFFF",
+  button: "#64B5F6",  // primary blue
+  text: "#000000",    // black text
+  soft: "#4A4A4A",    // dark gray for subtext
   danger: "#D32F2F",
   success: "#4CAF50",
+  border: "#CFE8FC"
 };
 
 const CheckupAppoi = () => {
@@ -59,17 +60,12 @@ const CheckupAppoi = () => {
     fetchAppointments();
   }, [appUserId, token]);
 
-
   useEffect(() => {
-  document.body.style.backgroundColor = "#0D1B2A";
-  return () => {
-    document.body.style.backgroundColor = null; // Reset on unmount
-  };
-}, []);
-
-
-
-
+    document.body.style.backgroundColor = COLORS.bg;
+    return () => {
+      document.body.style.backgroundColor = null;
+    };
+  }, []);
 
   const parseTime12to24 = (timeStr) => {
     const [time, modifier] = timeStr.split(" ");
@@ -115,63 +111,69 @@ const CheckupAppoi = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Passed Appointments</h2>
-      {passedAppointments.length === 0 ? (
-        <p style={styles.subText}>No passed booked appointments found.</p>
-      ) : (
-        passedAppointments.map((appt) => (
-          <div key={appt.appointmentId} style={styles.card}>
-            <h4 style={styles.cardTitle}>📅 {appt.selectedDate}</h4>
-            <p style={styles.text}>
-              ⏰ <strong>Time:</strong> {appt.startTime} - {appt.endTime}
-            </p>
-
-            {appt.status ? (
-              <p
-                style={{
-                  ...styles.status,
-                  color: appt.status === "done" ? COLORS.success : COLORS.danger,
-                }}
-              >
-                {appt.status === "done" ? "✅ Attended" : "❌ Missed"}
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Passed Appointments</h2>
+        {passedAppointments.length === 0 ? (
+          <p style={styles.subText}>No passed booked appointments found.</p>
+        ) : (
+          passedAppointments.map((appt) => (
+            <div key={appt.appointmentId} style={styles.card}>
+              <h4 style={styles.cardTitle}>📅 {appt.selectedDate}</h4>
+              <p style={styles.text}>
+                ⏰ <strong>Time:</strong> {appt.startTime} - {appt.endTime}
               </p>
-            ) : (
-              <div style={styles.buttonGroup}>
-                <button
-                  style={styles.noButton}
-                  onClick={() => handleConfirm(appt.appointmentId, false)}
-                >
-                  Mark Missed
-                </button>
-                <button
-                  style={styles.yesButton}
-                  onClick={() => handleConfirm(appt.appointmentId, true)}
-                >
-                  Mark Attended
-                </button>
-              </div>
-            )}
 
-            <button
-              style={styles.viewDetailsButton}
-              onClick={() =>
-                navigate(`/doctor/getappointmentbyid/${appt.appointmentId}`)
-              }
-            >
-              View Full Details
-            </button>
-          </div>
-        ))
-      )}
-    </div>
+              {appt.status ? (
+                <p
+                  style={{
+                    ...styles.status,
+                    color: appt.status === "done" ? COLORS.success : COLORS.danger,
+                  }}
+                >
+                  {appt.status === "done" ? "✅ Attended" : "❌ Missed"}
+                </p>
+              ) : (
+                <div style={styles.buttonGroup}>
+                  <button
+                    style={styles.noButton}
+                    onClick={() => handleConfirm(appt.appointmentId, false)}
+                  >
+                    Mark Missed
+                  </button>
+                  <button
+                    style={styles.yesButton}
+                    onClick={() => handleConfirm(appt.appointmentId, true)}
+                  >
+                    Mark Attended
+                  </button>
+                </div>
+              )}
+
+              <button
+                style={styles.viewDetailsButton}
+                onClick={() =>
+                  navigate(`/doctor/getappointmentbyid/${appt.appointmentId}`)
+                }
+              >
+                View Full Details
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </>
   );
 };
 
 const styles = {
   container: {
     padding: 24,
-    fontFamily: "'Crimson Pro', serif",
+    fontFamily: "'Poppins', sans-serif",
     backgroundColor: COLORS.bg,
     color: COLORS.text,
     maxWidth: "900px",
@@ -179,10 +181,11 @@ const styles = {
     minHeight: "100vh",
   },
   heading: {
-    color: COLORS.soft,
+    color: COLORS.button,
     fontSize: "2rem",
     marginBottom: "1.5rem",
     textAlign: "center",
+    fontWeight: "600",
   },
   subText: {
     fontSize: "1rem",
@@ -191,18 +194,19 @@ const styles = {
   },
   card: {
     backgroundColor: COLORS.card,
-    border: `1px solid ${COLORS.steel}`,
+    border: `1px solid ${COLORS.border}`,
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
   },
   cardTitle: {
     color: COLORS.text,
     marginBottom: 8,
+    fontWeight: "600",
   },
   text: {
-    color: COLORS.soft,
+    color: COLORS.text,
   },
   buttonGroup: {
     display: "flex",
@@ -211,8 +215,8 @@ const styles = {
     marginBottom: 10,
   },
   yesButton: {
-    backgroundColor: COLORS.steel,
-    color: COLORS.text,
+    backgroundColor: COLORS.success,
+    color: "#fff",
     padding: "8px 16px",
     borderRadius: "6px",
     border: "none",
@@ -231,7 +235,7 @@ const styles = {
   viewDetailsButton: {
     marginTop: 10,
     backgroundColor: COLORS.button,
-    color: COLORS.text,
+    color: "#fff",
     padding: "8px 16px",
     border: "none",
     borderRadius: "6px",
@@ -244,7 +248,7 @@ const styles = {
     marginTop: 10,
   },
   loading: {
-    fontFamily: "'Crimson Pro', serif",
+    fontFamily: "'Poppins', sans-serif",
     padding: 24,
     textAlign: "center",
     color: COLORS.text,
@@ -252,3 +256,5 @@ const styles = {
 };
 
 export default CheckupAppoi;
+// import React, { useEffect, useState } from "react";
+// import { ToastContainer } from "react-toastify";                       `

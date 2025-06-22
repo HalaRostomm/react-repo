@@ -28,6 +28,13 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+const doctorIcon = new L.Icon({
+  iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
+
 function ChangeMapView({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
@@ -36,7 +43,7 @@ function ChangeMapView({ center, zoom }) {
   return null;
 }
 
-const UrgentDrList = ({ token, userId }) => {
+const UrgentDrList = ({ token }) => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
@@ -79,8 +86,8 @@ const UrgentDrList = ({ token, userId }) => {
         const data = res.data;
 
         data.sort((a, b) => {
-          const [latA, lngA] = a.address.split(",").map(Number);
-          const [latB, lngB] = b.address.split(",").map(Number);
+          const [lngA, latA] = a.address.split(",").map(Number);
+          const [lngB, latB] = b.address.split(",").map(Number);
           const distA = getDistanceFromLatLonInKm(userLocation[0], userLocation[1], latA, lngA);
           const distB = getDistanceFromLatLonInKm(userLocation[0], userLocation[1], latB, lngB);
           return distA - distB;
@@ -113,7 +120,7 @@ const UrgentDrList = ({ token, userId }) => {
       const newAddresses = {};
       await Promise.all(
         doctors.map(async (doc) => {
-          const [lat, lng] = doc.address.split(",").map(Number);
+          const [lng, lat] = doc.address.split(",").map(Number);
           newAddresses[doc.id || doc.firstname + doc.lastname] = await reverseGeocode(lat, lng);
         })
       );
@@ -131,153 +138,158 @@ const UrgentDrList = ({ token, userId }) => {
   }
 
   return (
-  <>
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
-
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: 'Tinos', serif;
-      background-color: #E5E5E5;
-      height: 100%;
-    }
-
-    .layout {
-      display: flex;
-      min-height: 100vh;
-      overflow: hidden;
-    }
-
-    .left-content {
-      background-color: #ffffff;
-      flex: 1 1 50%;
-      padding: 3rem 2rem;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .right-background {
-      flex: 1 1 50%;
-      background-image: url(${VetHeroImage});
-      background-size: cover;
-      background-position: left center;
-      background-repeat: no-repeat;
-    }
-
-    h1 {
-      font-size: 2rem;
-      color: #14213D;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-    }
-
-    .leaflet-container {
-      border-radius: 12px;
-      border: 2px solid #FCA311;
-      margin-bottom: 1.5rem;
-    }
-
-    .doctor-card {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-radius: 12px;
-      background-color: #FFFFFF;
-      border-left: 5px solid #FCA311;
-      transition: transform 0.2s ease;
-    }
-
-    .doctor-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .doctor-card h2 {
-      margin: 0;
-      font-size: 1.3rem;
-      color: #14213D;
-      font-weight: bold;
-    }
-
-    .doctor-card p {
-      margin: 6px 0;
-      font-weight: bold;
-      color: #000000;
-    }
-
-    @media (max-width: 768px) {
-      .layout {
-        flex-direction: column;
-      }
-
-      .left-content, .right-background {
-        flex: 1 1 100%;
-        min-height: 50vh;
-      }
-
-      .left-content {
-        padding: 2rem 1rem;
-      }
-    }
-  `}</style>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+        body, html {
+          margin: 0;
+          padding: 0;
+          font-family: 'Tinos', serif;
+          background-color: #E5E5E5;
+          height: 100%;
+        }
+        .layout {
+          display: flex;
+          min-height: 100vh;
+          overflow: hidden;
+        }
+        .left-content {
+          background-color: #ffffff;
+          flex: 1 1 50%;
+          padding: 3rem 2rem;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .right-background {
+          flex: 1 1 50%;
+          background-image: url(${VetHeroImage});
+          background-size: cover;
+          background-position: left center;
+          background-repeat: no-repeat;
+        }
+        h1 {
+          font-size: 2rem;
+          color: #14213D;
+          font-weight: bold;
+          margin-bottom: 1.5rem;
+        }
+        .leaflet-container {
+          border-radius: 12px;
+          border: 2px solid #FCA311;
+          margin-bottom: 1.5rem;
+            z-index: 0;
+            position: relative;
+        }
+        .doctor-card {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+          border-radius: 12px;
+          background-color: #FFFFFF;
+          border-left: 5px solid #FCA311;
+          transition: transform 0.2s ease;
+        }
+        .doctor-card:hover {
+          transform: translateY(-3px);
+        }
+        .doctor-card h2 {
+          margin: 0;
+          font-size: 1.3rem;
+          color: #14213D;
+          font-weight: bold;
+        }
+        .doctor-card p {
+          margin: 6px 0;
+          font-weight: bold;
+          color: #000000;
+        }
+        @media (max-width: 768px) {
+          .layout {
+            flex-direction: column;
+          }
+          .left-content, .right-background {
+            flex: 1 1 100%;
+            min-height: 50vh;
+          }
+          .left-content {
+            padding: 2rem 1rem;
+          }
+        }
+      `}</style>
 
       <div className="layout">
-    {/* Left White Container */}
-    <div className="left-content">
-      <h1>We've Got You! Don’t worry</h1>
-
-      <div style={{ height: 250 }}>
-        {userLocation && (
-          <MapContainer
-            center={userLocation}
-            zoom={12}
-            className="leaflet-container"
-            style={{ height: "100%", width: "100%" }}
-          >
-            <ChangeMapView center={userLocation} zoom={12} />
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={userLocation}>
-              <Popup>Your Location</Popup>
-            </Marker>
-
-            {doctors.map((doc) => {
-              const [lat, lng] = doc.address.split(",").map(Number);
-              const docKey = doc.id || doc.firstname + doc.lastname;
-              return (
-                <Marker key={docKey} position={[lat, lng]}>
-                  <Popup>
-                    {doc.firstname} {doc.lastname} <br />
-                    Phone: {doc.phone}
-                  </Popup>
+        <div className="left-content">
+          <h1>We've Got You! Don’t worry</h1>
+          <div style={{ height: 250 }}>
+            {userLocation && (
+              <MapContainer
+                center={
+                  doctors.length > 0
+                    ? (() => {
+                        const [lng, lat] = doctors[0].address.split(",").map(Number);
+                        return [lat, lng];
+                      })()
+                    : [0, 0]
+                }
+                zoom={12}
+                className="leaflet-container"
+                style={{ height: "250px", width: "100%" }}
+              >
+                <ChangeMapView
+                  center={
+                    doctors.length > 0
+                      ? (() => {
+                          const [lng, lat] = doctors[0].address.split(",").map(Number);
+                          return [lat, lng];
+                        })()
+                      : [0, 0]
+                  }
+                  zoom={12}
+                />
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={userLocation}>
+                  <Popup>Your Location</Popup>
                 </Marker>
+                {doctors.map((doc) => {
+                  const [lng, lat] = doc.address.split(",").map(Number);
+                  const docKey = doc.id || doc.firstname + doc.lastname;
+                  const address = addresses[docKey] || "Loading location...";
+                  return (
+                    <Marker key={docKey} position={[lat, lng]} icon={doctorIcon}>
+                      <Popup>
+                        <strong>{doc.firstname} {doc.lastname}</strong><br />
+                        Phone: {doc.phone}<br />
+                        {address}
+                      </Popup>
+                    </Marker>
+                  );
+                })}
+              </MapContainer>
+            )}
+          </div>
+
+          <div>
+            {doctors.map((doc) => {
+              const docKey = doc.id || doc.firstname + doc.lastname;
+              const address = addresses[docKey] || "Loading location...";
+              return (
+                <div key={docKey} className="doctor-card">
+                  <h2>{doc.firstname} {doc.lastname}</h2>
+                  <p>Phone: {doc.phone}</p>
+                  <p>{address}</p>
+                </div>
               );
             })}
-          </MapContainer>
-        )}
+          </div>
+        </div>
+        <div className="right-background" />
       </div>
-
-      {/* Doctor Cards */}
-      <div>
-        {doctors.map((doc) => {
-          const docKey = doc.id || doc.firstname + doc.lastname;
-          const address = addresses[docKey] || "Loading location...";
-          return (
-            <div key={docKey} className="doctor-card">
-              <h2>{doc.firstname} {doc.lastname}</h2>
-              <p>Phone: {doc.phone}</p>
-              <p>{address}</p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-
-    {/* Right Image Background */}
-    <div className="right-background" />
-  </div>
-</>
+    </>
   );
 };
 

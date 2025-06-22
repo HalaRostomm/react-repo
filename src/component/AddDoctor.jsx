@@ -48,25 +48,25 @@ const AddDoctor = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: "#fff",
         padding: "50px 20px",
-        fontFamily: "'Segoe UI', sans-serif",
-        color: "#e0e0e0",
+        fontFamily: "'Raleway', sans-serif",
+        color: "#000",
       }}
     >
       <div
         style={{
           maxWidth: "600px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: "#ffffff",
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
         }}
       >
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
+            backgroundColor: "#D0D5CE",
             padding: "20px 30px",
             borderTopLeftRadius: "12px",
             borderTopRightRadius: "12px",
@@ -75,7 +75,7 @@ const AddDoctor = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "10px",
-            color: "#fff",
+            color: "#000",
           }}
         >
           <FaStethoscope size={24} />
@@ -87,9 +87,10 @@ const AddDoctor = () => {
           <div
             className="text-center fw-semibold"
             style={{
-              backgroundColor: "#c62828",
-              color: "#fff",
+              backgroundColor: "#f8d7da",
+              color: "#721c24",
               padding: "10px",
+              borderRadius: "0 0 6px 6px",
             }}
           >
             {errorMessage}
@@ -103,7 +104,12 @@ const AddDoctor = () => {
             <input
               type="text"
               name="username"
-              className="form-control bg-dark text-white"
+              className="form-control"
+              style={{
+                backgroundColor: "#f1f1f1",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
               placeholder="Enter email"
               value={doctor.username}
               onChange={handleChange}
@@ -116,7 +122,12 @@ const AddDoctor = () => {
             <input
               type="password"
               name="password"
-              className="form-control bg-dark text-white"
+              className="form-control"
+              style={{
+                backgroundColor: "#f1f1f1",
+                color: "#000",
+                border: "1px solid #ccc",
+              }}
               placeholder="Enter password"
               value={doctor.password}
               onChange={handleChange}
@@ -128,11 +139,12 @@ const AddDoctor = () => {
             type="submit"
             className="btn w-100"
             style={{
-              backgroundColor: "#9c27b0",
-              color: "#fff",
+              backgroundColor: "#D0D5CE",
+              color: "#000",
               fontWeight: "600",
               padding: "10px",
               borderRadius: "8px",
+              border: "1px solid #bbb",
             }}
             disabled={loading}
           >

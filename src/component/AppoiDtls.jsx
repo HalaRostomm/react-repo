@@ -94,7 +94,8 @@ const AppoiDtls = () => {
 
       <section style={{ marginBottom: 25 }}>
         <h4>Owner Information</h4>
-        <p>Name: {user.firstname} {user.lastname}</p>
+       <p>Name: {user?.firstname || "N/A"} {user?.lastname || ""}</p>
+
         <p>Phone: {user.phone}</p>
       </section>
 

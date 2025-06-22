@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../service/authService";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import logo from "../assets/pawnoback.gif";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -61,16 +63,26 @@ function Login() {
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch user details");
-      }
+      if (!response.ok) throw new Error("Failed to fetch user details");
 
       const user = await response.json();
-
       if (!user.firstname || user.firstname.trim() === "") {
         navigate(`${updateProfileEndpoint}/${user.appUserId}`);
       } else {
-        navigate(userDetailsEndpoint.replace(BASE_URL, ""));
+        switch (userRole) {
+          case "ROLE_ADMIN":
+            navigate("/admin/admindashboard"); break;
+          case "ROLE_DOCTOR":
+            navigate("/doctor/dashboard"); break;
+          case "ROLE_SP":
+            navigate("/sp/dashboard"); break;
+          case "ROLE_USER":
+            navigate("/user/home"); break;
+          case "ROLE_PP":
+            navigate("/pp/dashboard"); break;
+          default:
+            navigate("/");
+        }
       }
 
       localStorage.setItem("authToken", token);
@@ -85,42 +97,43 @@ function Login() {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Welcome Back!</h2>
-        <p style={styles.subtitle}>Login to your pet care account</p>
-        <form onSubmit={handleLogin} style={styles.form}>
-          <label htmlFor="username" style={styles.label}>
-            Email
-          </label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            style={styles.input}
-            placeholder="Enter your username"
-          />
+      <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+      <div style={styles.innerWrapper}>
+        <img src={logo} alt="logo" style={styles.bigLogo} />
 
-          <label htmlFor="password" style={styles.label}>
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={styles.input}
-            placeholder="Enter your password"
-          />
+        <div style={styles.card}>
+          <form onSubmit={handleLogin} style={styles.form}>
+            <div style={styles.inputWrapper}>
+              <FaEnvelope color="#FFA100" />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="enter your email"
+                style={styles.input}
+                required
+              />
+            </div>
 
-          <button type="submit" style={styles.button}>
-            Login
-          </button>
+            <div style={styles.inputWrapper}>
+              <FaLock color="#FFA100" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="enter your password"
+                style={styles.input}
+                required
+              />
+            </div>
 
-          {error && <p style={styles.error}>{error}</p>}
-        </form>
+            <button type="submit" style={styles.button}>Login</button>
+            <p style={styles.register}>
+              Don’t have an account? <a href="/register" style={styles.registerLink}>Register</a>
+            </p>
+            {error && <p style={styles.error}>{error}</p>}
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -128,67 +141,75 @@ function Login() {
 
 const styles = {
   container: {
-    background:
-      "linear-gradient(135deg, #A8E6CF 0%, #DCEDC2 50%, #FFD3B6 100%)",
+    backgroundColor: "#ffffff",
     height: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    fontFamily: "'Poppins', sans-serif",
+  },
+  innerWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "70px",
+  },
+  bigLogo: {
+    width: "450px",
+    height: "450px",
   },
   card: {
     backgroundColor: "#ffffff",
-    padding: "40px 30px",
-    borderRadius: "15px",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-    width: "350px",
+    borderRadius: "24px",
+    padding: "40px",
+    width: "400px",
+    boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
     textAlign: "center",
-  },
-  title: {
-    color: "#344E41",
-    marginBottom: "8px",
-    fontWeight: "700",
-  },
-  subtitle: {
-    color: "#6B8E23",
-    marginBottom: "25px",
-    fontWeight: "500",
-    fontSize: "14px",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "15px",
+    gap: "18px",
   },
-  label: {
-    textAlign: "left",
-    fontWeight: "600",
-    color: "#344E41",
-    fontSize: "14px",
+  inputWrapper: {
+    display: "flex",
+    alignItems: "center",
+    border: "1.5px solid #A8D5BA",
+    borderRadius: "14px",
+    padding: "12px 16px",
+    gap: "10px",
+    backgroundColor: "#fff",
   },
   input: {
-    padding: "12px 15px",
-    borderRadius: "10px",
-    border: "1.5px solid #A8D5BA",
-    fontSize: "15px",
+    border: "none",
     outline: "none",
-    transition: "border-color 0.3s ease",
+    fontSize: "15px",
+    flex: 1,
+    fontFamily: "'Poppins', sans-serif",
   },
   button: {
-    marginTop: "10px",
-    backgroundColor: "#FF8C42",
-    border: "none",
+    backgroundColor: "#FFA100",
     color: "#fff",
+    border: "none",
     padding: "14px 0",
-    borderRadius: "12px",
-    fontWeight: "700",
-    fontSize: "16px",
+    fontSize: "17px",
+    fontWeight: "bold",
+    borderRadius: "14px",
     cursor: "pointer",
-    boxShadow: "0 5px 12px rgba(255,140,66,0.5)",
-    transition: "background-color 0.3s ease",
+    marginTop: "6px",
+  },
+  register: {
+    fontSize: "14px",
+    marginTop: "10px",
+    color: "#000",
+  },
+  registerLink: {
+    color: "#13b6b9",
+    fontWeight: "bold",
+    textDecoration: "none",
   },
   error: {
-    marginTop: "15px",
+    marginTop: "14px",
     color: "#d93025",
     fontWeight: "600",
   },

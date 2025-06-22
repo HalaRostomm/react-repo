@@ -4,10 +4,7 @@ import adminService from "../service/adminService";
 import { FaPlusCircle } from "react-icons/fa";
 
 const AddServiceCategory = () => {
-  const [category, setCategory] = useState({
-    key: "",
-    value: "",
-  });
+  const [category, setCategory] = useState({ key: "", value: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -18,17 +15,11 @@ const AddServiceCategory = () => {
   ];
 
   const handleKeyChange = (e) => {
-    setCategory({
-      key: e.target.value,
-      value: "",
-    });
+    setCategory({ key: e.target.value, value: "" });
   };
 
   const handleValueChange = (e) => {
-    setCategory((prev) => ({
-      ...prev,
-      value: e.target.value,
-    }));
+    setCategory((prev) => ({ ...prev, value: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -39,10 +30,9 @@ const AddServiceCategory = () => {
       };
       await adminService.addNewServiceCategory(formattedData);
       setMessage("✅ Category added successfully!");
-      setTimeout(() => navigate("/getservicecategories"), 1500);
+      setTimeout(() => navigate("/admin/getservicecategories"), 1500);
     } catch (error) {
       setMessage(`❌ Failed to add category: ${error.response ? error.response.data : error.message}`);
-      console.error("Error:", error);
     }
   };
 
@@ -50,17 +40,15 @@ const AddServiceCategory = () => {
     <>
       <style>
         {`
-          input::placeholder, select:required:invalid {
-            color: rgba(255, 255, 255, 0.7);
+          * {
+            font-family: 'Raleway', sans-serif;
           }
-
-          input:-webkit-autofill,
-          input:-webkit-autofill:focus,
-          input:-webkit-autofill:hover,
-          input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
-            -webkit-text-fill-color: white !important;
-            transition: background-color 9999s ease-in-out 0s;
+          input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+          }
+          input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+            -webkit-text-fill-color: black !important;
           }
         `}
       </style>
@@ -69,15 +57,15 @@ const AddServiceCategory = () => {
         className="d-flex justify-content-center align-items-center"
         style={{
           minHeight: "100vh",
-          backgroundColor: "#0f172a",
+          backgroundColor: "#FFFFFF",
           padding: "20px",
         }}
       >
         <div
-          className="card shadow-lg border-0"
+          className="card shadow border-0"
           style={{
-            backgroundColor: "#1e293b",
-            color: "white",
+            backgroundColor: "#FFFFFF",
+            color: "#000",
             width: "100%",
             maxWidth: "600px",
             borderRadius: "1rem",
@@ -86,10 +74,11 @@ const AddServiceCategory = () => {
           <div
             className="card-header text-center fw-bold fs-4"
             style={{
-              backgroundColor: "#6f42c1",
+              backgroundColor: "#D0D5CE",
+              borderBottom: "1px solid #D0D5CE",
+              color: "#000000",
               borderTopLeftRadius: "1rem",
               borderTopRightRadius: "1rem",
-              color: "white",
             }}
           >
             <FaPlusCircle style={{ marginRight: "8px" }} />
@@ -116,9 +105,11 @@ const AddServiceCategory = () => {
                   onChange={handleKeyChange}
                   required
                   style={{
-                    backgroundColor: "#0f172a",
-                    color: "white",
-                    borderColor: "#6f42c1",
+                    backgroundColor: "#fff",
+                    color: "#000",
+                    borderColor: "#D0D5CE",
+                    borderRadius: "8px",
+                    padding: "10px",
                   }}
                 >
                   <option value="">-- Select Service Key --</option>
@@ -140,10 +131,11 @@ const AddServiceCategory = () => {
                   onChange={handleValueChange}
                   required
                   style={{
-                    backgroundColor: "#0f172a",
-                    color: "white",
-                    borderColor: "#6f42c1",
-                    caretColor: "white",
+                    backgroundColor: "#fff",
+                    color: "#000",
+                    borderColor: "#D0D5CE",
+                    borderRadius: "8px",
+                    padding: "10px",
                   }}
                 />
               </div>
@@ -152,13 +144,12 @@ const AddServiceCategory = () => {
                 type="submit"
                 className="btn fw-bold w-100"
                 style={{
-                  backgroundColor: "#6f42c1",
-                  borderColor: "#6f42c1",
-                  color: "white",
-                  transition: "background-color 0.3s",
+                  backgroundColor: "#000000",
+                  color: "#fff",
+                  border: "none",
+                  padding: "10px",
+                  borderRadius: "8px",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5a32a3")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#6f42c1")}
               >
                 Save
               </button>

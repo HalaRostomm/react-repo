@@ -13,15 +13,13 @@ import {
 } from 'react-icons/fa';
 
 const colors = {
-  primary: '#7F7B72',
-  secondary: '#F7F0E0',
-  tertiary: '#F1EADC',
-  light: '#E5DED4',
-  background: '#FAF8F2',
-  text: '#000000',
+  primary: '#FF9800', // Orange
+  secondary: '#FFFFFF', // White
+  background: '#FFFFFF',
+  text: '#000000', // Black
 };
 
-const fontFamily = "'Roboto Slab', serif";
+const fontFamily = "'Poppins', sans-serif";
 
 const customSelectStyles = {
   control: (provided) => ({
@@ -34,6 +32,7 @@ const customSelectStyles = {
     backgroundColor: colors.secondary,
     '&:hover': { borderColor: colors.primary },
     fontFamily,
+    color: colors.text,
   }),
   multiValueLabel: (styles) => ({ ...styles, fontFamily }),
   menu: (provided) => ({ ...provided, fontFamily }),

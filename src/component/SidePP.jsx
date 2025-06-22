@@ -79,11 +79,11 @@ const SidePP = () => {
       <style>{`
         .sidebar-pp {
           width: 250px;
-          background: #F1EADC;
-          color: #000000;
+          background: #000000;
+          color: #FFFFFF;
           min-height: 100vh;
           padding: 20px;
-          font-family: 'Roboto Slab', serif;
+          font-family: 'Poppins', sans-serif;
           position: fixed;
           top: 0;
           left: -260px;
@@ -101,7 +101,7 @@ const SidePP = () => {
           font-size: 24px;
           background: none;
           border: none;
-          color: #7F7B72;
+          color: #FCA311;
           z-index: 1001;
         }
         .close-btn {
@@ -111,7 +111,7 @@ const SidePP = () => {
           background: none;
           border: none;
           font-size: 24px;
-          color: #7F7B72;
+          color: #FCA311;
           cursor: pointer;
         }
         .sidebar-header {
@@ -123,12 +123,12 @@ const SidePP = () => {
           height: 70px;
           border-radius: 50%;
           object-fit: cover;
-          border: 2px solid #E5DED4;
+          border: 2px solid #FCA311;
         }
         .sidebar-header p {
           margin-top: 8px;
           font-weight: bold;
-          color: #7F7B72;
+          color: #FCA311;
         }
         .sidebar-links {
           list-style: none;
@@ -142,19 +142,19 @@ const SidePP = () => {
           align-items: center;
           gap: 10px;
           padding: 10px 12px;
-          color: #F7F0E0;
-          background-color: #7F7B72;
+          color: #FFFFFF;
+          background-color: #FCA311;
           border-radius: 10px;
           text-decoration: none;
           font-weight: 500;
           font-size: 15px;
         }
         .sidebar-links a:hover {
-          background-color: #F7F0E0;
+          background-color: #FFFFFF;
           color: #000000;
         }
         .logout-btn {
-          background-color: #E5DED4;
+          background-color: #FFFFFF;
           color: #000000;
           border: none;
           padding: 10px;
@@ -168,8 +168,8 @@ const SidePP = () => {
           justify-content: center;
         }
         .logout-btn:hover {
-          background-color: #7F7B72;
-          color: #F7F0E0;
+          background-color: #FCA311;
+          color: #FFFFFF;
         }
       `}</style>
     </>

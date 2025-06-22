@@ -24,22 +24,31 @@ const UpdatePassDr = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div
+      className="container mt-5"
+      style={{ fontFamily: "'Poppins', sans-serif", color: "black" }}
+    >
       <div className="card shadow-lg border-0 rounded-lg">
         <div
-          className="card-header text-white text-center"
+          className="card-header text-center"
           style={{
-            backgroundColor: "#FF64B5F6",
+            backgroundColor: "#64B5F6", // corrected hex color
             borderRadius: "0.5rem 0.5rem 0 0",
-            fontFamily: "'Poppins', sans-serif",
+            color: "white",
+            fontWeight: "600",
+            fontSize: "1.5rem",
           }}
         >
-          <h2>Update Password</h2>
+          Update Password
         </div>
-        <div className="card-body" style={{ fontFamily: "'Poppins', sans-serif" }}>
+        <div className="card-body">
           <form onSubmit={handlePasswordUpdate}>
             <div className="mb-3">
-              <label htmlFor="oldPassword" className="form-label" style={{ color: "black" }}>
+              <label
+                htmlFor="oldPassword"
+                className="form-label"
+                style={{ color: "black" }}
+              >
                 Old Password
               </label>
               <input
@@ -49,10 +58,15 @@ const UpdatePassDr = () => {
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 required
+                style={{ color: "black" }}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="newPassword" className="form-label" style={{ color: "black" }}>
+              <label
+                htmlFor="newPassword"
+                className="form-label"
+                style={{ color: "black" }}
+              >
                 New Password
               </label>
               <input
@@ -62,10 +76,15 @@ const UpdatePassDr = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
+                style={{ color: "black" }}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label" style={{ color: "black" }}>
+              <label
+                htmlFor="confirmPassword"
+                className="form-label"
+                style={{ color: "black" }}
+              >
                 Confirm New Password
               </label>
               <input
@@ -75,6 +94,7 @@ const UpdatePassDr = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                style={{ color: "black" }}
               />
             </div>
             <div className="d-flex justify-content-center mt-4">
@@ -82,7 +102,7 @@ const UpdatePassDr = () => {
                 type="submit"
                 className="btn"
                 style={{
-                  backgroundColor: "#FF64B5F6",
+                  backgroundColor: "#64B5F6",
                   fontWeight: "bold",
                   padding: "0.5rem 2rem",
                   borderRadius: "20px",
@@ -97,8 +117,13 @@ const UpdatePassDr = () => {
 
           {message && (
             <div
-              className={`alert ${message.includes("successfully") ? "alert-success" : "alert-danger"} mt-3`}
+              className={`alert ${
+                message.toLowerCase().includes("successfully")
+                  ? "alert-success"
+                  : "alert-danger"
+              } mt-3`}
               role="alert"
+              style={{ fontWeight: "600" }}
             >
               {message}
             </div>

@@ -18,8 +18,9 @@ const UpdateProfilePp = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const primary = "#7F7B72";
-  const background = "#F7F0E0";
+  const primary = "#FCA311";
+  const black = "#000000";
+  const white = "#FFFFFF";
 
   const [productProvider, setPp] = useState({
     firstname: "",
@@ -61,15 +62,12 @@ const UpdateProfilePp = () => {
       .finally(() => setIsLoading(false));
   }, [id]);
 
-
-useEffect(() => {
-  document.body.style.backgroundColor = background;
-  return () => {
-    document.body.style.backgroundColor = null; // Reset on unmount
-  };
-}, []);
-
-
+  useEffect(() => {
+    document.body.style.backgroundColor = white;
+    return () => {
+      document.body.style.backgroundColor = null;
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -134,22 +132,33 @@ useEffect(() => {
   return (
     <div
       className="container mt-4"
-      style={{ fontFamily: "'Roboto Slab', serif", backgroundColor: background, padding: 30 }}
+      style={{
+        fontFamily: "'Poppins', sans-serif",
+        backgroundColor: white,
+        padding: 30,
+        color: black,
+      }}
     >
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card shadow-lg" style={{ borderColor: primary }}>
+          <div className="card shadow-lg border-0">
             <div
               className="card-header fs-4 text-center"
-              style={{ backgroundColor: primary, color: "#fff", fontWeight: "700" }}
+              style={{ backgroundColor: primary, color: black, fontWeight: "700" }}
             >
               Update Profile Information
             </div>
             <div className="card-body">
               {message && (
                 <div
-                  className={`alert ${message.startsWith("✅") ? "alert-success" : "alert-danger"} text-center`}
-                  style={{ fontWeight: "600", color: "#000" }}
+                  className="alert text-center"
+                  style={{
+                    fontWeight: "600",
+                    backgroundColor: white,
+                    color: black,
+                    border: `2px solid ${primary}`,
+                    borderRadius: "10px",
+                  }}
                 >
                   {message}
                 </div>
@@ -163,101 +172,67 @@ useEffect(() => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaUser className="me-2" /> First Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="firstname"
-                      value={productProvider.firstname}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+                  {[
+                    { label: "First Name", name: "firstname", icon: <FaUser /> },
+                    { label: "Last Name", name: "lastname", icon: <FaUser /> },
+                    { label: "Date of Birth", name: "birthDate", type: "date", icon: <FaBirthdayCake /> },
+                    {
+                      label: "Gender",
+                      name: "gender",
+                      type: "select",
+                      icon: <FaTransgender />,
+                      options: ["", "Male", "Female"],
+                    },
+                    { label: "Phone", name: "phone", icon: <FaPhone /> },
+                    { label: "Address", name: "address", icon: <FaMapMarkerAlt /> },
+                  ].map(({ label, name, type = "text", icon, options }) => (
+                    <div className="mb-3" key={name}>
+                      <label className="form-label fw-bold">
+                        {icon} {label}
+                      </label>
+                      {type === "select" ? (
+                        <select
+                          className="form-control"
+                          name={name}
+                          value={productProvider[name]}
+                          onChange={handleInputChange}
+                          required
+                          style={{ backgroundColor: white, border: `1px solid ${black}`, color: black }}
+                        >
+                          {options.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt || "Select Gender"}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type={type}
+                          className="form-control"
+                          name={name}
+                          value={productProvider[name]}
+                          onChange={handleInputChange}
+                          required
+                          style={{ backgroundColor: white, border: `1px solid ${black}`, color: black }}
+                        />
+                      )}
+                    </div>
+                  ))}
 
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaUser className="me-2" /> Last Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="lastname"
-                      value={productProvider.lastname}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaBirthdayCake className="me-2" /> Date of Birth
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      name="birthDate"
-                      value={productProvider.birthDate}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaTransgender className="me-2" /> Gender
-                    </label>
-                    <select
-                      className="form-control"
-                      name="gender"
-                      value={productProvider.gender}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaPhone className="me-2" /> Phone
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="phone"
-                      value={productProvider.phone}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label fw-bold">
-                      <FaMapMarkerAlt className="me-2" /> Address
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="address"
-                      value={productProvider.address}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-sm mt-2"
-                      onClick={getCurrentLocation}
-                      style={{ color: primary, borderColor: primary, fontWeight: "600" }}
-                    >
-                      <FaMapMarkedAlt className="me-2" />
-                      Get Current Location
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-sm mt-2 mb-3"
+                    onClick={getCurrentLocation}
+                    style={{
+                      backgroundColor: white,
+                      border: `1px solid ${primary}`,
+                      color: black,
+                      fontWeight: "600",
+                    }}
+                  >
+                    <FaMapMarkedAlt className="me-2" />
+                    Get Current Location
+                  </button>
 
                   <div className="mb-3">
                     <label className="form-label fw-bold">
@@ -268,6 +243,7 @@ useEffect(() => {
                       className="form-control"
                       value={productProvider.company.companyName}
                       readOnly
+                      style={{ backgroundColor: white, color: black, border: `1px solid ${black}` }}
                     />
                   </div>
 
@@ -280,6 +256,7 @@ useEffect(() => {
                       accept="image/*"
                       onChange={handleImageUpload}
                       className="form-control"
+                      style={{ backgroundColor: white, color: black, border: `1px solid ${black}` }}
                     />
                   </div>
 
@@ -288,8 +265,9 @@ useEffect(() => {
                     className="btn w-100"
                     style={{
                       backgroundColor: primary,
-                      color: "#fff",
+                      color: black,
                       fontWeight: "600",
+                      border: "none",
                     }}
                     disabled={isLoading}
                   >
@@ -299,9 +277,14 @@ useEffect(() => {
 
                   <button
                     type="button"
-                    className="btn btn-secondary w-100 mt-2"
+                    className="btn w-100 mt-2"
                     onClick={() => navigate("/pp/profile")}
-                    style={{ fontWeight: "600" }}
+                    style={{
+                      backgroundColor: black,
+                      color: white,
+                      fontWeight: "600",
+                      border: "none",
+                    }}
                   >
                     <FaArrowLeft className="me-2" /> Back
                   </button>

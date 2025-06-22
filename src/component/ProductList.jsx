@@ -2,8 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductService from "../service/ppservice";
 import { jwtDecode } from "jwt-decode";
-import { FaStar, FaStarHalfAlt, FaRegStar, FaBoxOpen, FaTags, FaEdit, FaPowerOff} from "react-icons/fa";
- // or FaSignOutAlt if it's for logout
+import {
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+  FaBoxOpen,
+  FaTags,
+  FaEdit,
+  FaPowerOff,
+} from "react-icons/fa";
 
 const ProductList = ({ token }) => {
   const [products, setProducts] = useState([]);
@@ -36,7 +43,6 @@ const ProductList = ({ token }) => {
         const response = await ProductService.getAllProducts(userId);
         const productsData = response.data || [];
         setProducts(productsData);
-        
         await fetchRatings(productsData);
       } catch (err) {
         console.error("Failed to fetch products:", err);
@@ -45,12 +51,14 @@ const ProductList = ({ token }) => {
     };
     fetchProducts();
   }, [userId]);
- useEffect(() => {
-  document.body.style.backgroundColor = "#F7F0E0";
-  return () => {
-    document.body.style.backgroundColor = null; // Reset on unmount
-  };
-}, []);
+
+  useEffect(() => {
+    document.body.style.backgroundColor = "#ffffff";
+    return () => {
+      document.body.style.backgroundColor = null;
+    };
+  }, []);
+
   const fetchRatings = async (products) => {
     try {
       const ratings = {};
@@ -102,29 +110,29 @@ const ProductList = ({ token }) => {
     const hasHalfStar = rating - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    for (let i = 0; i < fullStars; i++) stars.push(<FaStar key={"full" + i} color="gold" />);
-    if (hasHalfStar) stars.push(<FaStarHalfAlt key="half" color="gold" />);
-    for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={"empty" + i} color="gold" />);
+    for (let i = 0; i < fullStars; i++) stars.push(<FaStar key={"full" + i} color="#FF9800" />);
+    if (hasHalfStar) stars.push(<FaStarHalfAlt key="half" color="#FF9800" />);
+    for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={"empty" + i} color="#FF9800" />);
     return stars;
   };
 
   return (
     <div
       style={{
-        fontFamily: "'Roboto Slab', serif",
+        fontFamily: "'Poppins', sans-serif",
         color: "#000000",
-        backgroundColor: "#F7F0E0",
+        backgroundColor: "#ffffff",
         padding: "2rem",
         maxWidth: "1200px",
         margin: "auto",
         minHeight: "100vh",
       }}
     >
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem", color: "#7F7B72" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "1.5rem", color: "#FF9800" }}>
         <FaBoxOpen style={{ marginRight: 8 }} /> Your Products
       </h2>
 
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+      {error && <p style={{ color: "#c62828", textAlign: "center" }}>{error}</p>}
 
       {products.length === 0 ? (
         <p style={{ textAlign: "center", fontStyle: "italic" }}>No products found.</p>
@@ -133,9 +141,9 @@ const ProductList = ({ token }) => {
           <button
             onClick={() => navigate("/pp/addproduct")}
             style={{
-              backgroundColor: "#7F7B72",
+              backgroundColor: "#FF9800",
               border: "none",
-              color: "#F7F0E0",
+              color: "#ffffff",
               padding: "0.6rem 1.2rem",
               borderRadius: "6px",
               fontWeight: "600",
@@ -156,18 +164,16 @@ const ProductList = ({ token }) => {
       >
         {products.map((product) => {
           const rating = averageRatings[product.productId];
-console.log("Product:", product);
-
 
           return (
             <div
               key={product.productId}
               style={{
-                border: "1px solid #E5DED4",
+                border: "1px solid #000000",
                 borderRadius: "12px",
-                boxShadow: "0 4px 8px rgb(0 0 0 / 0.05)",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 padding: "1rem",
-                backgroundColor: "#F1EADC",
+                backgroundColor: "#ffffff",
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -177,7 +183,7 @@ console.log("Product:", product);
                   marginBottom: "0.5rem",
                   fontWeight: "700",
                   fontSize: "1.25rem",
-                  color: "#7F7B72",
+                  color: "#FF9800",
                 }}
               >
                 <FaTags style={{ marginRight: 6 }} /> {product.productName}
@@ -200,7 +206,7 @@ console.log("Product:", product);
                 {rating !== undefined && rating > 0 ? renderStars(rating) : "No ratings"}
               </p>
 
-              <p style={{ fontSize: "0.9rem", color: "#444" }}>
+              <p style={{ fontSize: "0.9rem", color: "#000000" }}>
                 <strong>Description:</strong> {product.description}
               </p>
 
@@ -216,7 +222,7 @@ console.log("Product:", product);
                   fontWeight: "700",
                   fontSize: "1rem",
                   marginBottom: "0.5rem",
-                  borderBottom: `2px solid #7F7B72`,
+                  borderBottom: `2px solid #FF9800`,
                   paddingBottom: "0.3rem",
                 }}
               >
@@ -227,10 +233,10 @@ console.log("Product:", product);
                 {Object.entries(product.stockByColorAndSize || {}).map(([key, stock]) => (
                   <p
                     key={key}
-                    style={{ fontSize: "0.9rem", marginBottom: "0.3rem", color: "#444" }}
+                    style={{ fontSize: "0.9rem", marginBottom: "0.3rem", color: "#000000" }}
                   >
                     <strong>{key}:</strong> {stock} in stock | Price: {" "}
-                    <span style={{ color: "#7F7B72" }}>
+                    <span style={{ color: "#FF9800" }}>
                       {product.priceByColorAndSize?.[key] ?? "N/A"} $
                     </span>
                   </p>
@@ -244,8 +250,8 @@ console.log("Product:", product);
                   }
                   style={{
                     flex: 1,
-                    backgroundColor: "#7F7B72",
-                    color: "#F7F0E0",
+                    backgroundColor: "#FF9800",
+                    color: "#ffffff",
                     fontWeight: "600",
                     border: "none",
                     borderRadius: "6px",
@@ -262,8 +268,8 @@ console.log("Product:", product);
                   style={{
                     flex: 1,
                     backgroundColor:
-                      product.status === "available" ? "#c62828" : "#2e7d32",
-                    color: "#fff",
+                      product.status === "available" ? "#000000" : "#FF9800",
+                    color: "#ffffff",
                     fontWeight: "600",
                     border: "none",
                     borderRadius: "6px",
@@ -272,9 +278,13 @@ console.log("Product:", product);
                   }}
                 >
                   {product.status === "available" ? (
-                    <><FaPowerOff style={{ marginRight: 6 }} />Deactivate</>
+                    <>
+                      <FaPowerOff style={{ marginRight: 6 }} />Deactivate
+                    </>
                   ) : (
-                    <><FaPowerOff  style={{ marginRight: 6 }} />Activate</>
+                    <>
+                      <FaPowerOff style={{ marginRight: 6 }} />Activate
+                    </>
                   )}
                 </button>
               </div>

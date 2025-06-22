@@ -12,6 +12,12 @@ import {
 } from "react-icons/fa";
 import userService from "../service/userservice";
 
+// Load Poppins font
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
+
 const UpdateProfileUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -102,15 +108,18 @@ const UpdateProfileUser = () => {
       backgroundColor: "#E5E5E5",
       minHeight: "100vh",
       padding: "2rem 1rem",
-      fontFamily: "'Tinos', serif",
-      color: "#000000",
+      fontFamily: "'Poppins', sans-serif",
     },
     title: {
-      fontSize: "2rem",
+      fontSize: "2.2rem",
       fontWeight: "bold",
-      color: "#14213D",
+      backgroundColor: "#3FEDF1",
+      padding: "1rem",
+      borderRadius: "8px",
+      color: "#000000",
       textAlign: "center",
       marginBottom: "2rem",
+      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
     },
     formGroup: {
       display: "flex",
@@ -119,14 +128,14 @@ const UpdateProfileUser = () => {
       marginBottom: "1.5rem",
     },
     label: {
-      fontWeight: "bold",
+      fontWeight: "600",
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      color: "#14213D",
+      color: "#FFFFFF",
     },
     input: {
-      padding: "0.5rem 1rem",
+      padding: "0.6rem 1rem",
       borderRadius: "6px",
       border: "1px solid #ccc",
       fontSize: "1rem",
@@ -154,6 +163,11 @@ const UpdateProfileUser = () => {
     container: {
       maxWidth: "700px",
       margin: "0 auto",
+      backgroundColor: "#383FEDF1",
+      padding: "2rem",
+      borderRadius: "10px",
+      boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+      color: "#FFFFFF",
     },
   };
 

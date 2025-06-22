@@ -38,25 +38,25 @@ const AddUser = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: "#fff",
         padding: "50px 20px",
-        fontFamily: "'Segoe UI', sans-serif",
-        color: "#e0e0e0",
+        fontFamily: "'Raleway', sans-serif",
+        color: "#000000",
       }}
     >
       <div
         style={{
           maxWidth: "500px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: "#ffffff",
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
         }}
       >
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
+            backgroundColor: "#D0D5CE",
             padding: "20px 30px",
             borderTopLeftRadius: "12px",
             borderTopRightRadius: "12px",
@@ -65,7 +65,7 @@ const AddUser = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "10px",
-            color: "#fff",
+            color: "#000000",
           }}
         >
           <FaUserPlus size={20} />
@@ -81,6 +81,7 @@ const AddUser = () => {
               color: message.startsWith("✅") ? "#256029" : "#842029",
               padding: "12px",
               fontWeight: "600",
+              fontFamily: "'Raleway', sans-serif",
             }}
           >
             {message}
@@ -93,12 +94,19 @@ const AddUser = () => {
             <input
               type="email"
               name="username"
-              className="form-control bg-dark text-white"
+              className="form-control"
               placeholder="Email"
               value={user.username}
               onChange={handleChange}
               required
-              style={{ "::placeholder": { color: "white" } }}
+              style={{
+                backgroundColor: "#f9f9f9",
+                color: "#000000",
+                border: "1px solid #999",
+                borderRadius: "8px",
+                padding: "10px",
+                fontFamily: "'Raleway', sans-serif",
+              }}
             />
           </div>
 
@@ -106,11 +114,19 @@ const AddUser = () => {
             <input
               type="password"
               name="password"
-              className="form-control bg-dark text-white"
+              className="form-control"
               placeholder="Password"
               value={user.password}
               onChange={handleChange}
               required
+              style={{
+                backgroundColor: "#f9f9f9",
+                color: "#000000",
+                border: "1px solid #999",
+                borderRadius: "8px",
+                padding: "10px",
+                fontFamily: "'Raleway', sans-serif",
+              }}
             />
           </div>
 
@@ -118,12 +134,14 @@ const AddUser = () => {
             type="submit"
             className="btn w-100"
             style={{
-              backgroundColor: "#9c27b0",
-              color: "#fff",
+              backgroundColor: "#000000",
+              color: "#ffffff",
               fontWeight: "600",
               padding: "10px",
               borderRadius: "8px",
               fontSize: "16px",
+              fontFamily: "'Raleway', sans-serif",
+              border: "none",
             }}
           >
             Add User
@@ -131,16 +149,16 @@ const AddUser = () => {
         </form>
       </div>
 
-      {/* Autofill + placeholder white fix */}
+      {/* Autofill + Placeholder Fix */}
       <style>{`
         input::placeholder {
-          color: white !important;
-          opacity: 0.8;
+          color: #000000 !important;
+          opacity: 0.6;
         }
 
         input:-webkit-autofill {
-          -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
-          -webkit-text-fill-color: white !important;
+          -webkit-box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
+          -webkit-text-fill-color: #000000 !important;
         }
       `}</style>
     </div>

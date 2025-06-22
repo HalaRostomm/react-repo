@@ -1,518 +1,390 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from '../service/userservice';
-import { 
-  FaEdit, 
-  FaTrash, 
-  FaLock, 
-  FaSignOutAlt, 
-  FaUserEdit, 
-  FaThumbsUp, 
-  FaComment, 
-  FaShare, FaBars, FaTimes,
-  FaPlus 
+import {
+  FaEdit,
+  FaTrash,
+  FaLock,
+  FaSignOutAlt,
+  FaUserEdit,
+  FaPlus,
 } from 'react-icons/fa';
-<link href="https://fonts.googleapis.com/css2?family=Tinos&display=swap" rel="stylesheet"></link>
+
 const UserProfile = () => {
   const [userInfo, setUserInfo] = useState({});
   const [userPosts, setUserPosts] = useState([]);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [resolvedAddress, setResolvedAddress] = useState('');
-
-  const fetchUserProfile = async () => {
-    try {
-      const response = await userService.getUserProfile();
-      setUserInfo(response);
-
-      const posts = await userService.getUserPosts(response.appUserId);
-      setUserPosts(posts);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching profile or posts:', err);
-      setError('Failed to fetch user info or posts.');
-      setLoading(false);
-    }
-  };
-  
- 
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const u = await userService.getUserProfile();
+        setUserInfo(u);
+        const posts = await userService.getUserPosts(u.appUserId);
+        setUserPosts(posts);
+      } catch {
+        console.error('Error fetching data');
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchUserProfile();
   }, []);
+
+  useEffect(() => {
+    if (userInfo.address?.includes(',')) {
+      const [lng, lat] = userInfo.address.split(',').map(Number);
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(r => r.json())
+        .then(d => setResolvedAddress(d.display_name))
+        .catch(() => setResolvedAddress(userInfo.address));
+    }
+  }, [userInfo]);
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
     navigate('/login');
   };
 
-
-useEffect(() => {
-    if (userInfo && userInfo.address && userInfo.address.includes(',')) {
-      const [longitude, latitude] = userInfo.address.split(',').map(Number);
-      const fetchAddressFromCoordinates = async () => {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await response.json();
-setResolvedAddress(data.display_name);
-        } catch (error) {
-          setResolvedAddress('Address: ' + userInfo.address);
-        }
-      };
-      fetchAddressFromCoordinates();
-    }
-  }, [userInfo]);
-
-
-
-
-
-
-
   const handleDeletePost = async (postId) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      try {
-        await userService.deletePost(postId);
-        alert("Post deleted successfully!");
-        const updatedPosts = await userService.getUserPosts(userInfo.appUserId);
-        setUserPosts(updatedPosts);
-      } catch (err) {
-        console.error("Error deleting post:", err);
-        alert("Failed to delete post.");
-      }
+    if (!window.confirm('Are you sure?')) return;
+    try {
+      await userService.deletePost(postId);
+      const posts = await userService.getUserPosts(userInfo.appUserId);
+      setUserPosts(posts);
+    } catch {
+      alert('Failed to delete');
     }
   };
 
-  const handleEditPost = (postId) => {
-    navigate(`/user/updatepost/${postId}`);
+  if (loading) return <div className="loading">Loading...</div>;
+
+  const initials = `${userInfo.firstname?.[0] || ''}${userInfo.lastname?.[0] || ''}`;
+
+  // Color constants
+  const colors = {
+    primary: '#FFA100', // Button and icon color
+    cardBg: 'rgba(19, 182, 185, 0.2)', // 0x3313b6b9 equivalent in rgba
+    headerBg: '#13b6b9', // Header background
+    text: '#000000', // Black text
+    white: '#FFFFFF',
+    statusAvailable: '#13b6b9',
+    statusOther: '#808080',
+    avatarBg: '#14213D',
   };
 
-  // Styles
-  const styles = {
-  container: {
-    fontFamily: "'Tinos', serif",
-    backgroundColor: '#E5E5E5',
-    minHeight: '100vh',
-  },
-  header: {
-    backgroundColor: '#14213D',
-    height: '350px',
-    position: 'relative',
-    color: '#FFFFFF',
-  },
-  coverPhoto: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  profileSection: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 1rem',
-    position: 'relative',
-  },
-  profileCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    marginTop: '-100px',
-    padding: '1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  profileImage: {
-    width: '150px',
-    height: '150px',
-    borderRadius: '50%',
-    border: '5px solid #FFFFFF',
-    marginTop: '-75px',
-    objectFit: 'cover',
-    backgroundColor: '#14213D',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#FFFFFF',
-    fontSize: '3rem',
-    fontWeight: 'bold',
-  },
-  userName: {
-    fontSize: '2rem',
-    margin: '1rem 0 0.5rem',
-    color: '#000000',
-  },
-  userBio: {
-    color: '#14213D',
-    marginBottom: '1rem',
-    textAlign: 'center',
-  },
-  actionButtons: {
-    display: 'flex',
-    gap: '1rem',
-    marginBottom: '1rem',
-  },
-  button: {
-    padding: '8px 16px',
-    borderRadius: '6px',
+  // Shared button style
+  const baseBtnStyle = {
+    backgroundColor: colors.primary,
+    color: colors.text,
+    padding: '0.75rem 1.25rem',
     border: 'none',
+    borderRadius: '6px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
-    fontWeight: 'bold',
-    fontFamily: "'Tinos', serif",
-  },
-  primaryButton: {
-    backgroundColor: '#FCA311',
-    color: '#FFFFFF',
-  },
-  secondaryButton: {
-    backgroundColor: '#14213D',
-    color: '#FFFFFF',
-  },
-  dangerButton: {
-    backgroundColor: '#000000',
-    color: '#FFFFFF',
-  },
-  contentContainer: {
-    maxWidth: '1200px',
-    margin: '2rem auto',
-    display: 'grid',
-    gridTemplateColumns: '300px 1fr',
-    gap: '1.5rem',
-    padding: '0 1rem',
-  },
-  infoCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    padding: '1.5rem',
-    marginBottom: '1.5rem',
-  },
-  infoTitle: {
-    fontSize: '1.2rem',
-    marginTop: '0',
-    marginBottom: '1rem',
-    color: '#000000',
-    borderBottom: '2px solid #FCA311',
-    paddingBottom: '0.5rem',
-  },
-  infoItem: {
-    marginBottom: '0.8rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  infoLabel: {
-    fontWeight: 'bold',
-    color: '#14213D',
-  },
-  infoValue: {
-    color: '#000000',
-  },
-  postsContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    padding: '1.5rem',
-  },
-  postCard: {
-    borderBottom: '1px solid #ddd',
-    paddingBottom: '1rem',
-    marginBottom: '1.5rem',
-  },
-  postHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '1rem',
-  },
-  postUserImage: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    marginRight: '10px',
-    backgroundColor: '#14213D',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  postUserInfo: {
-    flex: 1,
-  },
-  postUserName: {
-    fontWeight: 'bold',
-    margin: '0',
-    color: '#000000',
-  },
-  postTime: {
-    color: '#14213D',
-    fontSize: '0.8rem',
-    margin: '0',
-  },
-  postContent: {
-    marginBottom: '1rem',
-    color: '#000000',
-  },
-  postType: {
-    display: 'inline-block',
-    backgroundColor: '#FCA311',
-    color: '#FFFFFF',
-    padding: '4px 8px',
-    borderRadius: '4px',
-    fontSize: '0.8rem',
-    marginBottom: '1rem',
-  },
-  postImages: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '8px',
-    marginBottom: '1rem',
-  },
-  postImage: {
-    width: '100%',
-    borderRadius: '8px',
-    objectFit: 'cover',
-    maxHeight: '300px',
-  },
-  postActions: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '1rem',
-  },
-  postAction: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '8px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    color: '#14213D',
-    fontWeight: 'bold',
-  },
-  editDeleteButtons: {
-    display: 'flex',
-    gap: '10px',
-    marginTop: '10px',
-  },
-};
+    gap: '0.5rem',
+    fontWeight: '600',
+    fontSize: '0.95rem',
+    fontFamily: "'Poppins', sans-serif",
+  };
 
-
-  if (loading) return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      fontFamily: "'Economica', sans-serif"
-    }}>
-      Loading...
-    </div>
-  );
-
-  const userInitials = userInfo.firstname?.charAt(0) + userInfo.lastname?.charAt(0);
+  const styles = {
+    container: {
+      fontFamily: "'Poppins', sans-serif",
+      color: colors.text,
+      backgroundColor: '#f5f5f5',
+      paddingBottom: '2rem',
+      minHeight: '100vh',
+    },
+    profileCard: {
+      maxWidth: '800px',
+      margin: '2rem auto',
+      backgroundColor: colors.cardBg,
+      borderRadius: '12px',
+      padding: '2rem 1rem',
+      textAlign: 'center',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    },
+    avatar: {
+      width: '140px',
+      height: '140px',
+      borderRadius: '50%',
+      border: `4px solid ${colors.white}`,
+      overflow: 'hidden',
+      margin: '0 auto 1rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.avatarBg,
+      color: colors.white,
+      fontSize: '3rem',
+      fontWeight: 'bold',
+    },
+    userName: {
+      margin: '0.5rem 0',
+      fontSize: '1.8rem',
+      fontFamily: "'Poppins', sans-serif",
+      fontWeight: '600',
+    },
+    actions: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '1rem',
+      flexWrap: 'wrap',
+    },
+    btn: baseBtnStyle,
+    createBtn: {
+      ...baseBtnStyle,
+      marginTop: '1.5rem',
+    },
+    main: {
+      display: 'flex',
+      maxWidth: '1200px',
+      margin: '0 auto',
+      gap: '1rem',
+      padding: '0 1rem',
+      fontFamily: "'Poppins', sans-serif",
+    },
+    sidebar: {
+      flex: '0 0 300px',
+      backgroundColor: colors.cardBg,
+      borderRadius: '10px',
+      padding: '1.5rem',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      maxHeight: '400px',  // or any height you want
+    },
+    sidebarTitle: {
+      fontFamily: "'Poppins', sans-serif",
+      fontSize: '1.2rem',
+      marginBottom: '1rem',
+      fontWeight: '600',
+    },
+    infoItem: {
+     marginBottom: '0.25rem',
+      display: 'flex',
+      justifyContent: 'space-between',
+      fontFamily: "'Poppins', sans-serif",
+    },
+    label: {
+      fontWeight: '600',
+    },
+    value: {},
+    postsSection: {
+      flex: 1,
+    },
+    postsTitle: {
+      fontFamily: "'Poppins', sans-serif",
+      fontSize: '1.2rem',
+      marginBottom: '1rem',
+      fontWeight: '600',
+    },
+    postCard: {
+      backgroundColor: colors.white,
+      borderRadius: '10px',
+      padding: '1.5rem',
+      boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
+      marginBottom: '1.5rem',
+    },
+    postHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '1rem',
+    },
+    postAvatar: {
+      width: '45px',
+      height: '45px',
+      borderRadius: '50%',
+      backgroundColor: colors.avatarBg,
+      color: colors.white,
+      fontWeight: '600',
+      fontSize: '1rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: '10px',
+    },
+    postAuthor: {
+      fontWeight: '600',
+      fontFamily: "'Poppins', sans-serif",
+    },
+    postDate: {
+      fontSize: '0.85rem',
+      color: '#555',
+      fontFamily: "'Poppins', sans-serif",
+    },
+    statusLabel: {
+      display: 'inline-block',
+      padding: '0.25rem 0.75rem',
+      borderRadius: '20px',
+      fontWeight: '600',
+      fontSize: '0.85rem',
+      marginBottom: '0.75rem',
+      color: colors.white,
+      fontFamily: "'Poppins', sans-serif",
+    },
+    postContent: {
+      marginBottom: '1rem',
+      lineHeight: '1.5',
+      fontFamily: "'Poppins', sans-serif",
+    },
+    postImages: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '0.75rem',
+      marginBottom: '1rem',
+    },
+    postImg: {
+      width: 'calc(33% - 0.5rem)',
+      borderRadius: '8px',
+      objectFit: 'cover',
+      maxHeight: '200px',
+    },
+    postActions: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '1rem',
+    },
+    editBtn: {
+      ...baseBtnStyle,
+      backgroundColor: colors.primary,
+    },
+    delBtn: {
+      ...baseBtnStyle,
+      backgroundColor: colors.statusOther,
+    },
+  };
 
   return (
     <div style={styles.container}>
-      {/* Header with cover photo */}
-      <div style={styles.header}>
-        {/* Placeholder for cover photo - you can replace with actual image if available */}
-        <div style={{ 
-          backgroundColor: '#14213D', 
-          width: '100%', 
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '2rem'
-        }}>
-          PawLover Profile
+      <section style={styles.profileCard}>
+        <div style={styles.avatar}>
+          {userInfo.image ? (
+            <img 
+              src={`data:image/jpeg;base64,${userInfo.image}`} 
+              alt="Profile" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            initials
+          )}
         </div>
-      </div>
-
-      <div style={styles.profileSection}>
-        {/* Profile card */}
-        <div style={styles.profileCard}>
-          <div style={styles.profileImage}>
-            {userInfo.image ? (
-              <img 
-                src={`data:image/jpeg;base64,${userInfo.image}`} 
-                alt="Profile" 
-                style={{ width: '100%', height: '100%', borderRadius: '50%' }}
-              />
-            ) : (
-              userInitials
-            )}
-          </div>
-          
-          <h1 style={styles.userName}>{userInfo.firstname} {userInfo.lastname}</h1>
-          <p style={styles.userBio}>Pet lover and community member</p>
-          
-          <div style={styles.actionButtons}>
-            <button 
-              style={{ ...styles.button, ...styles.primaryButton }}
-              onClick={() => navigate(`/user/updateuser/${userInfo.appUserId}`)}
-            >
-              <FaUserEdit /> Edit Profile
-            </button>
-            <button 
-              style={{ ...styles.button, ...styles.secondaryButton }}
-              onClick={() => navigate('/user/updatePassword')}
-            >
-              <FaLock /> Update Password
-            </button>
-            <button 
-              style={{ ...styles.button, ...styles.dangerButton }}
-              onClick={handleLogout}
-            >
-              <FaSignOutAlt /> Logout
-            </button>
-          </div>
+        <h2 style={styles.userName}>
+          {userInfo.firstname} {userInfo.lastname}
+        </h2>
+        <div style={styles.actions}>
+          <button
+            style={styles.btn}
+            onClick={() => navigate(`/user/updateuser/${userInfo.appUserId}`)}
+          >
+            <FaUserEdit color={colors.text} /> Edit Profile
+          </button>
+          <button
+            style={styles.btn}
+            onClick={() => navigate('/user/updatePassword')}
+          >
+            <FaLock color={colors.text} /> Update Password
+          </button>
+          <button style={styles.btn} onClick={handleLogout}>
+            <FaSignOutAlt color={colors.text} /> Logout
+          </button>
         </div>
-      </div>
+      </section>
 
-      {/* Main content */}
-      <div style={styles.contentContainer}>
-        {/* Left sidebar - User info */}
-        <div>
-          <div style={styles.infoCard}>
-            <h2 style={styles.infoTitle}>About</h2>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>First Name:</span>
-              <span style={styles.infoValue}>{userInfo.firstname}</span>
+      <main style={styles.main}>
+        <aside style={styles.sidebar}>
+          <h3 style={styles.sidebarTitle}>About</h3>
+          {[
+            ['Name', `${userInfo.firstname || ''} ${userInfo.lastname || ''}`.trim()],
+            ['Birth Date', userInfo.birthDate],
+            ['Email', userInfo.username],
+            ['Gender', userInfo.gender],
+            ['Phone', userInfo.phone],
+            ['Address', resolvedAddress],
+          ].map(([label, val]) => (
+            <div key={label} style={styles.infoItem}>
+              <span style={styles.label}>{label}:</span>
+              <span style={styles.value}>{val || '-'}</span>
             </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Last Name:</span>
-              <span style={styles.infoValue}>{userInfo.lastname}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Birth Date:</span>
-              <span style={styles.infoValue}>{userInfo.birthDate}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Email:</span>
-              <span style={styles.infoValue}>{userInfo.username}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Gender:</span>
-              <span style={styles.infoValue}>{userInfo.gender}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Phone:</span>
-              <span style={styles.infoValue}>{userInfo.phone}</span>
-            </div>
-            <div style={styles.infoItem}>
-  <span style={styles.infoLabel}>Address:</span>
-  <span style={styles.infoValue}>{resolvedAddress}</span>
-</div>
+          ))}
+        </aside>
 
-          </div>
-
-          <div style={styles.infoCard}>
-            <h2 style={styles.infoTitle}>Stats</h2>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Posts:</span>
-              <span style={styles.infoValue}>{userPosts.length}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Member Since:</span>
-              <span style={styles.infoValue}>
-                {new Date(userInfo.createdAt).toLocaleDateString()}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right content - Posts */}
-        <div style={styles.postsContainer}>
-          <h2 style={{ marginTop: 0 }}>Your Posts</h2>
-          
+        <section style={styles.postsSection}>
+          <h3 style={styles.postsTitle}>Your Posts</h3>
           {userPosts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
-              <p>You haven't created any posts yet.</p>
-              <button 
-                style={{ ...styles.button, ...styles.primaryButton }}
-                onClick={() => navigate('/user/addpost')}
-              >
-                <FaPlus /> Create Your First Post
-              </button>
-            </div>
+            <button
+              style={styles.createBtn}
+              onClick={() => navigate('/user/addpost')}
+            >
+              <FaPlus color={colors.text} /> Create Your First Post
+            </button>
           ) : (
             userPosts.map((post) => (
               <div key={post.postId} style={styles.postCard}>
                 <div style={styles.postHeader}>
-                  <div style={styles.postUserImage}>
-                    {userInitials}
-                  </div>
-                  <div style={styles.postUserInfo}>
-                    <h3 style={styles.postUserName}>You</h3>
-                    <p style={styles.postTime}>
+                  <div style={styles.postAvatar}>{initials}</div>
+                  <div>
+                    <div style={styles.postAuthor}>You</div>
+                    <div style={styles.postDate}>
                       {new Date(post.createdAt).toLocaleString(undefined, {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit',
-                        hour12: true
                       })}
-                    </p>
+                    </div>
                   </div>
                 </div>
 
-                <div style={styles.postContent}>
-                  <span style={styles.postType}>{post.type}</span>
-                  <p>{post.content}</p>
-                </div>
+                <span
+                  style={{
+                    ...styles.statusLabel,
+                    backgroundColor:
+                      post.status === 'Available' ? colors.statusAvailable : colors.statusOther,
+                  }}
+                >
+                  {post.status || post.type}
+                </span>
+
+                <p style={styles.postContent}>{post.content}</p>
 
                 {post.images?.length > 0 && (
                   <div style={styles.postImages}>
-                    {post.images.map((img, idx) => (
+                    {post.images.map((img, i) => (
                       <img
-                        key={idx}
+                        key={i}
                         src={`data:image/jpeg;base64,${img}`}
-                        alt={`post-${idx}`}
-                        style={styles.postImage}
+                        alt=""
+                        style={styles.postImg}
                       />
                     ))}
                   </div>
                 )}
 
-                
-
-                <div style={styles.editDeleteButtons}>
+                <div style={styles.postActions}>
                   <button
-                    onClick={() => handleEditPost(post.postId)}
-                    style={{
-                      ...styles.button,
-                      backgroundColor: '#FEA70F',
-                      color: 'white',
-                    }}
+                    style={styles.editBtn}
+                    onClick={() => navigate(`/user/updatepost/${post.postId}`)}
                   >
-                    <FaEdit /> Edit
+                    <FaEdit color={colors.text} /> Edit
                   </button>
-                  {post.type !== 'For Adoption' && post.type !== 'Lost-Found' && (
-                    <button
-                      onClick={() => handleDeletePost(post.postId)}
-                      style={{
-                        ...styles.button,
-                        backgroundColor: '#DC3545',
-                        color: 'white',
-                      }}
-                    >
-                      <FaTrash /> Delete
-                    </button>
-                  )}
+                   { !['for adoption cd', 'lost found cd', 'cd'].includes(post.type?.toLowerCase()) && (
+        <button
+          style={styles.delBtn}
+          onClick={() => handleDeletePost(post.postId)}
+        >
+          <FaTrash color={colors.white} /> Delete
+        </button>
+      )}
                 </div>
               </div>
             ))
           )}
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 };

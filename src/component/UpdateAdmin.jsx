@@ -99,182 +99,192 @@ const UpdateAdmin = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0f172a",
-        padding: "50px 20px",
-        fontFamily: "'Segoe UI', sans-serif",
-        color: "#e0e0e0",
-      }}
-    >
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+
       <div
         style={{
-          maxWidth: "800px",
-          margin: "0 auto",
-          backgroundColor: "#1e293b",
-          borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          minHeight: "100vh",
+          backgroundColor: "#ffffff", // White background
+          padding: "50px 20px",
+          fontFamily: "'Raleway', sans-serif",
+          color: "#333",
         }}
       >
-        {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
-            padding: "20px 30px",
-            borderTopLeftRadius: "12px",
-            borderTopRightRadius: "12px",
+            maxWidth: "800px",
+            margin: "0 auto",
+            backgroundColor: "#D0D5CE", // Card background color
+            borderRadius: "12px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
           }}
         >
-          <h2 style={{ margin: 0, fontWeight: "700" }}>Edit Profile</h2>
-          <p style={{ margin: 0, color: "#f3e5f5" }}>Update your personal details</p>
-        </div>
-
-        {/* Message */}
-        {message && (
+          {/* Header */}
           <div
             style={{
-              backgroundColor: message.startsWith("✅") ? "#2e7d32" : "#c62828",
+              background: "linear-gradient(90deg, #000000, #4a148c)", // Gradient header background
+              padding: "20px 30px",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
               color: "#fff",
-              padding: "10px",
-              textAlign: "center",
-              fontWeight: "500",
             }}
           >
-            {message}
+            <h2 style={{ margin: 0, fontWeight: "700" }}>Edit Profile</h2>
+            <p style={{ margin: 0, color: "#f3e5f5" }}>
+              Update your personal details
+            </p>
           </div>
-        )}
-        {errorMessage && (
-          <div
-            style={{
-              backgroundColor: "#c62828",
-              color: "#fff",
-              padding: "10px",
-              textAlign: "center",
-              fontWeight: "500",
-            }}
-          >
-            {errorMessage}
-          </div>
-        )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} style={{ padding: "30px" }}>
-          <div className="row g-3">
-            <div className="col-md-6">
-              <label>First Name</label>
-              <input
-                type="text"
-                name="firstname"
-                className="form-control bg-dark text-white"
-                value={admin.firstname}
-                onChange={handleInputChange}
-                required
-              />
+          {/* Messages */}
+          {message && (
+            <div
+              style={{
+                backgroundColor: message.startsWith("✅") ? "#2e7d32" : "#c62828",
+                color: "#fff",
+                padding: "10px",
+                textAlign: "center",
+                fontWeight: "500",
+              }}
+            >
+              {message}
             </div>
-            <div className="col-md-6">
-              <label>Last Name</label>
-              <input
-                type="text"
-                name="lastname"
-                className="form-control bg-dark text-white"
-                value={admin.lastname}
-                onChange={handleInputChange}
-                required
-              />
+          )}
+          {errorMessage && (
+            <div
+              style={{
+                backgroundColor: "#c62828",
+                color: "#fff",
+                padding: "10px",
+                textAlign: "center",
+                fontWeight: "500",
+              }}
+            >
+              {errorMessage}
             </div>
-            <div className="col-md-6">
-              <label>Date of Birth</label>
-              <input
-                type="date"
-                name="birthDate"
-                className="form-control bg-dark text-white"
-                value={admin.birthDate}
-                onChange={handleInputChange}
-                required
-              />
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} style={{ padding: "30px" }}>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  name="firstname"
+                  className="form-control"
+                  value={admin.firstname}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="lastname"
+                  className="form-control"
+                  value={admin.lastname}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  name="birthDate"
+                  className="form-control"
+                  value={admin.birthDate}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Gender</label>
+                <select
+                  name="gender"
+                  className="form-select"
+                  value={admin.gender}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  className="form-control"
+                  value={admin.phone}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Upload Image</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </div>
+              <div className="col-12">
+                <label>Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  className="form-control"
+                  value={admin.address}
+                  onChange={handleInputChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="btn mt-2"
+                  style={{
+                    backgroundColor: "#f3e5f5",
+                    border: "1px solid #000000",
+                    color: "#000000",
+                    fontWeight: "500",
+                    borderRadius: "8px",
+                  }}
+                  onClick={getCurrentLocation}
+                >
+                  Use Current Location
+                </button>
+              </div>
             </div>
-            <div className="col-md-6">
-              <label>Gender</label>
-              <select
-                name="gender"
-                className="form-select bg-dark text-white"
-                value={admin.gender}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
-            <div className="col-md-6">
-              <label>Phone</label>
-              <input
-                type="text"
-                name="phone"
-                className="form-control bg-dark text-white"
-                value={admin.phone}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="col-md-6">
-              <label>Upload Image</label>
-              <input
-                type="file"
-                className="form-control bg-dark text-white"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </div>
-            <div className="col-12">
-              <label>Address</label>
-              <input
-                type="text"
-                name="address"
-                className="form-control bg-dark text-white"
-                value={admin.address}
-                onChange={handleInputChange}
-                required
-              />
+
+            {/* Submit */}
+            <div className="text-end mt-4">
               <button
-                type="button"
-                className="btn mt-2"
+                type="submit"
+                className="btn"
                 style={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #9c27b0",
-                  color: "#9c27b0",
-                  fontWeight: "500",
-                  borderRadius: "8px",
+                  backgroundColor: "#000000",
+                  color: "#fff",
+                  padding: "10px 20px",
+                  fontWeight: "600",
+                  borderRadius: "10px",
                 }}
-                onClick={getCurrentLocation}
+                disabled={isLoading}
               >
-                Use Current Location
+                {isLoading ? "Updating..." : "UPDATE PROFILE"}
               </button>
             </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="text-end mt-4">
-            <button
-              type="submit"
-              className="btn"
-              style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
-                padding: "10px 20px",
-                fontWeight: "600",
-                borderRadius: "10px",
-              }}
-              disabled={isLoading}
-            >
-              {isLoading ? "Updating..." : "UPDATE PROFILE"}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

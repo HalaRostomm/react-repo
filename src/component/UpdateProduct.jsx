@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ProductService from "../service/ppservice";
-import { FaImage, FaEdit, FaBoxOpen, FaDollarSign } from "react-icons/fa";
+import { FaImage, FaEdit, FaBoxOpen } from "react-icons/fa";
 
 const UpdateProduct = () => {
   const { categoryId, productId } = useParams();
@@ -9,13 +9,12 @@ const UpdateProduct = () => {
   const [message, setMessage] = useState("");
 
   const colors = {
-    primary: "#7F7B72",
-    background: "#F7F0E0",
-    card: "#F1EADC",
-    accent: "#E5DED4",
+    primary: "#FF9800",
+    background: "#FFFFFF",
+    card: "#FFFFFF",
     text: "#000000",
   };
-  const fontFamily = "'Roboto Slab', serif";
+  const fontFamily = "'Poppins', sans-serif";
 
   const [product, setProduct] = useState({
     productId: "",
@@ -106,9 +105,8 @@ const UpdateProduct = () => {
       {message && <p style={{ textAlign: "center", marginBottom: 16, color: message.startsWith("✅") ? "green" : "red" }}>{message}</p>}
 
       <form onSubmit={handleSubmit}>
-        {/* Product Name */}
         <div style={{ marginBottom: "1rem" }}>
-          <label style={{ fontWeight: "600" }}><FaBoxOpen /> Product Name:</label>
+          <label style={{ fontWeight: "600", color: colors.text }}><FaBoxOpen /> Product Name:</label>
           <input
             type="text"
             name="productName"
@@ -127,9 +125,8 @@ const UpdateProduct = () => {
           />
         </div>
 
-        {/* Description */}
         <div style={{ marginBottom: "1rem" }}>
-          <label style={{ fontWeight: "600" }}><FaEdit /> Description:</label>
+          <label style={{ fontWeight: "600", color: colors.text }}><FaEdit /> Description:</label>
           <textarea
             name="description"
             value={product.description}
@@ -148,9 +145,8 @@ const UpdateProduct = () => {
           />
         </div>
 
-        {/* Image Upload */}
         <div style={{ marginBottom: "1rem" }}>
-          <label style={{ fontWeight: "600" }}><FaImage /> Product Image (optional):</label>
+          <label style={{ fontWeight: "600", color: colors.text }}><FaImage /> Product Image (optional):</label>
           <input
             type="file"
             name="image"
@@ -159,10 +155,9 @@ const UpdateProduct = () => {
           />
         </div>
 
-        {/* Price and Stock Inputs */}
         {Object.keys(product.priceByColorAndSize).map((key) => (
           <div key={key} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "center" }}>
-            <span style={{ minWidth: 100, fontWeight: 500 }}>{key}</span>
+            <span style={{ minWidth: 100, fontWeight: 500, color: colors.text }}>{key}</span>
             <input
               type="number"
               name={`${key}_price`}

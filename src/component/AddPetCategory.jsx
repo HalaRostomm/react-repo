@@ -50,142 +50,134 @@ const AddPetCategory = () => {
   const selectedKeyHasValues = Array.isArray(savedCategories[category.key]);
 
   return (
-    <>
-      <style>
-        {`
-          input::placeholder,
-          select {
-            color: rgba(255,255,255,0.8);
-            background-color: #0f172a;
-          }
-        `}
-      </style>
+    <div style={{
+      backgroundColor: "#ffffff",
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "30px",
+      fontFamily: "'Raleway', sans-serif"
+    }}>
       <div style={{
-        backgroundColor: "#0f172a",
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px"
+        backgroundColor: "#D0D5CE",
+        padding: "40px",
+        borderRadius: "16px",
+        width: "100%",
+        maxWidth: "600px",
+        color: "#000000",
+        boxShadow: "0 6px 18px rgba(0,0,0,0.2)"
       }}>
-        <div style={{
-          backgroundColor: "#1e293b",
-          padding: "40px",
-          borderRadius: "16px",
-          width: "100%",
-          maxWidth: "600px",
-          color: "#fff",
-          boxShadow: "0 6px 18px rgba(0,0,0,0.4)"
-        }}>
-          <h3 style={{ color: "#8e6dda", textAlign: "center", marginBottom: 20 }}>
-            <FaPaw style={{ marginRight: 8 }} />
-            Add Pet Category
-          </h3>
+        <h3 style={{ color: "#000000", textAlign: "center", marginBottom: 20 }}>
+          <FaPaw style={{ marginRight: 8 }} />
+          Add Pet Category
+        </h3>
 
-          {message && (
-            <div
-              className={`alert ${message.startsWith("✅") ? "alert-success" : "alert-danger"}`}
+        {message && (
+          <div
+            className={`alert ${message.startsWith("✅") ? "alert-success" : "alert-danger"}`}
+            style={{
+              backgroundColor: message.startsWith("✅") ? "#c8e6c9" : "#ffcdd2",
+              color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
+              textAlign: "center",
+              padding: "10px",
+              borderRadius: "8px",
+              marginBottom: "15px"
+            }}
+          >
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="form-label fw-semibold">
+              <FaListAlt style={{ marginRight: 6 }} />
+              Category Key
+            </label>
+            <select
+              className="form-select"
+              value={category.key}
+              onChange={handleKeyChange}
+              required
               style={{
-                backgroundColor: message.startsWith("✅") ? "#c8e6c9" : "#ffcdd2",
-                color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
-                textAlign: "center",
-                padding: "10px",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                border: "1px solid #000",
                 borderRadius: "8px",
-                marginBottom: "15px"
+                padding: "10px",
+                fontFamily: "'Raleway', sans-serif"
               }}
             >
-              {message}
-            </div>
-          )}
+              <option value="">-- Select Category Key --</option>
+              {predefinedKeys.map((key) => (
+                <option key={key} value={key}>{key}</option>
+              ))}
+            </select>
+          </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="form-label fw-semibold">
-                <FaListAlt style={{ marginRight: 6 }} />
-                Category Key
-              </label>
+          <div className="mb-4">
+            <label className="form-label fw-semibold">
+              <FaListAlt style={{ marginRight: 6 }} />
+              Value
+            </label>
+            {selectedKeyHasValues ? (
               <select
                 className="form-select"
-                value={category.key}
-                onChange={handleKeyChange}
+                value={category.value}
+                onChange={handleValueChange}
                 required
                 style={{
-                  backgroundColor: "#0f172a",
-                  color: "#fff",
-                  border: "1px solid #6f42c1",
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  border: "1px solid #000",
                   borderRadius: "8px",
-                  padding: "10px"
+                  padding: "10px",
+                  fontFamily: "'Raleway', sans-serif"
                 }}
               >
-                <option value="">-- Select Category Key --</option>
-                {predefinedKeys.map((key) => (
-                  <option key={key} value={key}>{key}</option>
+                <option value="">-- Select Value --</option>
+                {savedCategories[category.key].map((val, idx) => (
+                  <option key={idx} value={val}>{val}</option>
                 ))}
               </select>
-            </div>
+            ) : (
+              <input
+                type="text"
+                placeholder="Enter value"
+                value={category.value}
+                onChange={handleValueChange}
+                required
+                className="form-control"
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  border: "1px solid #000",
+                  borderRadius: "8px",
+                  padding: "10px",
+                  fontFamily: "'Raleway', sans-serif"
+                }}
+              />
+            )}
+          </div>
 
-            <div className="mb-4">
-              <label className="form-label fw-semibold">
-                <FaListAlt style={{ marginRight: 6 }} />
-                Value
-              </label>
-              {selectedKeyHasValues ? (
-                <select
-                  className="form-select"
-                  value={category.value}
-                  onChange={handleValueChange}
-                  required
-                  style={{
-                    backgroundColor: "#0f172a",
-                    color: "#fff",
-                    border: "1px solid #6f42c1",
-                    borderRadius: "8px",
-                    padding: "10px"
-                  }}
-                >
-                  <option value="">-- Select Value --</option>
-                  {savedCategories[category.key].map((val, idx) => (
-                    <option key={idx} value={val}>{val}</option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type="text"
-                  placeholder="Enter value"
-                  value={category.value}
-                  onChange={handleValueChange}
-                  required
-                  className="form-control"
-                  style={{
-                    backgroundColor: "#0f172a",
-                    color: "#fff",
-                    border: "1px solid #6f42c1",
-                    borderRadius: "8px",
-                    padding: "10px"
-                  }}
-                />
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className="btn w-100 fw-bold"
-              style={{
-                backgroundColor: "#6f42c1",
-                color: "#fff",
-                borderRadius: "8px",
-                padding: "10px"
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5a32a3")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#6f42c1")}
-            >
-              <FaSave style={{ marginRight: 6 }} />
-              Save Category
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="btn w-100 fw-bold"
+            style={{
+              backgroundColor: "#000000",
+              color: "#ffffff",
+              borderRadius: "8px",
+              padding: "10px",
+              fontFamily: "'Raleway', sans-serif"
+            }}
+          >
+            <FaSave style={{ marginRight: 6 }} />
+            Save Category
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

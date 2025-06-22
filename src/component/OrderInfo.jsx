@@ -10,13 +10,9 @@ const OrderInfo = () => {
   const [error, setError] = useState(null);
   const [updatingItemId, setUpdatingItemId] = useState(null);
 
-  const colors = {
-    primary: '#7F7B72',
-    text: '#000000',
-    background: '#F7F0E0',
-    light: '#F1EADC',
-    lighter: '#E5DED4',
-  };
+  const primary = '#FCA311';
+  const black = '#000000';
+  const white = '#FFFFFF';
 
   const formatPrice = (price) => (typeof price === 'number' ? price.toFixed(2) : '0.00');
 
@@ -82,41 +78,32 @@ const OrderInfo = () => {
       });
   };
 
-  if (loading) return <div className="text-center mt-5">Loading order details...</div>;
+  if (loading) return <div className="text-center mt-5" style={{ fontFamily: 'Poppins, sans-serif', color: black }}>Loading order details...</div>;
   if (error) return <div className="alert alert-danger mt-4">{error}</div>;
   if (!orderInfo) return <p>No order info found.</p>;
 
   return (
-    <div className="container py-4" style={{ fontFamily: "'Roboto Slab', serif", color: colors.text }}>
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600&display=swap');
+    <div className="container py-4" style={{ fontFamily: 'Poppins, sans-serif', color: black, backgroundColor: white }}>
+      <style>{`
+        .custom-btn {
+          background-color: ${primary};
+          color: ${black};
+          border: none;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-weight: 600;
+        }
+        .custom-btn:hover {
+          background-color: #e08f0f;
+        }
+        .table th, .table td {
+          vertical-align: middle !important;
+        }
+      `}</style>
 
-          .custom-bg {
-            background-color: ${colors.background};
-          }
-          .custom-primary {
-            color: ${colors.primary};
-          }
-          .custom-btn {
-            background-color: ${colors.primary};
-            color: white;
-            border: none;
-            padding: 0.4rem 0.8rem;
-            border-radius: 5px;
-          }
-          .custom-btn:hover {
-            background-color: #6f6a62;
-          }
-          .table th, .table td {
-            vertical-align: middle !important;
-          }
-        `}
-      </style>
-
-      <div className="card shadow mb-4 custom-bg">
+      <div className="card shadow mb-4" style={{ backgroundColor: white, border: `2px solid ${primary}`, borderRadius: '12px' }}>
         <div className="card-body">
-          <h3 className="custom-primary mb-4">Order #{orderId}</h3>
+          <h3 style={{ color: primary, fontWeight: 700 }}>Order #{orderId}</h3>
           <p><strong>Date:</strong> {new Date(orderInfo.createdAt).toLocaleString()}</p>
           <p><strong>Full Name:</strong> {orderInfo.fullName}</p>
           <p><strong>Email:</strong> {orderInfo.email}</p>
@@ -133,10 +120,10 @@ const OrderInfo = () => {
         </div>
       </div>
 
-      <h4 className="custom-primary mb-3">Order Items</h4>
+      <h4 style={{ color: primary, fontWeight: 600 }} className="mb-3">Order Items</h4>
       <div className="table-responsive">
         <table className="table table-bordered table-hover text-center">
-          <thead style={{ backgroundColor: colors.primary, color: 'white' }}>
+          <thead style={{ backgroundColor: primary, color: white }}>
             <tr>
               <th>Product</th>
               <th>Qty</th>
@@ -173,7 +160,7 @@ const OrderInfo = () => {
                   ) : (
                     <button
                       type="button"
-                      className="btn btn-secondary btn-sm"
+                      className="btn btn-outline-dark btn-sm"
                       onClick={() => markItemUnDone(item.orderItemsId)}
                       disabled={updatingItemId === item.orderItemsId}
                     >

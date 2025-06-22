@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import adminService from "../service/adminService";
-import { FaEdit, FaListAlt, FaKey, FaTag } from "react-icons/fa";
+import { FaEdit, FaKey, FaListAlt, FaTag } from "react-icons/fa";
 
-const UpdatePetCategory = () => {
+const UpdateServiceCategory = () => {
   const { id } = useParams();
   const [category, setCategory] = useState({
     categoryId: "",
-    type: "PET",
+    type: "SERVICE",
     mscategory_key: "",
     mscategory: {},
   });
+  const [originalKey, setOriginalKey] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [originalKey, setOriginalKey] = useState("");
 
   const predefinedKeys = [
     "Bird", "Cat", "Dog", "Ferret", "Fish", "Guinea Pig", "Hamster",
@@ -32,7 +32,7 @@ const UpdatePetCategory = () => {
           setOriginalKey(key);
           setCategory({
             categoryId: response.data.categoryId,
-            type: response.data.type || "PET",
+            type: response.data.type || "SERVICE",
             mscategory_key: key,
             mscategory: { [key]: value },
           });
@@ -74,7 +74,7 @@ const UpdatePetCategory = () => {
 
       await adminService.updateCategory(id, category, token);
       setMessage("✅ Category updated successfully!");
-      setTimeout(() => navigate("/admin/getpetcategories"), 1500);
+      setTimeout(() => navigate("/admin/getservicecategories"), 1500);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "❌ Failed to update category.";
       setMessage(errorMessage);
@@ -88,11 +88,9 @@ const UpdatePetCategory = () => {
           * {
             font-family: 'Raleway', sans-serif;
           }
-
           input::placeholder {
             color: rgba(0, 0, 0, 0.6);
           }
-
           input:-webkit-autofill {
             -webkit-box-shadow: 0 0 0px 1000px white inset !important;
             -webkit-text-fill-color: black !important;
@@ -101,7 +99,7 @@ const UpdatePetCategory = () => {
       </style>
 
       <div style={{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#FFFFFF",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -119,19 +117,19 @@ const UpdatePetCategory = () => {
         }}>
           <h3 style={{ textAlign: "center", color: "#000000", marginBottom: 25 }}>
             <FaEdit style={{ marginRight: 8 }} />
-            Update Pet Category
+            Update Service Category
           </h3>
 
           {message && (
-            <div className={`alert ${message.startsWith("✅") ? "alert-success" : "alert-danger"}`}
-              style={{
-                backgroundColor: message.startsWith("✅") ? "#e0f2f1" : "#ffebee",
-                color: message.startsWith("✅") ? "#00695c" : "#c62828",
-                padding: "10px",
-                borderRadius: "8px",
-                textAlign: "center",
-                marginBottom: "20px"
-              }}>
+            <div style={{
+              backgroundColor: message.startsWith("✅") ? "#e0f7e9" : "#ffebee",
+              color: message.startsWith("✅") ? "#2e7d32" : "#c62828",
+              padding: "10px",
+              borderRadius: "8px",
+              textAlign: "center",
+              marginBottom: "20px",
+              fontWeight: "500"
+            }}>
               {message}
             </div>
           )}
@@ -142,8 +140,9 @@ const UpdatePetCategory = () => {
                 <FaListAlt style={{ marginRight: 6 }} />
                 Category Key
               </label>
+
               {originalKey && (
-                <div className="mb-2" style={{ color: "#333" }}>
+                <div className="mb-2" style={{ color: "#555" }}>
                   <small>
                     <FaKey style={{ marginRight: "6px" }} />
                     <strong>Previous Key:</strong> {originalKey}
@@ -199,11 +198,11 @@ const UpdatePetCategory = () => {
               type="submit"
               className="btn w-100 fw-bold"
               style={{
-                backgroundColor: "#000",
+                backgroundColor: "#000000",
                 color: "#fff",
                 padding: "10px",
                 borderRadius: "8px",
-                fontWeight: "600"
+                border: "none"
               }}
             >
               Save Changes
@@ -215,4 +214,4 @@ const UpdatePetCategory = () => {
   );
 };
 
-export default UpdatePetCategory;
+export default UpdateServiceCategory;

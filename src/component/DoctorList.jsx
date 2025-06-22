@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminService from "../service/adminService";
-import { FaChartBar, FaTrash, FaStethoscope, FaPaw } from "react-icons/fa"; // ⬅ add FaPaw
+import { FaChartBar, FaTrash, FaStethoscope, FaPaw } from "react-icons/fa";
 
 const DoctorList = () => {
   const [doctors, setDoctors] = useState([]);
@@ -83,25 +83,25 @@ const DoctorList = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: "#ffffff",
         padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: "#000",
+        fontFamily: "'Raleway', sans-serif",
       }}
     >
       <div
         style={{
           maxWidth: "1400px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: "#f5f5f5",
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
         }}
       >
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
+            backgroundColor: "#D0D5CE",
             padding: "20px 30px",
             borderTopLeftRadius: "12px",
             borderTopRightRadius: "12px",
@@ -112,8 +112,8 @@ const DoctorList = () => {
         >
           <FaStethoscope size={24} />
           <div>
-            <h2 style={{ margin: 0, fontWeight: "700" }}>Vet List</h2>
-            <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
+            <h2 style={{ margin: 0, fontWeight: "700", color: "#000" }}>Vet List</h2>
+            <p style={{ margin: 0, color: "#333", fontWeight: "400" }}>
               View and manage registered veterinarians
             </p>
           </div>
@@ -126,8 +126,8 @@ const DoctorList = () => {
             style={{
               margin: "0",
               borderRadius: 0,
-              color: messageType === "danger" ? "#f8d7da" : "#d4edda",
-              backgroundColor: messageType === "danger" ? "#721c24" : "#155724",
+              color: messageType === "danger" ? "#721c24" : "#155724",
+              backgroundColor: messageType === "danger" ? "#f8d7da" : "#d4edda",
               border: "none",
             }}
           >
@@ -141,43 +141,40 @@ const DoctorList = () => {
             <button
               className="btn"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
+                backgroundColor: "#D0D5CE",
+                color: "#000",
                 fontWeight: "600",
                 padding: "8px 20px",
                 borderRadius: "30px",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
               }}
               onClick={() => navigate("/admin/adddoctor")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
             >
               ➕ Add Vet
             </button>
           </div>
 
-         {loading ? (
-  <div className="text-center py-5">
-    <style>{`
-      @keyframes pawBounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-    `}</style>
-    <FaPaw
-      size={40}
-      style={{
-        color: "#ffffff",
-        animation: "pawBounce 1s infinite ease-in-out"
-      }}
-    />
-  </div>
-) : (
+          {loading ? (
+            <div className="text-center py-5">
+              <style>{`
+                @keyframes pawBounce {
+                  0%, 100% { transform: translateY(0); }
+                  50% { transform: translateY(-10px); }
+                }
+              `}</style>
+              <FaPaw
+                size={40}
+                style={{
+                  color: "#000",
+                  animation: "pawBounce 1s infinite ease-in-out"
+                }}
+              />
+            </div>
+          ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", color: "#e0e0e0" }}>
+              <table style={{ width: "100%", color: "#000" }}>
                 <thead>
-                  <tr style={{ color: "#c3baf0", textAlign: "center" }}>
+                  <tr style={{ backgroundColor: "#D0D5CE", textAlign: "center" }}>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Profile</th>
@@ -196,16 +193,11 @@ const DoctorList = () => {
                       <tr
                         key={doctor.appUserId}
                         style={{
-                          borderTop: "1px solid #334155",
+                          borderTop: "1px solid #ccc",
                           textAlign: "center",
-                          transition: "background-color 0.3s",
                         }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#1a2235")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.backgroundColor = "transparent")
-                        }
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
                         <td>{doctor.appUserId}</td>
                         <td>{doctor.firstname} {doctor.lastname}</td>
@@ -219,7 +211,7 @@ const DoctorList = () => {
                                 height: "45px",
                                 borderRadius: "50%",
                                 objectFit: "cover",
-                                border: "2px solid #9c27b0",
+                                border: "2px solid #D0D5CE",
                               }}
                             />
                           ) : (
@@ -236,7 +228,7 @@ const DoctorList = () => {
                           <button
                             onClick={() => navigate(`/admin/dashdr/${doctor.appUserId}`)}
                             style={{
-                              backgroundColor: "#6f42c1",
+                              backgroundColor: "#000",
                               color: "#fff",
                               padding: "6px 12px",
                               border: "none",
@@ -252,7 +244,7 @@ const DoctorList = () => {
                           <button
                             onClick={() => deleteDoctor(doctor.appUserId)}
                             style={{
-                              backgroundColor: "#e53935",
+                              backgroundColor: "#000",
                               color: "#fff",
                               padding: "6px 12px",
                               border: "none",

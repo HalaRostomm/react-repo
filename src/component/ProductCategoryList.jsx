@@ -3,6 +3,14 @@ import { useNavigate } from "react-router-dom";
 import adminService from "../service/adminService";
 import { FaTags, FaEdit, FaTrashAlt } from "react-icons/fa";
 
+const COLORS = {
+  BACKGROUND: "#ffffff",
+  CARD: "#D0D5CE",
+  TEXT: "#000000",
+  BORDER: "#cccccc",
+  BUTTON: "#000000",
+};
+
 const ProductCategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState("");
@@ -39,37 +47,39 @@ const ProductCategoryList = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#0f172a",
+        backgroundColor: COLORS.BACKGROUND,
         padding: "50px",
-        color: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: COLORS.TEXT,
+        fontFamily: "'Raleway', sans-serif",
       }}
     >
       <div
         style={{
           maxWidth: "1100px",
           margin: "0 auto",
-          backgroundColor: "#1e293b",
+          backgroundColor: COLORS.BACKGROUND,
           borderRadius: "12px",
-          boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
+          boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
+          border: `1px solid ${COLORS.BORDER}`,
         }}
       >
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(90deg, #9c27b0, #d63384)",
+            background: "#D0D5CE",
             padding: "20px 30px",
             borderTopLeftRadius: "12px",
             borderTopRightRadius: "12px",
             display: "flex",
             alignItems: "center",
             gap: "12px",
+            color: COLORS.TEXT,
           }}
         >
           <FaTags size={24} />
           <div>
             <h2 style={{ margin: 0, fontWeight: "700" }}>Product Categories</h2>
-            <p style={{ margin: 0, color: "#f3e5f5", fontWeight: "400" }}>
+            <p style={{ margin: 0, fontWeight: "400", color: "#000000" }}>
               Manage all product categories
             </p>
           </div>
@@ -80,11 +90,13 @@ const ProductCategoryList = () => {
           <div
             className={`alert text-center fw-semibold`}
             style={{
-              margin: "0",
+              margin: 0,
               borderRadius: 0,
-              color: message.includes("❌") ? "#f8d7da" : "#d4edda",
-              backgroundColor: message.includes("❌") ? "#721c24" : "#155724",
-              border: "none",
+              color: message.includes("❌") ? "#842029" : "#0f5132",
+              backgroundColor: message.includes("❌") ? "#f8d7da" : "#d1e7dd",
+              fontFamily: "'Raleway', sans-serif",
+              borderTop: `1px solid ${COLORS.BORDER}`,
+              padding: "12px",
             }}
           >
             {message}
@@ -98,17 +110,15 @@ const ProductCategoryList = () => {
             <button
               className="btn"
               style={{
-                backgroundColor: "#9c27b0",
-                color: "#fff",
+                backgroundColor: COLORS.CARD,
+                color: COLORS.TEXT,
                 fontWeight: "600",
                 padding: "8px 20px",
                 borderRadius: "30px",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(156, 39, 176, 0.6)",
+                fontFamily: "'Raleway', sans-serif",
               }}
               onClick={() => navigate("/admin/addproductcategory")}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = "#7b1fa2")}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = "#9c27b0")}
             >
               ➕ Add Category
             </button>
@@ -116,9 +126,9 @@ const ProductCategoryList = () => {
 
           {/* Table */}
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", color: "#e0e0e0" }}>
+            <table style={{ width: "100%", color: COLORS.TEXT }}>
               <thead>
-                <tr style={{ color: "#c3baf0", textAlign: "center" }}>
+                <tr style={{ textAlign: "center", borderBottom: `1px solid ${COLORS.BORDER}` }}>
                   <th style={{ padding: "10px" }}>ID</th>
                   <th>Category Name</th>
                   <th>Key</th>
@@ -131,35 +141,43 @@ const ProductCategoryList = () => {
                     <tr
                       key={category.category_category_id}
                       style={{
-                        borderTop: "1px solid #334155",
+                        borderTop: `1px solid ${COLORS.BORDER}`,
                         textAlign: "center",
                         transition: "background-color 0.3s",
                       }}
                       onMouseEnter={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#1a2235")
+                        (e.currentTarget.style.backgroundColor = "#f5f5f5")
                       }
                       onMouseLeave={(e) =>
                         (e.currentTarget.style.backgroundColor = "transparent")
                       }
                     >
-                      <td style={{ padding: "10px" }}>
-                        {category.category_category_id || "No ID"}
-                      </td>
+                      <td style={{ padding: "10px" }}>{category.category_category_id}</td>
                       <td>{category.mscategory || "No Name"}</td>
                       <td>{category.mscategory_key || "N/A"}</td>
                       <td>
                         <button
-                          className="btn btn-sm me-2 text-white"
-                          style={{ backgroundColor: "#845ef7", border: "none" }}
+                          className="btn btn-sm me-2"
+                          style={{
+                            backgroundColor: COLORS.CARD,
+                            color: COLORS.TEXT,
+                            border: "none",
+                            fontFamily: "'Raleway', sans-serif",
+                          }}
                           onClick={() =>
-                            navigate(`/admin/updatecategory/${category.category_category_id}`)
+                            navigate(`/admin/updateproductcategory/${category.category_category_id}`)
                           }
                         >
                           <FaEdit className="me-1" /> Edit
                         </button>
                         <button
                           className="btn btn-sm"
-                          style={{ backgroundColor: "#e53935", color: "#fff", border: "none" }}
+                          style={{
+                            backgroundColor: "#8B0000",
+                            color: COLORS.CARD,
+                            border: "none",
+                            fontFamily: "'Raleway', sans-serif",
+                          }}
                           onClick={() => deleteCategory(category.category_category_id)}
                         >
                           <FaTrashAlt className="me-1" /> Delete

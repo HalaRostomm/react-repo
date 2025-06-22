@@ -5,11 +5,11 @@ import authService from "../service/authService";
 import "react-toastify/dist/ReactToastify.css";
 
 const COLORS = {
-  dark: "#0D1B2A",
-  deep: "#1B263B",
-  steel: "#415A77",
-  soft: "#778DA9",
-  light: "#E0E1DD",
+  primary: "#64B5F6",
+  lightBg: "#f9f9f9",
+  cardBg: "#ffffff",
+  border: "#cbd5e1",
+  text: "#000000",
 };
 
 const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -103,23 +103,35 @@ const DoctorAvailability = () => {
     }
   };
 
-  if (loading) return <p style={{ fontFamily: "'Crimson Pro', serif", textAlign: "center", color: COLORS.light }}>Loading...</p>;
+  if (loading)
+    return (
+      <p style={{ fontFamily: "'Poppins', sans-serif", textAlign: "center", color: COLORS.primary }}>
+        Loading...
+      </p>
+    );
 
   return (
     <div
       style={{
-        fontFamily: "'Crimson Pro', serif",
-        backgroundColor: COLORS.deep,
-        color: COLORS.light,
+        fontFamily: "'Poppins', sans-serif",
+        backgroundColor: COLORS.lightBg,
+        color: COLORS.text,
         padding: "30px",
         maxWidth: "700px",
         margin: "40px auto",
         borderRadius: "12px",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
       }}
     >
       <ToastContainer />
-      <h2 style={{ color: COLORS.soft, fontWeight: 700, marginBottom: "20px", textAlign: "center" }}>
+      <h2
+        style={{
+          color: COLORS.primary,
+          fontWeight: 700,
+          marginBottom: "20px",
+          textAlign: "center",
+        }}
+      >
         Doctor Availability
       </h2>
 
@@ -131,14 +143,15 @@ const DoctorAvailability = () => {
             style={{
               marginBottom: "14px",
               padding: "14px 20px",
-              backgroundColor: COLORS.dark,
+              backgroundColor: COLORS.cardBg,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: "10px",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
-            <span style={{ color: COLORS.light }}>
+            <span>
               <strong>{day}:</strong> {availability[day] || "Not set"}
             </span>
             <button
@@ -146,8 +159,8 @@ const DoctorAvailability = () => {
               disabled={hasAppointments}
               style={{
                 cursor: hasAppointments ? "not-allowed" : "pointer",
-                backgroundColor: hasAppointments ? "#aaa" : COLORS.steel,
-                color: COLORS.light,
+                backgroundColor: hasAppointments ? "#ccc" : COLORS.primary,
+                color: "#fff",
                 padding: "8px 16px",
                 border: "none",
                 borderRadius: "6px",
@@ -165,45 +178,41 @@ const DoctorAvailability = () => {
           style={{
             marginTop: "30px",
             padding: "20px",
-            border: `1px solid ${COLORS.soft}`,
+            border: `1px solid ${COLORS.primary}`,
             borderRadius: "12px",
-            backgroundColor: COLORS.dark,
+            backgroundColor: COLORS.cardBg,
           }}
         >
-          <h4 style={{ marginBottom: "20px", color: COLORS.soft }}>
+          <h4 style={{ marginBottom: "20px", color: COLORS.primary }}>
             Set time for <strong>{selectedDay}</strong>
           </h4>
 
-          <div style={{ display: "flex", gap: "12px", marginBottom: "14px" }}>
-            <label style={{ minWidth: "60px", color: COLORS.light }}>Start:</label>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "center" }}>
+            <label style={{ minWidth: "60px" }}>Start:</label>
             <input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               style={{
                 padding: "8px",
-                fontFamily: "'Crimson Pro', serif",
-                border: `1px solid ${COLORS.soft}`,
+                fontFamily: "'Poppins', sans-serif",
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "6px",
-                backgroundColor: COLORS.light,
-                color: COLORS.dark,
               }}
             />
           </div>
 
-          <div style={{ display: "flex", gap: "12px", marginBottom: "14px" }}>
-            <label style={{ minWidth: "60px", color: COLORS.light }}>End:</label>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "14px", alignItems: "center" }}>
+            <label style={{ minWidth: "60px" }}>End:</label>
             <input
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
               style={{
                 padding: "8px",
-                fontFamily: "'Crimson Pro', serif",
-                border: `1px solid ${COLORS.soft}`,
+                fontFamily: "'Poppins', sans-serif",
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "6px",
-                backgroundColor: COLORS.light,
-                color: COLORS.dark,
               }}
             />
           </div>
@@ -211,12 +220,12 @@ const DoctorAvailability = () => {
           <button
             onClick={handleTimeSave}
             style={{
-              backgroundColor: COLORS.steel,
-              color: COLORS.light,
+              backgroundColor: COLORS.primary,
+              color: "#fff",
               border: "none",
               padding: "10px 20px",
               borderRadius: "6px",
-              fontFamily: "'Crimson Pro', serif",
+              fontFamily: "'Poppins', sans-serif",
               fontWeight: 600,
               marginTop: "12px",
             }}

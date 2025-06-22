@@ -67,6 +67,17 @@ const Reschedule = () => {
       setMessage("❌ " + (err.response?.data?.message || "Cancellation failed."));
     }
   };
+ const convertTo24Hour = (timeStr) => {
+  const [time, modifier] = timeStr.split(' ');
+  let [hours, minutes] = time.split(':');
+  if (modifier === 'PM' && hours !== '12') {
+    hours = parseInt(hours) + 12;
+  }
+  if (modifier === 'AM' && hours === '12') {
+    hours = '00';
+  }
+  return `${hours}:${minutes}`;
+};
 
   const handleReschedule = async () => {
     if (!newAppointmentId) {
@@ -95,7 +106,7 @@ const Reschedule = () => {
         rel="stylesheet"
       />
       <div style={styles.container}>
-        <h2 style={styles.header}>📅 Reschedule Appointment</h2>
+        <h2 style={styles.header}>📅 Reschedule Vet Appointment</h2>
         {loading ? (
           <p style={styles.textCenter}>Loading...</p>
         ) : (
@@ -109,19 +120,45 @@ const Reschedule = () => {
             )}
 
             <label style={styles.label}>Select New Appointment:</label>
-            <select
-              value={newAppointmentId}
-              onChange={(e) => setNewAppointmentId(e.target.value)}
-              style={styles.select}
-            >
-              <option value="">-- Choose a slot --</option>
-              {availableAppointments.map(appt => (
-                <option key={appt.appointmentId} value={appt.appointmentId}>
-                  {appt.selectedDate} ({appt.startTime} - {appt.endTime})
-                </option>
-              ))}
-            </select>
-
+          <select
+  id="newAppointmentSelect"
+  style={styles.select}
+  value={newAppointmentId}
+  onChange={(e) => setNewAppointmentId(e.target.value)}
+>
+  <option value="">-- Select an appointment slot --</option>
+  {availableAppointments
+    .filter((appt) => {
+      const now = new Date();
+      const convertTo24Hour = (timeStr) => {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
+        if (modifier === 'AM' && hours === '12') hours = '00';
+        return `${hours}:${minutes}`;
+      };
+      const time24 = convertTo24Hour(appt.startTime);
+      const apptDateTime = new Date(`${appt.selectedDate}T${time24}`);
+      return apptDateTime > now;
+    })
+    .sort((a, b) => {
+      const convertTo24Hour = (timeStr) => {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
+        if (modifier === 'AM' && hours === '12') hours = '00';
+        return `${hours}:${minutes}`;
+      };
+      const aTime = new Date(`${a.selectedDate}T${convertTo24Hour(a.startTime)}`);
+      const bTime = new Date(`${b.selectedDate}T${convertTo24Hour(b.startTime)}`);
+      return aTime - bTime;
+    })
+    .map((appt) => (
+      <option key={appt.appointmentId} value={appt.appointmentId}>
+        {appt.selectedDate} ({appt.startTime} - {appt.endTime})
+      </option>
+    ))}
+</select>
             <div style={styles.btnGroup}>
               <button style={styles.confirmBtn} onClick={handleReschedule}>
                 ✅ Confirm Reschedule
