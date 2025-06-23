@@ -47,7 +47,7 @@ const Serviceappdtls = () => {
   return (
     <>
       <link
-        href="https://fonts.googleapis.com/css2?family=Tinos&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
         rel="stylesheet"
       />
       <div style={styles.container}>
@@ -68,7 +68,7 @@ const Serviceappdtls = () => {
         </table>
 
         {isFutureAppointment && (
-          <div style={{ textAlign: "end", marginTop: "20px" }}>
+          <div style={{ textAlign: "right", marginTop: "20px" }}>
             <button
               onClick={() =>
                 navigate(
@@ -94,24 +94,27 @@ const DataRow = ({ label, value }) => (
   </tr>
 );
 
-// 💅 Styled System
+// Updated styles with your color scheme and font
 const styles = {
   container: {
     maxWidth: "700px",
     margin: "40px auto",
     padding: "30px",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(19, 182, 185, 0.2)", // #13B6B9 with 20% opacity
     borderRadius: "12px",
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     color: "#000000",
   },
   heading: {
     textAlign: "center",
-    color: "#14213D",
+    backgroundColor: "#13B6B9",
+    color: "#000000",
     marginBottom: "30px",
     fontWeight: "700",
     fontSize: "28px",
+    padding: "1rem 0",
+    borderRadius: 8,
   },
   table: {
     width: "100%",
@@ -120,8 +123,8 @@ const styles = {
   },
   th: {
     textAlign: "left",
-    backgroundColor: "#FCA311",
-    color: "#FFFFFF",
+    backgroundColor: "#FFA100",
+    color: "#000000",
     padding: "12px",
     fontWeight: "700",
     width: "40%",
@@ -131,7 +134,7 @@ const styles = {
     padding: "12px",
     backgroundColor: "#E5E5E5",
     border: "1px solid #ccc",
-    color: "#14213D",
+    color: "#000000",
   },
   alert: {
     backgroundColor: "#ffe6e6",
@@ -139,22 +142,22 @@ const styles = {
     padding: "12px",
     maxWidth: "600px",
     margin: "40px auto",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     borderLeft: "5px solid #ff4d4d",
     borderRadius: "8px",
   },
   loading: {
     textAlign: "center",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     marginTop: "50px",
     fontSize: "18px",
   },
   rescheduleButton: {
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     fontWeight: "bold",
-    backgroundColor: "#FCA311",
+    backgroundColor: "#FFA100",
     border: "none",
-    color: "#FFFFFF",
+    color: "#000000",
     padding: "10px 20px",
     borderRadius: "8px",
     cursor: "pointer",

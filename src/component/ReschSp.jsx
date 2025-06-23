@@ -109,8 +109,8 @@ const ReschSp = () => {
 
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Tinos&display=swap"
+     <link
+        href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
         rel="stylesheet"
       />
       <div style={styles.container}>
@@ -194,7 +194,6 @@ const ReschSp = () => {
     </>
   );
 };
-
 const styles = {
   container: {
     maxWidth: "700px",
@@ -202,13 +201,13 @@ const styles = {
     padding: "30px",
     backgroundColor: "#FFFFFF",
     borderRadius: "12px",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
     color: "#000000",
   },
   header: {
     textAlign: "center",
-    color: "#14213D",
+    color: "#13B6B9",
     marginBottom: "30px",
     fontWeight: "bold",
     fontSize: "26px",
@@ -217,16 +216,18 @@ const styles = {
     textAlign: "center",
     fontSize: "18px",
     marginTop: "30px",
+    color: "#000000",
   },
   card: {
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "rgba(19, 182, 185, 0.2)", // #13b6b9 with 20% opacity
     padding: "16px",
     borderRadius: "8px",
     marginBottom: "20px",
+    color: "#000000",
   },
   subheading: {
     marginBottom: "10px",
-    color: "#14213D",
+    color: "#13B6B9",
   },
   formGroup: {
     marginBottom: "20px",
@@ -234,7 +235,7 @@ const styles = {
   label: {
     display: "block",
     marginBottom: "8px",
-    color: "#14213D",
+    color: "#000000",
   },
   select: {
     width: "100%",
@@ -242,30 +243,32 @@ const styles = {
     borderRadius: "8px",
     border: "1px solid #ccc",
     fontSize: "16px",
+    color: "#000000",
+    fontFamily: "'Poppins', sans-serif",
   },
   buttonRow: {
     textAlign: "center",
     marginTop: "20px",
   },
   primaryBtn: {
-    backgroundColor: "#FCA311",
+    backgroundColor: "#FFA100",
     color: "#FFFFFF",
     border: "none",
     padding: "10px 20px",
     borderRadius: "8px",
     fontWeight: "bold",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     cursor: "pointer",
     marginRight: "10px",
   },
   cancelBtn: {
-    backgroundColor: "#E63946",
+    backgroundColor: "#FFA100",
     color: "#FFFFFF",
     border: "none",
     padding: "8px 16px",
     borderRadius: "8px",
     fontWeight: "bold",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     cursor: "pointer",
   },
   messageBox: {

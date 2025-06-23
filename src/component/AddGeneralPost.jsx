@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import userservice from "../service/userservice";
 
-// Inject Tinos font
-const tinosFontLink = document.createElement("link");
-tinosFontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFontLink.rel = "stylesheet";
-document.head.appendChild(tinosFontLink);
+// Inject Poppins font dynamically
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 const COLORS = {
   BLACK: "#000000",
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  LIGHT: "#E5E5E5",
+  PRIMARY: "#13b6b9",      // header color
+  ACCENT: "#ffa100",       // buttons and icons
+  LIGHT_OPACITY_BG: "#13b6b933",  // card bg 20% opacity
   WHITE: "#FFFFFF",
 };
 
@@ -73,15 +73,27 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
       style={{
         maxWidth: 650,
         margin: "2.5rem auto",
-        background: COLORS.WHITE,
+        backgroundColor: COLORS.LIGHT_OPACITY_BG, // 20% opacity bg
         borderRadius: "16px",
         padding: "24px",
         boxShadow: "0 6px 24px rgba(0, 0, 0, 0.1)",
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         border: `1.5px solid ${COLORS.PRIMARY}`,
+        color: COLORS.BLACK,
       }}
     >
-      <h3 style={{ marginBottom: 20, fontWeight: "700", color: COLORS.PRIMARY }}>
+      <h3
+        style={{
+          marginBottom: 20,
+          fontWeight: "700",
+          color: COLORS.BLACK,
+          backgroundColor: COLORS.PRIMARY,
+          padding: "0.75rem",
+          borderRadius: "12px",
+          userSelect: "none",
+          textAlign: "center",
+        }}
+      >
         📝 Create a Post
       </h3>
 
@@ -100,8 +112,9 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
               width: 50,
               height: 50,
               borderRadius: "50%",
-              backgroundColor: COLORS.LIGHT,
+              backgroundColor: COLORS.WHITE,
               flexShrink: 0,
+              border: `1.5px solid ${COLORS.LIGHT_OPACITY_BG}`,
             }}
           />
           <textarea
@@ -112,13 +125,15 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
             placeholder="What's on your mind?"
             style={{
               flex: 1,
-              border: `1px solid ${COLORS.LIGHT}`,
+              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
               borderRadius: "12px",
               padding: "12px 16px",
               fontSize: "16px",
               outline: "none",
-              background: COLORS.LIGHT,
-              fontFamily: "'Tinos', serif",
+              backgroundColor: COLORS.WHITE,
+              fontFamily: "'Poppins', sans-serif",
+              color: COLORS.BLACK,
+              resize: "vertical",
             }}
           />
         </div>
@@ -133,11 +148,13 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
               width: "100%",
               padding: "12px 14px",
               borderRadius: "10px",
-              border: `1px solid ${COLORS.LIGHT}`,
+              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
               fontSize: "16px",
-              backgroundColor: COLORS.LIGHT,
+              backgroundColor: COLORS.WHITE,
               outline: "none",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              color: COLORS.BLACK,
+              cursor: "pointer",
             }}
           >
             <option value="">📌 Select Post Type</option>
@@ -154,11 +171,12 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
             style={{
               display: "inline-block",
               padding: "10px 20px",
-              background: COLORS.ACCENT,
+              backgroundColor: COLORS.ACCENT,
               color: COLORS.BLACK,
               borderRadius: "8px",
               cursor: "pointer",
               fontWeight: 600,
+              userSelect: "none",
             }}
           >
             📸 Upload Images
@@ -194,7 +212,7 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
                   height: "90px",
                   objectFit: "cover",
                   borderRadius: "10px",
-                  border: `2px solid ${COLORS.LIGHT}`,
+                  border: `2px solid ${COLORS.LIGHT_OPACITY_BG}`,
                 }}
               />
             ))}
@@ -206,7 +224,7 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
           <button
             type="submit"
             style={{
-              background: COLORS.ACCENT,
+              backgroundColor: COLORS.ACCENT,
               color: COLORS.BLACK,
               fontWeight: "700",
               padding: "10px 24px",
@@ -214,10 +232,12 @@ const AddGeneralPost = ({ onPostAdded, token }) => {
               borderRadius: "10px",
               fontSize: "16px",
               cursor: "pointer",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              userSelect: "none",
+              transition: "background-color 0.3s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#e4940f")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = COLORS.ACCENT)}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e4940f")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
           >
             🚀 Post
           </button>

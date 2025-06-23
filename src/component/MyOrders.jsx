@@ -34,88 +34,91 @@ const MyOrders = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-        body {
-          font-family: 'Tinos', serif;
-          background-color: #E5E5E5;
-          color: #000000;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #E5E5E5;
+      color: #000000;
+    }
 
-        .orders-container {
-          max-width: 900px;
-          margin: 3rem auto;
-          padding: 1rem;
-        }
+    .orders-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 1rem;
+    }
 
-        .orders-title {
-          text-align: center;
-          font-size: 2rem;
-          font-weight: bold;
-          color: #14213D;
-          margin-bottom: 2rem;
-        }
+    .orders-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #13B6B9;
+      margin-bottom: 2rem;
+    }
 
-        .order-card {
-          background: #FFFFFF;
-          border-radius: 16px;
-          padding: 1.5rem;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          transition: transform 0.2s;
-          cursor: pointer;
-        }
+    .order-card {
+      background: rgba(19, 182, 185, 0.2); /* 13B6B9 with 20% opacity */
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.2s;
+      cursor: pointer;
+      margin-bottom: 1.2rem;
+    }
 
-        .order-card:hover {
-          transform: translateY(-5px);
-        }
+    .order-card:hover {
+      transform: translateY(-5px);
+    }
 
-        .order-icon {
-          background-color: #FCA311;
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          font-size: 1.8rem;
-        }
+    .order-icon {
+      background-color: #FFA100;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.8rem;
+    }
 
-        .order-details {
-          flex-grow: 1;
-          margin-left: 1.5rem;
-        }
+    .order-details {
+      flex-grow: 1;
+      margin-left: 1.5rem;
+    }
 
-        .order-date,
-        .order-price,
-        .order-status {
-          margin: 0.25rem 0;
-        }
+    .order-date,
+    .order-price,
+    .order-status {
+      margin: 0.25rem 0;
+      color: #000000;
+      font-size: 0.95rem;
+    }
 
-        .status-text {
-          font-weight: bold;
-        }
+    .status-text {
+      font-weight: 600;
+    }
 
-        .status-done {
-          color: #198754;
-        }
+    .status-done {
+      color: #198754;
+    }
 
-        .status-pending {
-          color: #FCA311;
-        }
+    .status-pending {
+      color: #FFA100;
+    }
 
-        .status-cancelled {
-          color: #dc3545;
-        }
+    .status-cancelled {
+      color: #dc3545;
+    }
 
-        .chevron {
-          font-size: 1.5rem;
-          color: #999;
-        }
-      `}</style>
+    .chevron {
+      font-size: 1.5rem;
+      color: #999999;
+    }
+  `}</style>
 
       <div className="orders-container">
         <h3 className="orders-title">📦 My Orders</h3>

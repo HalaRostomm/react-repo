@@ -4,14 +4,19 @@ import { useParams } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import authService from '../service/authService';
 
-// Dynamically add Economica font to <head>
-const economicaFontLink = document.createElement("link");
-economicaFontLink.href = "https://fonts.googleapis.com/css2?family=Economica&display=swap";
-economicaFontLink.rel = "stylesheet";
-document.head.appendChild(economicaFontLink);
+// Dynamically add Poppins font to <head>
+const poppinsFontLink = document.createElement("link");
+poppinsFontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+poppinsFontLink.rel = "stylesheet";
+document.head.appendChild(poppinsFontLink);
 
-const PRIMARY_COLOR = "#3FEDF1";
-const ACCENT_COLOR = "#FEA70F";
+const COLORS = {
+  PRIMARY: "#13b6b9",
+  ACCENT: "#ffa100",
+  TEXT: "#000000",
+  CARD_BG_OPACITY: "33", // 20% opacity hex
+  WHITE: "#FFFFFF",
+};
 
 const RateDoctor = () => {
   const { doctorId } = useParams();
@@ -95,23 +100,26 @@ const RateDoctor = () => {
     <div
       className="container"
       style={{
-        fontFamily: "'Economica', sans-serif",
+        fontFamily: "'Poppins', sans-serif",
         maxWidth: 900,
         margin: "2rem auto",
         padding: "1rem 2rem",
-        backgroundColor: "#fff",
+        backgroundColor: `${COLORS.PRIMARY}${COLORS.CARD_BG_OPACITY}`, // card bg with 20% opacity
         borderRadius: 12,
-        boxShadow: `0 0 15px ${PRIMARY_COLOR}33`, // transparent primary color shadow
-        color: "#222",
+        boxShadow: `0 0 15px ${COLORS.PRIMARY}${COLORS.CARD_BG_OPACITY}`,
+        color: COLORS.TEXT,
       }}
     >
       <h2
         style={{
           textAlign: "center",
-          color: PRIMARY_COLOR,
+          backgroundColor: COLORS.PRIMARY,
+          color: COLORS.TEXT,
           marginBottom: "1.5rem",
           fontWeight: "700",
           letterSpacing: "2px",
+          borderRadius: 8,
+          padding: "0.6rem 0",
         }}
       >
         Doctor Reviews
@@ -125,7 +133,7 @@ const RateDoctor = () => {
           fontWeight: "600",
           marginBottom: 24,
           fontSize: "1.3rem",
-          color: PRIMARY_COLOR,
+          color: COLORS.ACCENT,
         }}
       >
         <div>
@@ -134,23 +142,30 @@ const RateDoctor = () => {
             return (
               <FaStar
                 key={`avg-star-${i}`}
-                color={starValue <= Math.floor(averageRating) ? ACCENT_COLOR : "#ccc"}
+                color={starValue <= Math.floor(averageRating) ? COLORS.ACCENT : "#ccc"}
               />
             );
           })}
         </div>
-        <span style={{ fontWeight: "700" }}>({averageRating.toFixed(1)})</span>
+        <span style={{ fontWeight: "700", color: COLORS.TEXT }}>
+          ({averageRating.toFixed(1)})
+        </span>
       </div>
 
       {/* Submit Review */}
       <section
         style={{
-          borderTop: `2px solid ${PRIMARY_COLOR}`,
+          borderTop: `2px solid ${COLORS.PRIMARY}`,
           paddingTop: 20,
           marginBottom: 40,
+          backgroundColor: COLORS.WHITE,
+          borderRadius: 8,
+          padding: "20px",
+          boxShadow: `0 0 10px ${COLORS.PRIMARY}${COLORS.CARD_BG_OPACITY}`,
+          color: COLORS.TEXT,
         }}
       >
-        <h3 style={{ color: ACCENT_COLOR, marginBottom: 12 }}>Write a Review</h3>
+        <h3 style={{ color: COLORS.ACCENT, marginBottom: 12 }}>Write a Review</h3>
 
         <label
           htmlFor="rating"
@@ -166,7 +181,7 @@ const RateDoctor = () => {
               style={{
                 cursor: "pointer",
                 fontSize: 28,
-                color: i < userReview.rating ? ACCENT_COLOR : "#ccc",
+                color: i < userReview.rating ? COLORS.ACCENT : "#ccc",
                 marginRight: 6,
                 transition: "color 0.2s",
               }}
@@ -193,10 +208,11 @@ const RateDoctor = () => {
             padding: 10,
             fontSize: 16,
             borderRadius: 8,
-            border: `1.5px solid ${PRIMARY_COLOR}`,
-            fontFamily: "'Economica', sans-serif",
+            border: `1.5px solid ${COLORS.PRIMARY}`,
+            fontFamily: "'Poppins', sans-serif",
             resize: "vertical",
             marginBottom: 12,
+            color: COLORS.TEXT,
           }}
           placeholder="Write your review here..."
         />
@@ -204,8 +220,8 @@ const RateDoctor = () => {
         <button
           onClick={handleAddReview}
           style={{
-            backgroundColor: PRIMARY_COLOR,
-            color: "white",
+            backgroundColor: COLORS.ACCENT,
+            color: COLORS.TEXT,
             fontWeight: "700",
             padding: "10px 22px",
             borderRadius: 10,
@@ -213,16 +229,20 @@ const RateDoctor = () => {
             cursor: "pointer",
             transition: "background-color 0.3s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = ACCENT_COLOR)}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = PRIMARY_COLOR)}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#cc8500")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
         >
           Submit Review
         </button>
       </section>
 
       {/* All Reviews */}
-      <section>
-        <h3 style={{ color: PRIMARY_COLOR, marginBottom: 20 }}>All Reviews</h3>
+      <section
+        style={{
+          color: COLORS.TEXT,
+        }}
+      >
+        <h3 style={{ color: COLORS.PRIMARY, marginBottom: 20 }}>All Reviews</h3>
         {reviews.length === 0 ? (
           <p style={{ fontStyle: "italic", color: "#555" }}>No reviews yet.</p>
         ) : (
@@ -230,7 +250,7 @@ const RateDoctor = () => {
             <div
               key={rev.reviewId}
               style={{
-                borderBottom: `1.5px solid ${PRIMARY_COLOR}33`,
+                borderBottom: `1.5px solid ${COLORS.PRIMARY}${COLORS.CARD_BG_OPACITY}`,
                 paddingBottom: 16,
                 marginBottom: 16,
               }}
@@ -238,7 +258,7 @@ const RateDoctor = () => {
               <div style={{ marginBottom: 6 }}>
                 {[...Array(5)].map((_, j) =>
                   j < rev.rating ? (
-                    <FaStar key={`gold-star-${j}`} color={ACCENT_COLOR} />
+                    <FaStar key={`gold-star-${j}`} color={COLORS.ACCENT} />
                   ) : (
                     <FaRegStar key={`grey-star-${j}`} color="#ccc" />
                   )
@@ -276,20 +296,20 @@ const RateDoctor = () => {
                     className="btn btn-sm btn-danger"
                     onClick={() => handleDeleteReview(rev.reviewId)}
                     style={{
-                      backgroundColor: ACCENT_COLOR,
+                      backgroundColor: COLORS.ACCENT,
                       border: "none",
                       padding: "6px 12px",
                       borderRadius: 6,
-                      color: "white",
+                      color: COLORS.TEXT,
                       cursor: "pointer",
                       fontWeight: "600",
                       transition: "background-color 0.3s ease",
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = PRIMARY_COLOR)
+                      (e.currentTarget.style.backgroundColor = COLORS.PRIMARY)
                     }
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = ACCENT_COLOR)
+                      (e.currentTarget.style.backgroundColor = COLORS.ACCENT)
                     }
                   >
                     Delete
@@ -305,9 +325,9 @@ const RateDoctor = () => {
         <div
           className="alert alert-info mt-3"
           style={{
-            backgroundColor: PRIMARY_COLOR + "22",
-            border: `1px solid ${PRIMARY_COLOR}`,
-            color: PRIMARY_COLOR,
+            backgroundColor: COLORS.PRIMARY + "22",
+            border: `1px solid ${COLORS.PRIMARY}`,
+            color: COLORS.PRIMARY,
             fontWeight: "600",
             padding: "10px 14px",
             borderRadius: 8,

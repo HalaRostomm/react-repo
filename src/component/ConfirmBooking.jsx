@@ -3,17 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 
-// Inject Tinos font
-const tinosFont = document.createElement("link");
-tinosFont.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFont.rel = "stylesheet";
-document.head.appendChild(tinosFont);
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 const COLORS = {
   DARK: "#000000",
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  GRAY: "#E5E5E5",
+  PRIMARY: "#13b6b9",  // Changed to card & header color
+  ACCENT: "#ffa100",   // Orange buttons/icons
+  LIGHT_BG_OPACITY: "33", // 20% opacity in hex
   WHITE: "#FFFFFF",
 };
 
@@ -28,7 +27,8 @@ const ConfirmBooking = () => {
   const [doctor, setDoctor] = useState(null);
   const [user, setUser] = useState(null);
   const [appointment, setAppointment] = useState(null);
-const [resolvedAddress, setResolvedAddress] = useState('');
+  const [resolvedAddress, setResolvedAddress] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,31 +62,23 @@ const [resolvedAddress, setResolvedAddress] = useState('');
     fetchData();
   }, [userId, doctorId, appointmentId]);
 
-
-
-useEffect(() => {
-    if (doctor && doctor.address && doctor.address.includes(',')) {
-      const [longitude, latitude] = doctor.address.split(',').map(Number);
+  useEffect(() => {
+    if (doctor && doctor.address && doctor.address.includes(",")) {
+      const [longitude, latitude] = doctor.address.split(",").map(Number);
       const fetchAddressFromCoordinates = async () => {
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
           );
           const data = await response.json();
-setResolvedAddress(data.display_name);
+          setResolvedAddress(data.display_name);
         } catch (error) {
-          setResolvedAddress('Address: ' + doctor.address);
+          setResolvedAddress("Address: " + doctor.address);
         }
       };
       fetchAddressFromCoordinates();
     }
   }, [doctor]);
-
-
-
-
-
-
 
   const handleConfirmBooking = async () => {
     if (!selectedPetId) {
@@ -111,7 +103,9 @@ setResolvedAddress(data.display_name);
         setMessage("⚠️ Failed to confirm booking.");
       }
     } catch (error) {
-      setMessage(`❌ Error: ${error.response?.data?.message || "Failed to confirm booking"}`);
+      setMessage(
+        `❌ Error: ${error.response?.data?.message || "Failed to confirm booking"}`
+      );
     }
   };
 
@@ -121,14 +115,13 @@ setResolvedAddress(data.display_name);
       style={{
         maxWidth: "950px",
         marginTop: "3rem",
-        fontFamily: "'Tinos', serif",
-        color: COLORS.PRIMARY,
+        fontFamily: "'Poppins', sans-serif",
+        color: COLORS.DARK,
       }}
     >
       <div
         style={{
-          backgroundColor: COLORS.WHITE,
-          border: `2px solid ${COLORS.ACCENT}`,
+          backgroundColor: `${COLORS.PRIMARY}${COLORS.LIGHT_BG_OPACITY}`, // 20% opacity card bg
           borderRadius: "12px",
           padding: "2rem",
           boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
@@ -139,16 +132,21 @@ setResolvedAddress(data.display_name);
           style={{
             fontWeight: 700,
             fontSize: "2rem",
-            color: COLORS.ACCENT,
-            borderBottom: `2px solid ${COLORS.GRAY}`,
-            paddingBottom: "1rem",
+            color: COLORS.DARK,
+            backgroundColor: COLORS.PRIMARY,
+            borderRadius: "8px",
+            padding: "1rem",
+            marginBottom: "2rem",
           }}
         >
-          Confirm Your Appointment
+          ✅ Confirm Your Appointment
         </h2>
 
         {loading ? (
-          <div className="text-center" style={{ fontWeight: "bold", color: COLORS.PRIMARY }}>
+          <div
+            className="text-center"
+            style={{ fontWeight: "bold", color: COLORS.ACCENT }}
+          >
             🔄 Loading...
           </div>
         ) : (
@@ -158,16 +156,30 @@ setResolvedAddress(data.display_name);
               <section
                 style={{
                   marginBottom: "2rem",
-                  borderBottom: `1px solid ${COLORS.GRAY}`,
-                  paddingBottom: "1rem",
+                  backgroundColor: COLORS.WHITE,
+                  borderRadius: "8px",
+                  padding: "1rem",
+                  boxShadow: `0 2px 8px ${COLORS.PRIMARY}33`,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>👨‍⚕️ Doctor Information</h4>
-                <p><strong>Name:</strong> Dr. {doctor.firstname} {doctor.lastname}</p>
-                <p><strong>Specialization:</strong> {doctor.specialization}</p>
-                <p><strong>Experience:</strong> {doctor.experienceYears} years</p>
-                <p><strong>Address:</strong>  {resolvedAddress}</p>
-                <p><strong>Phone:</strong> {doctor.phone}</p>
+                <h4 style={{ color: COLORS.DARK, marginBottom: "1rem" }}>
+                  👨‍⚕️ Doctor Information
+                </h4>
+                <p>
+                  <strong>Name:</strong> Dr. {doctor.firstname} {doctor.lastname}
+                </p>
+                <p>
+                  <strong>Specialization:</strong> {doctor.specialization}
+                </p>
+                <p>
+                  <strong>Experience:</strong> {doctor.experienceYears} years
+                </p>
+                <p>
+                  <strong>Address:</strong> {resolvedAddress}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {doctor.phone}
+                </p>
                 {doctor.image && (
                   <img
                     src={`data:image/jpeg;base64,${doctor.image}`}
@@ -190,14 +202,24 @@ setResolvedAddress(data.display_name);
               <section
                 style={{
                   marginBottom: "2rem",
-                  borderBottom: `1px solid ${COLORS.GRAY}`,
-                  paddingBottom: "1rem",
+                  backgroundColor: COLORS.WHITE,
+                  borderRadius: "8px",
+                  padding: "1rem",
+                  boxShadow: `0 2px 8px ${COLORS.PRIMARY}33`,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>🙋 User Information</h4>
-                <p><strong>Name:</strong> {user.firstname} {user.lastname}</p>
-                <p><strong>Username:</strong> {user.username}</p>
-                <p><strong>Phone:</strong> {user.phone}</p>
+                <h4 style={{ color: COLORS.DARK, marginBottom: "1rem" }}>
+                  🙋 User Information
+                </h4>
+                <p>
+                  <strong>Name:</strong> {user.firstname} {user.lastname}
+                </p>
+                <p>
+                  <strong>Username:</strong> {user.username}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {user.phone}
+                </p>
                 {user.image && (
                   <img
                     src={`data:image/jpeg;base64,${user.image}`}
@@ -220,20 +242,32 @@ setResolvedAddress(data.display_name);
               <section
                 style={{
                   marginBottom: "2rem",
-                  borderBottom: `1px solid ${COLORS.GRAY}`,
-                  paddingBottom: "1rem",
+                  backgroundColor: COLORS.WHITE,
+                  borderRadius: "8px",
+                  padding: "1rem",
+                  boxShadow: `0 2px 8px ${COLORS.PRIMARY}33`,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>📅 Appointment Info</h4>
-                <p><strong>Date:</strong> {appointment.selectedDate}</p>
-                <p><strong>Time:</strong> {appointment.startTime} - {appointment.endTime}</p>
-                <p><strong>Price:</strong> ${appointment.price}</p>
+                <h4 style={{ color: COLORS.DARK, marginBottom: "1rem" }}>
+                  📅 Appointment Info
+                </h4>
+                <p>
+                  <strong>Date:</strong> {appointment.selectedDate}
+                </p>
+                <p>
+                  <strong>Time:</strong> {appointment.startTime} - {appointment.endTime}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${appointment.price}
+                </p>
               </section>
             )}
 
             {/* Pet Dropdown */}
             <section style={{ marginBottom: "2rem" }}>
-              <label htmlFor="petSelect"><strong>Select Your Pet:</strong></label>
+              <label htmlFor="petSelect">
+                <strong>Select Your Pet:</strong>
+              </label>
               <select
                 id="petSelect"
                 className="form-control"
@@ -244,7 +278,8 @@ setResolvedAddress(data.display_name);
                   padding: "0.5rem",
                   borderRadius: "6px",
                   border: `1px solid ${COLORS.PRIMARY}`,
-                  fontFamily: "'Tinos', serif",
+                  fontFamily: "'Poppins', sans-serif",
+                  color: COLORS.DARK,
                 }}
               >
                 {pets.map((pet) => (
@@ -268,8 +303,11 @@ setResolvedAddress(data.display_name);
                   padding: "10px 24px",
                   fontSize: "1rem",
                   border: "none",
+                  cursor: "pointer",
                   transition: "background-color 0.3s ease",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#cc8500")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
               >
                 ✅ Confirm Booking
               </button>

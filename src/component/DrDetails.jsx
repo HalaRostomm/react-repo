@@ -3,18 +3,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 
-// Font injection (Economica)
-const tinosFontLink = document.createElement("link");
-tinosFontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFontLink.rel = "stylesheet";
-document.head.appendChild(tinosFontLink);
+// Font injection (Poppins)
+const poppinsFontLink = document.createElement("link");
+poppinsFontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+poppinsFontLink.rel = "stylesheet";
+document.head.appendChild(poppinsFontLink);
 
 // Theme Colors
 const COLORS = {
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  LIGHT: "#E5E5E5",
-  BG: "#FFFFFF",
+  PRIMARY: "#13b6b9",      // Header background & card background base
+  ACCENT: "#ffa100",       // Buttons & icons orange
+  LIGHT_BG_OPACITY: "33",  // 20% opacity in hex (20% = 33 hex)
+  TEXT: "#000000",         // Black text
 };
 
 const DrDetails = () => {
@@ -76,11 +76,20 @@ const DrDetails = () => {
       className="container mt-5"
       style={{
         maxWidth: 900,
-       fontFamily: "'Tinos', serif",
-        color: COLORS.PRIMARY,
+        fontFamily: "'Poppins', sans-serif",
+        color: COLORS.TEXT,
       }}
     >
-      <h2 className="text-center mb-4" style={{ fontWeight: 700 }}>
+      <h2
+        className="text-center mb-4"
+        style={{
+          fontWeight: 700,
+          backgroundColor: COLORS.PRIMARY,
+          color: COLORS.TEXT,
+          padding: "1rem",
+          borderRadius: 8,
+        }}
+      >
         📅 Available Doctor Appointments
       </h2>
 
@@ -101,7 +110,10 @@ const DrDetails = () => {
       )}
 
       {loading ? (
-        <div className="text-center my-5" style={{ fontSize: "1.2rem", color: COLORS.ACCENT }}>
+        <div
+          className="text-center my-5"
+          style={{ fontSize: "1.2rem", color: COLORS.ACCENT }}
+        >
           🔄 Loading appointments...
         </div>
       ) : appointments.length > 0 ? (
@@ -111,10 +123,16 @@ const DrDetails = () => {
             borderCollapse: "separate",
             borderSpacing: "0 10px",
             fontWeight: 600,
-               fontFamily: "'Tinos', serif", // ✅ Consistency here
+            fontFamily: "'Poppins', sans-serif",
+            color: COLORS.TEXT,
           }}
         >
-          <thead style={{ backgroundColor: COLORS.PRIMARY, color: "#fff" }}>
+          <thead
+            style={{
+              backgroundColor: COLORS.PRIMARY,
+              color: COLORS.TEXT,
+            }}
+          >
             <tr>
               <th style={{ borderTopLeftRadius: 10, padding: "12px 15px" }}>#</th>
               <th>Date</th>
@@ -129,12 +147,17 @@ const DrDetails = () => {
               <tr
                 key={appt.appointmentId}
                 style={{
-                  backgroundColor: "#e6f7ff",
+                  backgroundColor: `${COLORS.PRIMARY}33`, // 20% opacity background
                   transition: "background-color 0.3s",
                   cursor: "pointer",
+                  color: COLORS.TEXT,
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c0e8ff")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#e6f7ff")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = `${COLORS.PRIMARY}66`)
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = `${COLORS.PRIMARY}33`)
+                }
               >
                 <td style={{ padding: "12px 15px" }}>{index + 1}</td>
                 <td>{appt.selectedDate}</td>
@@ -146,14 +169,22 @@ const DrDetails = () => {
                     className="btn"
                     style={{
                       backgroundColor: COLORS.ACCENT,
-                      color: "#fff",
+                      color: "#000",
                       fontWeight: "700",
                       borderRadius: 6,
                       padding: "6px 14px",
                       border: "none",
                       fontSize: "1rem",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s ease",
                     }}
                     onClick={() => handleBookAppointment(appt.appointmentId)}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#cc8500")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = COLORS.ACCENT)
+                    }
                   >
                     Book Now
                   </button>

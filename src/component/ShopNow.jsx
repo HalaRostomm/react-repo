@@ -5,24 +5,25 @@ import authService from "../service/authService";
 import { Modal, Button, Form } from "react-bootstrap";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-// New design constants
-const PRIMARY_COLOR = "#14213D";
-const ACCENT_COLOR = "#FCA311";
-const BG_COLOR = "#FFFFFF";
-const FONT_FAMILY = "'Tinos', serif";
+// Design constants
+const PRIMARY_COLOR = "#000000"; // black text
+const ACCENT_COLOR = "#FFA100"; // orange buttons & icons
+const CARD_BG_COLOR = "rgba(19, 182, 185, 0.2)"; // #13b6b9 with 20% opacity
+const HEADER_COLOR = "#13b6b9";
+const FONT_FAMILY = "'Poppins', sans-serif";
 
-const loadTinosFont = () => {
-  if (!document.getElementById("tinos-font")) {
+const loadPoppinsFont = () => {
+  if (!document.getElementById("poppins-font")) {
     const link = document.createElement("link");
-    link.id = "tinos-font";
-    link.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
+    link.id = "poppins-font";
+    link.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
     link.rel = "stylesheet";
     document.head.appendChild(link);
   }
 };
 
 const ShopNow = () => {
-  loadTinosFont();
+  loadPoppinsFont();
   const { category, id } = useParams();
   const navigate = useNavigate();
 
@@ -165,9 +166,11 @@ const ShopNow = () => {
     const hasHalfStar = rating - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    for (let i = 0; i < fullStars; i++) stars.push(<FaStar key={"full" + i} color={ACCENT_COLOR} />);
+    for (let i = 0; i < fullStars; i++)
+      stars.push(<FaStar key={"full" + i} color={ACCENT_COLOR} />);
     if (hasHalfStar) stars.push(<FaStarHalfAlt key="half" color={ACCENT_COLOR} />);
-    for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={"empty" + i} color={ACCENT_COLOR} />);
+    for (let i = 0; i < emptyStars; i++)
+      stars.push(<FaRegStar key={"empty" + i} color={ACCENT_COLOR} />);
     return stars;
   };
 
@@ -177,15 +180,16 @@ const ShopNow = () => {
       style={{
         fontFamily: FONT_FAMILY,
         color: PRIMARY_COLOR,
-        backgroundColor: BG_COLOR,
+        backgroundColor: "#FFFFFF", // white background
         maxWidth: "900px",
       }}
     >
       <h2
         style={{
-          borderBottom: `3px solid ${ACCENT_COLOR}`,
+          borderBottom: `3px solid ${HEADER_COLOR}`,
           paddingBottom: "0.3rem",
           marginBottom: 20,
+          color: HEADER_COLOR,
         }}
       >
         Products in Category: <span style={{ color: ACCENT_COLOR }}>{category}</span>
@@ -218,7 +222,7 @@ const ShopNow = () => {
                 borderRadius: 10,
                 padding: 20,
                 boxShadow: `0 4px 8px rgba(0, 0, 0, 0.1)`,
-                backgroundColor: "#FFFFFF",
+                backgroundColor: CARD_BG_COLOR,
                 fontFamily: FONT_FAMILY,
               }}
             >
@@ -252,25 +256,37 @@ const ShopNow = () => {
                   onClick={() => handleViewDetails(product.productId)}
                   style={{
                     backgroundColor: "transparent",
-                    color: PRIMARY_COLOR,
-                    border: `2px solid ${PRIMARY_COLOR}`,
+                    color: ACCENT_COLOR,
+                    border: `2px solid ${ACCENT_COLOR}`,
                     padding: "6px 12px",
                     borderRadius: 6,
                     marginRight: 10,
+                    cursor: "pointer",
                   }}
                 >
                   🔍 View Details
                 </button>
-                {outOfStock && (
+                {outOfStock ? (
                   <span
                     style={{
-                      backgroundColor: "#dc3545",
+                      backgroundColor: "#6c757d", // grey for out of stock
                       color: "white",
                       padding: "6px 12px",
                       borderRadius: 6,
                     }}
                   >
                     Out of Stock
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      backgroundColor: HEADER_COLOR, // #13b6b9 for available
+                      color: "white",
+                      padding: "6px 12px",
+                      borderRadius: 6,
+                    }}
+                  >
+                    Available
                   </span>
                 )}
               </div>

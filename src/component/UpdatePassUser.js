@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import userService from "../service/userservice";
 import { FaKey, FaLock, FaUnlock } from "react-icons/fa";
 
+// Load Poppins font dynamically
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
+
 const UpdatePassUser = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -28,29 +34,34 @@ const UpdatePassUser = () => {
       backgroundColor: "#E5E5E5",
       minHeight: "100vh",
       padding: "2rem 1rem",
-      fontFamily: "'Tinos', serif",
+      fontFamily: "'Poppins', sans-serif",
     },
     container: {
       maxWidth: "600px",
       margin: "0 auto",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "#13b6b933", // #13b6b9 with 20% opacity (33 hex)
       borderRadius: "10px",
       boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
       padding: "2rem",
+      color: "#000000", // text black
     },
     header: {
-      backgroundColor: "#14213D",
-      color: "#FFFFFF",
+      backgroundColor: "#13b6b9",
+      color: "#000000", // black text
       padding: "1rem",
       borderRadius: "8px",
       textAlign: "center",
       fontSize: "1.8rem",
       fontWeight: "bold",
       marginBottom: "2rem",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "8px",
     },
     label: {
-      fontWeight: "bold",
-      color: "#14213D",
+      fontWeight: "600",
+      color: "#000000", // black text
       display: "flex",
       alignItems: "center",
       gap: "8px",
@@ -62,10 +73,12 @@ const UpdatePassUser = () => {
       fontSize: "1rem",
       width: "100%",
       marginTop: "0.3rem",
+      color: "#000000",  // input text black
+      backgroundColor: "#fff",
     },
     button: {
-      backgroundColor: "#FCA311",
-      color: "#FFFFFF",
+      backgroundColor: "#ffa100",  // orange button
+      color: "#000000",            // black text
       padding: "0.7rem 2rem",
       border: "none",
       borderRadius: "30px",
@@ -84,20 +97,23 @@ const UpdatePassUser = () => {
       color: message.includes("✅") ? "green" : "red",
       textAlign: "center",
     },
+    icon: {
+      color: "#ffa100", // orange icons
+    },
   };
 
   return (
     <div style={styles.page}>
       <div style={styles.container}>
         <div style={styles.header}>
-          <FaKey style={{ marginRight: "8px" }} />
+          <FaKey style={styles.icon} />
           Update Password
         </div>
 
         <form onSubmit={handlePasswordUpdate}>
           <div className="mb-3">
             <label htmlFor="oldPassword" style={styles.label}>
-              <FaUnlock /> Old Password
+              <FaUnlock style={styles.icon} /> Old Password
             </label>
             <input
               type="password"
@@ -111,7 +127,7 @@ const UpdatePassUser = () => {
 
           <div className="mb-3">
             <label htmlFor="newPassword" style={styles.label}>
-              <FaLock /> New Password
+              <FaLock style={styles.icon} /> New Password
             </label>
             <input
               type="password"
@@ -125,7 +141,7 @@ const UpdatePassUser = () => {
 
           <div className="mb-3">
             <label htmlFor="confirmPassword" style={styles.label}>
-              <FaLock /> Confirm New Password
+              <FaLock style={styles.icon} /> Confirm New Password
             </label>
             <input
               type="password"
@@ -139,7 +155,7 @@ const UpdatePassUser = () => {
 
           <div className="text-center">
             <button type="submit" style={styles.button}>
-              <FaKey /> Update Password
+              <FaKey style={styles.icon} /> Update Password
             </button>
           </div>
         </form>

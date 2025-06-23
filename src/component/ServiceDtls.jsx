@@ -74,119 +74,120 @@ const ServiceDtls = () => {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+     <style>{`
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-        body {
-          font-family: 'Tinos', serif;
-          background-color: #E5E5E5;
-          margin: 0;
-          padding: 0;
-          color: #000000;
-        }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #E5E5E5;
+    margin: 0;
+    padding: 0;
+    color: #000000;
+  }
 
-        .container {
-          max-width: 650px;
-          margin: 2.5rem auto;
-          background: #FFFFFF;
-          border-radius: 16px;
-          padding: 2rem;
-          box-shadow: 0 6px 18px rgba(20, 33, 61, 0.12);
-        }
+  .container {
+    max-width: 650px;
+    margin: 2.5rem auto;
+    background: rgba(19, 182, 185, 0.2); /* #13b6b9 with 20% opacity */
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 6px 18px rgba(20, 33, 61, 0.12);
+  }
 
-        h2 {
-          color: #14213D;
-          font-weight: 700;
-          font-size: 2rem;
-          margin-bottom: 1.2rem;
-          text-align: center;
-        }
+  h2 {
+    color: #13b6b9; /* header color */
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
 
-        p {
-          font-size: 1.1rem;
-          margin: 0.6rem 0;
-          line-height: 1.5;
-        }
+  p {
+    font-size: 1.1rem;
+    margin: 0.6rem 0;
+    line-height: 1.5;
+    color: #000000; /* black text */
+  }
 
-        strong {
-          color: #14213D;
-        }
+  strong {
+    color: #13b6b9;
+  }
 
-        .btn-group {
-          margin-top: 2rem;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          justify-content: center;
-        }
+  .btn-group {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
 
-        button {
-          background-color: #FCA311;
-          border: none;
-          border-radius: 8px;
-          color: #000000;
-          font-weight: 700;
-          padding: 0.6rem 1.3rem;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-          box-shadow: 0 4px 12px rgba(252, 163, 17, 0.25);
-        }
+  button {
+    background-color: #ffa100; /* orange buttons */
+    border: none;
+    border-radius: 8px;
+    color: #000000;
+    font-weight: 700;
+    padding: 0.6rem 1.3rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 161, 0, 0.25);
+  }
 
-        button:hover {
-          background-color: #e3960f;
-          box-shadow: 0 6px 16px rgba(209, 138, 9, 0.5);
-        }
+  button:hover {
+    background-color: #cc8300; /* darker orange */
+    box-shadow: 0 6px 16px rgba(204, 131, 0, 0.5);
+  }
 
-        .btn-success {
-          background-color: #14213D;
-          color: #FFFFFF;
-        }
+  .btn-success {
+    background-color: #13b6b9;
+    color: #FFFFFF;
+  }
 
-        .btn-success:hover {
-          background-color: #0f1a2e;
-        }
+  .btn-success:hover {
+    background-color: #0f8d93; /* slightly darker teal */
+  }
 
-        .loading-container, .error-message {
-          max-width: 400px;
-          margin: 3rem auto;
-          text-align: center;
-          font-weight: 700;
-          font-size: 1.25rem;
-          font-family: 'Tinos', serif;
-          color: #14213D;
-        }
+  .loading-container, .error-message {
+    max-width: 400px;
+    margin: 3rem auto;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    font-family: 'Poppins', sans-serif;
+    color: #13b6b9;
+  }
 
-        .spinner {
-          margin: 0 auto 1rem;
-          width: 40px;
-          height: 40px;
-          border: 4px solid #14213D;
-          border-top: 4px solid #FCA311;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+  .spinner {
+    margin: 0 auto 1rem;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #13b6b9;
+    border-top: 4px solid #ffa100;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
 
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
 
-        @media (max-width: 480px) {
-          .container {
-            margin: 1rem;
-            padding: 1rem;
-          }
+  @media (max-width: 480px) {
+    .container {
+      margin: 1rem;
+      padding: 1rem;
+    }
 
-          h2 {
-            font-size: 1.6rem;
-          }
+    h2 {
+      font-size: 1.6rem;
+    }
 
-          button {
-            padding: 0.5rem 1rem;
-            font-size: 0.95rem;
-          }
-        }
-      `}</style>
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+`}</style>
 
       <main className="container" role="main" aria-live="polite">
         <h2>{service.name}</h2>

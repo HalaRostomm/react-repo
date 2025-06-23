@@ -106,12 +106,12 @@ setClientSecret(response.data.clientSecret || response.data);
   };
 
   return (
-   <>
+ <>
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
-      font-family: 'Tinos', serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #E5E5E5;
       margin: 0;
       padding: 0;
@@ -121,7 +121,7 @@ setClientSecret(response.data.clientSecret || response.data);
     .payment-container {
       max-width: 600px;
       margin: 3rem auto;
-      background-color: #FFFFFF;
+      background-color: rgba(19, 182, 185, 0.2);
       padding: 2.5rem;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -129,9 +129,9 @@ setClientSecret(response.data.clientSecret || response.data);
 
     .payment-container h2 {
       text-align: center;
-      color: #14213D;
+      color: #13B6B9;
       font-size: 2rem;
-      font-weight: bold;
+      font-weight: 600;
       margin-bottom: 1.8rem;
     }
 
@@ -142,8 +142,8 @@ setClientSecret(response.data.clientSecret || response.data);
     .form-group label {
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: bold;
-      color: #FCA311;
+      font-weight: 600;
+      color: #FFA100;
     }
 
     .form-control {
@@ -152,7 +152,8 @@ setClientSecret(response.data.clientSecret || response.data);
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 1rem;
-      background-color: #F9F9F9;
+      background-color: #ffffff;
+      color: #000000;
     }
 
     .form-control[readonly] {
@@ -169,7 +170,7 @@ setClientSecret(response.data.clientSecret || response.data);
     .pay-button {
       width: 100%;
       padding: 0.9rem;
-      background-color: #FCA311;
+      background-color: #FFA100;
       color: #000000;
       font-size: 1.1rem;
       font-weight: bold;
@@ -181,7 +182,7 @@ setClientSecret(response.data.clientSecret || response.data);
     }
 
     .pay-button:hover {
-      background-color: #e2960a;
+      background-color: #e29600;
     }
 
     .pay-button:disabled {

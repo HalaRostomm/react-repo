@@ -60,29 +60,29 @@ const SpAppoi = () => {
 
   return (
     <>
-      <style>{`
-  @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+<style>{`
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
   * {
     box-sizing: border-box;
   }
 
   .container {
-    max-width: 700px;
+    max-width: 900px; /* increased container size */
     margin: 2rem auto;
     padding: 2rem;
-    font-family: 'Tinos', serif;
-    background: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    background: rgba(19, 182, 185, 0.2); /* #13b6b9 with 20% opacity */
     border-radius: 15px;
     box-shadow: 0 6px 18px rgba(20, 33, 61, 0.15);
-    color: #14213D;
+    color: #000000; /* black text */
   }
 
   h2 {
     text-align: center;
     font-weight: 700;
     font-size: 2.3rem;
-    color: #FCA311;
+    color: #13b6b9; /* header color */
     margin-bottom: 1.5rem;
     letter-spacing: 1.2px;
   }
@@ -92,7 +92,7 @@ const SpAppoi = () => {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
-    color: #FCA311;
+    color: #ffa100; /* orange */
   }
 
   .message.error {
@@ -102,16 +102,16 @@ const SpAppoi = () => {
   .loading {
     text-align: center;
     font-size: 1.2rem;
-    color: #14213D;
+    color: #000000; /* black */
     margin: 2rem 0;
     font-weight: 700;
   }
 
   table {
-    width: 100%;
+    width: 100%; /* changed from 150% for better responsiveness */
     border-collapse: collapse;
     font-size: 1.1rem;
-    color: #14213D;
+    color: #000000; /* black */
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     border-radius: 10px;
     overflow: hidden;
@@ -119,8 +119,12 @@ const SpAppoi = () => {
 
   thead {
     background-color: #E5E5E5;
-    color: #000000;
     font-weight: 700;
+  }
+
+  /* Make date, start time, etc. same color as buttons */
+  thead th {
+    color: #ffa100;
   }
 
   th, td {
@@ -130,27 +134,27 @@ const SpAppoi = () => {
   }
 
   tbody tr:hover {
-    background-color: #fdf2e9;
+    background-color: #f0f8fa;
     transition: background-color 0.3s ease;
   }
 
   button {
-    background-color: #FCA311;
+    background-color: #ffa100; /* orange buttons */
     color: #ffffff;
     border: none;
     padding: 0.5rem 1.2rem;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 700;
-    font-family: 'Tinos', serif;
-    box-shadow: 0 4px 10px rgba(254, 167, 15, 0.4);
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 10px rgba(255, 161, 0, 0.4);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
   }
 
   button:hover {
-    background-color: #c27c04;
-    box-shadow: 0 6px 16px rgba(209, 138, 9, 0.6);
+    background-color: #cc8300; /* darker orange */
+    box-shadow: 0 6px 16px rgba(204, 131, 0, 0.6);
   }
 
   @media (max-width: 600px) {
@@ -174,6 +178,8 @@ const SpAppoi = () => {
     }
   }
 `}</style>
+
+
 
       <div className="container" role="main" aria-live="polite">
         <h2>📅 Available Service Appointments</h2>

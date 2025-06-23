@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import userservice from "../service/userservice";
 
-// Inject Tinos font
-const tinosFont = document.createElement("link");
-tinosFont.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFont.rel = "stylesheet";
-document.head.appendChild(tinosFont);
+// Inject Poppins font dynamically
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 const COLORS = {
   BLACK: "#000000",
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  LIGHT: "#E5E5E5",
+  PRIMARY: "#13b6b9",      // changed to your new header color
+  ACCENT: "#ffa100",       // orange for buttons and icons
+  LIGHT_OPACITY_BG: "#13b6b933",  // 20% opacity of #13b6b9
   WHITE: "#FFFFFF",
 };
 
@@ -78,18 +78,23 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
         margin: "2rem auto",
         padding: "24px",
         borderRadius: "16px",
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLORS.LIGHT_OPACITY_BG, // 20% opacity background
         boxShadow: "0 6px 25px rgba(0,0,0,0.1)",
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         border: `1.5px solid ${COLORS.PRIMARY}`,
+        color: COLORS.BLACK,
       }}
     >
       <h2
         style={{
           marginBottom: "1.5rem",
-          color: COLORS.PRIMARY,
+          backgroundColor: COLORS.PRIMARY, // header bg color
+          color: COLORS.BLACK,             // black text
           textAlign: "center",
           fontWeight: "700",
+          padding: "0.75rem",
+          borderRadius: "12px",
+          userSelect: "none",
         }}
       >
         🐾 Put a Pet Up for Adoption
@@ -108,6 +113,7 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
               borderRadius: "8px",
               cursor: "pointer",
               fontWeight: "bold",
+              userSelect: "none",
             }}
           >
             📷 Upload Photos
@@ -143,7 +149,7 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
                   height: "100px",
                   objectFit: "cover",
                   borderRadius: "12px",
-                  border: `2px solid ${COLORS.LIGHT}`,
+                  border: `2px solid ${COLORS.LIGHT_OPACITY_BG}`,
                 }}
               />
             ))}
@@ -162,12 +168,13 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
               width: "100%",
               padding: "14px 16px",
               borderRadius: "10px",
-              border: `1px solid ${COLORS.LIGHT}`,
+              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
               fontSize: "16px",
-              background: COLORS.LIGHT,
+              background: COLORS.LIGHT_OPACITY_BG,
               resize: "vertical",
               outline: "none",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              color: COLORS.BLACK,
             }}
           />
         </div>
@@ -186,6 +193,7 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
               fontSize: "16px",
               cursor: "pointer",
               transition: "background-color 0.3s ease",
+              userSelect: "none",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e5940f")}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}

@@ -104,72 +104,75 @@ const UpdateProfileUser = () => {
   };
 
   const styles = {
-    page: {
-      backgroundColor: "#E5E5E5",
-      minHeight: "100vh",
-      padding: "2rem 1rem",
-      fontFamily: "'Poppins', sans-serif",
-    },
-    title: {
-      fontSize: "2.2rem",
-      fontWeight: "bold",
-      backgroundColor: "#3FEDF1",
-      padding: "1rem",
-      borderRadius: "8px",
-      color: "#000000",
-      textAlign: "center",
-      marginBottom: "2rem",
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    },
-    formGroup: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.5rem",
-      marginBottom: "1.5rem",
-    },
-    label: {
-      fontWeight: "600",
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      color: "#FFFFFF",
-    },
-    input: {
-      padding: "0.6rem 1rem",
-      borderRadius: "6px",
-      border: "1px solid #ccc",
-      fontSize: "1rem",
-    },
-    button: {
-      backgroundColor: "#FCA311",
-      color: "#FFFFFF",
-      padding: "0.75rem 2rem",
-      border: "none",
-      borderRadius: "6px",
-      fontSize: "1.1rem",
-      fontWeight: "bold",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      marginTop: "1rem",
-    },
-    message: {
-      textAlign: "center",
-      fontWeight: "bold",
-      marginBottom: "1rem",
-      color: message.startsWith("✅") ? "green" : "red",
-    },
-    container: {
-      maxWidth: "700px",
-      margin: "0 auto",
-      backgroundColor: "#383FEDF1",
-      padding: "2rem",
-      borderRadius: "10px",
-      boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-      color: "#FFFFFF",
-    },
-  };
+  page: {
+    backgroundColor: "#E5E5E5",
+    minHeight: "100vh",
+    padding: "2rem 1rem",
+    fontFamily: "'Poppins', sans-serif",
+  },
+  title: {
+    fontSize: "2.2rem",
+    fontWeight: "bold",
+    backgroundColor: "#13b6b9",         // header color changed here
+    padding: "1rem",
+    borderRadius: "8px",
+    color: "#000000",                   // text black
+    textAlign: "center",
+    marginBottom: "2rem",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  },
+  formGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    marginBottom: "1.5rem",
+  },
+  label: {
+    fontWeight: "600",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    color: "#000000",                   // label text black
+  },
+  input: {
+    padding: "0.6rem 1rem",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    fontSize: "1rem",
+    color: "#000000",                  // input text black
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "#ffa100",        // buttons orange
+    color: "#000000",                  // text black for button
+    padding: "0.75rem 2rem",
+    border: "none",
+    borderRadius: "6px",
+    fontSize: "1.1rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginTop: "1rem",
+  },
+  message: {
+    textAlign: "center",
+    fontWeight: "bold",
+    marginBottom: "1rem",
+    color: message.startsWith("✅") ? "green" : "red",
+  },
+  container: {
+    maxWidth: "700px",
+    margin: "0 auto",
+    backgroundColor: "#13b6b933",      // cards bg #13b6b9 + 20% opacity = 33 hex
+    padding: "2rem",
+    borderRadius: "10px",
+    boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+    color: "#000000",                  // text black inside card
+  },
+};
+
 
   return (
     <div style={styles.page}>

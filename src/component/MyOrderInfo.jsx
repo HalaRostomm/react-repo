@@ -26,95 +26,96 @@ const MyOrderInfo = () => {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+    <style>{`
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-        body {
-          font-family: 'Tinos', serif;
-          background-color: #E5E5E5;
-          margin: 0;
-          padding: 0;
-          color: #000000;
-        }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #E5E5E5;
+    margin: 0;
+    padding: 0;
+    color: #000000;
+  }
 
-        .order-container {
-          max-width: 1100px;
-          margin: 3rem auto;
-          background: #FFFFFF;
-          border-radius: 16px;
-          padding: 2rem;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
+  .order-container {
+    max-width: 1100px;
+    margin: 3rem auto;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  }
 
-        .order-title {
-          color: #14213D;
-          font-size: 2.2rem;
-          margin-bottom: 2rem;
-          font-weight: bold;
-          text-align: center;
-        }
+  .order-title {
+    color: #13B6B9;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-align: center;
+  }
 
-        .order-card {
-          display: flex;
-          gap: 1.5rem;
-          background-color: #F9F9F9;
-          border-radius: 16px;
-          padding: 1rem;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-          transition: transform 0.2s ease-in-out;
-          height: 100%;
-        }
+  .order-card {
+    display: flex;
+    gap: 1.5rem;
+    background-color: rgba(19, 182, 185, 0.2); /* 13B6B9 with 20% opacity */
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+    height: 100%;
+  }
 
-        .order-card:hover {
-          transform: translateY(-3px);
-        }
+  .order-card:hover {
+    transform: translateY(-3px);
+  }
 
-        .product-img {
-          width: 120px;
-          height: 120px;
-          object-fit: cover;
-          border-radius: 12px;
-          border: 3px solid #FCA311;
-          background-color: #FFFFFF;
-        }
+  .product-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #FFA100;
+    background-color: #FFFFFF;
+  }
 
-        .card-info {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
+  .card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-        .card-title {
-          font-size: 1.25rem;
-          color: #14213D;
-          margin-bottom: 0.5rem;
-        }
+  .card-title {
+    font-size: 1.25rem;
+    color: #000000;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
 
-        .card-text {
-          color: #000000;
-          margin: 0.2rem 0;
-        }
+  .card-text {
+    color: #000000;
+    margin: 0.2rem 0;
+  }
 
-        .spinner-border {
-          width: 3rem;
-          height: 3rem;
-        }
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
 
-        @media (max-width: 768px) {
-          .order-card {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-          }
+  @media (max-width: 768px) {
+    .order-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
 
-          .product-img {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-          }
-        }
-      `}</style>
+    .product-img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+    }
+  }
+`}</style>
 
       <div className="order-container">
         <h3 className="order-title">🛒 Order Details</h3>

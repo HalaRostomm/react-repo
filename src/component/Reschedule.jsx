@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 const Reschedule = () => {
   const { appointmentId, doctorId } = useParams();
@@ -67,17 +67,6 @@ const Reschedule = () => {
       setMessage("❌ " + (err.response?.data?.message || "Cancellation failed."));
     }
   };
- const convertTo24Hour = (timeStr) => {
-  const [time, modifier] = timeStr.split(' ');
-  let [hours, minutes] = time.split(':');
-  if (modifier === 'PM' && hours !== '12') {
-    hours = parseInt(hours) + 12;
-  }
-  if (modifier === 'AM' && hours === '12') {
-    hours = '00';
-  }
-  return `${hours}:${minutes}`;
-};
 
   const handleReschedule = async () => {
     if (!newAppointmentId) {
@@ -102,7 +91,7 @@ const Reschedule = () => {
   return (
     <>
       <link
-        href="https://fonts.googleapis.com/css2?family=Tinos&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
         rel="stylesheet"
       />
       <div style={styles.container}>
@@ -120,45 +109,45 @@ const Reschedule = () => {
             )}
 
             <label style={styles.label}>Select New Appointment:</label>
-          <select
-  id="newAppointmentSelect"
-  style={styles.select}
-  value={newAppointmentId}
-  onChange={(e) => setNewAppointmentId(e.target.value)}
->
-  <option value="">-- Select an appointment slot --</option>
-  {availableAppointments
-    .filter((appt) => {
-      const now = new Date();
-      const convertTo24Hour = (timeStr) => {
-        const [time, modifier] = timeStr.split(' ');
-        let [hours, minutes] = time.split(':');
-        if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
-        if (modifier === 'AM' && hours === '12') hours = '00';
-        return `${hours}:${minutes}`;
-      };
-      const time24 = convertTo24Hour(appt.startTime);
-      const apptDateTime = new Date(`${appt.selectedDate}T${time24}`);
-      return apptDateTime > now;
-    })
-    .sort((a, b) => {
-      const convertTo24Hour = (timeStr) => {
-        const [time, modifier] = timeStr.split(' ');
-        let [hours, minutes] = time.split(':');
-        if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
-        if (modifier === 'AM' && hours === '12') hours = '00';
-        return `${hours}:${minutes}`;
-      };
-      const aTime = new Date(`${a.selectedDate}T${convertTo24Hour(a.startTime)}`);
-      const bTime = new Date(`${b.selectedDate}T${convertTo24Hour(b.startTime)}`);
-      return aTime - bTime;
-    })
-    .map((appt) => (
-      <option key={appt.appointmentId} value={appt.appointmentId}>
-        {appt.selectedDate} ({appt.startTime} - {appt.endTime})
-      </option>
-    ))}
-</select>
+            <select
+              id="newAppointmentSelect"
+              style={styles.select}
+              value={newAppointmentId}
+              onChange={(e) => setNewAppointmentId(e.target.value)}
+            >
+              <option value="">-- Select an appointment slot --</option>
+              {availableAppointments
+                .filter((appt) => {
+                  const now = new Date();
+                  const convertTo24Hour = (timeStr) => {
+                    const [time, modifier] = timeStr.split(' ');
+                    let [hours, minutes] = time.split(':');
+                    if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
+                    if (modifier === 'AM' && hours === '12') hours = '00';
+                    return `${hours}:${minutes}`;
+                  };
+                  const time24 = convertTo24Hour(appt.startTime);
+                  const apptDateTime = new Date(`${appt.selectedDate}T${time24}`);
+                  return apptDateTime > now;
+                })
+                .sort((a, b) => {
+                  const convertTo24Hour = (timeStr) => {
+                    const [time, modifier] = timeStr.split(' ');
+                    let [hours, minutes] = time.split(':');
+                    if (modifier === 'PM' && hours !== '12') hours = parseInt(hours) + 12;
+                    if (modifier === 'AM' && hours === '12') hours = '00';
+                    return `${hours}:${minutes}`;
+                  };
+                  const aTime = new Date(`${a.selectedDate}T${convertTo24Hour(a.startTime)}`);
+                  const bTime = new Date(`${b.selectedDate}T${convertTo24Hour(b.startTime)}`);
+                  return aTime - bTime;
+                })
+                .map((appt) => (
+                  <option key={appt.appointmentId} value={appt.appointmentId}>
+                    {appt.selectedDate} ({appt.startTime} - {appt.endTime})
+                  </option>
+                ))}
+            </select>
             <div style={styles.btnGroup}>
               <button style={styles.confirmBtn} onClick={handleReschedule}>
                 ✅ Confirm Reschedule
@@ -192,20 +181,23 @@ const styles = {
     margin: "40px auto",
     padding: "30px",
     borderRadius: "12px",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(19, 182, 185, 0.2)", // #13B6B9 with 20% opacity
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Tinos', serif",
+    fontFamily: "'Poppins', sans-serif",
     color: "#000000",
   },
   header: {
     textAlign: "center",
-    color: "#14213D",
+    backgroundColor: "#13B6B9",
+    color: "#000000",
     fontWeight: "bold",
     fontSize: "28px",
     marginBottom: "30px",
+    padding: "1rem 0",
+    borderRadius: 8,
   },
   subHeading: {
-    color: "#FCA311",
+    color: "#FFA100",
     marginBottom: "10px",
   },
   appointmentBox: {
@@ -213,12 +205,13 @@ const styles = {
     padding: "15px",
     borderRadius: "10px",
     marginBottom: "25px",
-    border: "1px solid #ccc"
+    border: "1px solid #ccc",
+    color: "#000000",
   },
   label: {
     display: "block",
     marginBottom: "10px",
-    color: "#14213D",
+    color: "#000000",
     fontWeight: "bold"
   },
   select: {
@@ -227,7 +220,10 @@ const styles = {
     borderRadius: "8px",
     border: "1px solid #ccc",
     marginBottom: "25px",
-    backgroundColor: "#F9F9F9"
+    backgroundColor: "#F9F9F9",
+    color: "#000000",
+    fontFamily: "'Poppins', sans-serif",
+    fontWeight: "500",
   },
   btnGroup: {
     display: "flex",
@@ -235,9 +231,9 @@ const styles = {
     gap: "10px"
   },
   confirmBtn: {
-    backgroundColor: "#FCA311",
+    backgroundColor: "#FFA100",
     border: "none",
-    color: "#FFFFFF",
+    color: "#000000",
     padding: "10px 20px",
     borderRadius: "8px",
     fontWeight: "bold",

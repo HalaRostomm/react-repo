@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 
-// Add Tinos font
+// Add Poppins font
 const fontLink = document.createElement("link");
-fontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
 fontLink.rel = "stylesheet";
 document.head.appendChild(fontLink);
 
@@ -15,11 +15,11 @@ fontAwesomeLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.
 fontAwesomeLink.rel = "stylesheet";
 document.head.appendChild(fontAwesomeLink);
 
-// Color constants
-const PRIMARY = "#14213D";
-const ACCENT = "#FCA311";
-const BG = "#E5E5E5";
-const TEXT = "#000000";
+// Color constants (updated)
+const PRIMARY = "#000000";       // Text color black
+const ACCENT = "#FFA100";        // Orange for buttons/icons
+const CARD_BG = "rgba(19, 182, 185, 0.2)"; // #13B6B9 20% opacity
+const HEADER_BG = "#13B6B9";     // Header background
 
 const MyAppointments = () => {
   const { id } = useParams();
@@ -73,21 +73,24 @@ const MyAppointments = () => {
 
   return (
     <div style={{
-      fontFamily: "'Tinos', serif",
+      fontFamily: "'Poppins', sans-serif",
       maxWidth: 900,
       margin: "2rem auto",
       padding: "1.5rem",
       backgroundColor: "#FFFFFF",
       borderRadius: 12,
       boxShadow: `0 0 20px ${PRIMARY}22`,
-      color: TEXT,
+      color: PRIMARY,
     }}>
       <h2 style={{
         textAlign: "center",
-        color: PRIMARY,
+        backgroundColor: HEADER_BG,
+        color: "#000000",
         marginBottom: "2rem",
         fontWeight: 700,
         letterSpacing: 1,
+        padding: "1rem 0",
+        borderRadius: 8,
       }}>
         🗓️ My Appointments
       </h2>
@@ -123,20 +126,20 @@ const MyAppointments = () => {
                   key={filter}
                   onClick={() => setSelectedFilter(filter)}
                   style={{
-                    backgroundColor: active ? PRIMARY : "transparent",
-                    color: active ? "#FFFFFF" : PRIMARY,
-                    border: `2px solid ${PRIMARY}`,
+                    backgroundColor: active ? ACCENT : "transparent",
+                    color: active ? "#000000" : PRIMARY,
+                    border: `2px solid ${ACCENT}`,
                     borderRadius: 24,
                     padding: "8px 20px",
                     fontWeight: 700,
-                    fontFamily: "'Tinos', serif",
+                    fontFamily: "'Poppins', sans-serif",
                     cursor: "pointer",
                     transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
                     if (!active) {
                       e.currentTarget.style.backgroundColor = ACCENT;
-                      e.currentTarget.style.color = "#FFFFFF";
+                      e.currentTarget.style.color = "#000000";
                       e.currentTarget.style.borderColor = ACCENT;
                     }
                   }}
@@ -144,7 +147,7 @@ const MyAppointments = () => {
                     if (!active) {
                       e.currentTarget.style.backgroundColor = "transparent";
                       e.currentTarget.style.color = PRIMARY;
-                      e.currentTarget.style.borderColor = PRIMARY;
+                      e.currentTarget.style.borderColor = ACCENT;
                     }
                   }}
                 >
@@ -169,10 +172,11 @@ const MyAppointments = () => {
               listStyle: "none",
               padding: 0,
               margin: 0,
-              borderTop: `2px solid ${PRIMARY}33`,
+              borderTop: `2px solid ${ACCENT}33`,
               borderRadius: 8,
               overflow: "hidden",
-              boxShadow: `0 2px 8px ${PRIMARY}11`,
+              boxShadow: `0 2px 8px ${ACCENT}22`,
+              backgroundColor: CARD_BG,
             }}>
               {filteredAppointments.map((appointment) => (
                 <li
@@ -183,13 +187,13 @@ const MyAppointments = () => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     padding: "15px 20px",
-                    borderBottom: `1px solid ${PRIMARY}22`,
-                    backgroundColor: "#FFFFFF",
+                    borderBottom: `1px solid ${ACCENT}33`,
+                    backgroundColor: "transparent",
                     transition: "background-color 0.2s ease",
                     cursor: "pointer",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = BG)}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#FFFFFF")}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = ACCENT + "22")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
                   <div>
                     <div style={{ fontSize: 16, fontWeight: "bold", color: PRIMARY }}>
@@ -203,9 +207,9 @@ const MyAppointments = () => {
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <i
                       className={`fas ${appointment.type === "Vet" ? "fa-paw" : "fa-hand-holding-heart"}`}
-                      style={{ color: appointment.type === "Vet" ? PRIMARY : ACCENT, fontSize: 20 }}
+                      style={{ color: ACCENT, fontSize: 20 }}
                     />
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={PRIMARY} viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={ACCENT} viewBox="0 0 16 16">
                       <path
                         fillRule="evenodd"
                         d="M1 8a.5.5 0 0 1 .5-.5h11.793l-4.147-4.146a.5.5 0 0 1 .708-.708l5 5a.5.5 0 0 1 0 .708l-5 5a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"

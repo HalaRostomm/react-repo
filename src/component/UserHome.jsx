@@ -18,7 +18,7 @@ const UserHome = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ const [petId, setPetId] = useState(null);
   useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -40,7 +40,7 @@ const UserHome = () => {
   useEffect(() => {
     if (!userId) return;
 
-    userservice.getAllPosts()
+    userservice.getAllPosts(userId)
       .then(res => {
         setPosts(res.data);
         setLoading(false);
@@ -55,17 +55,25 @@ const UserHome = () => {
       .catch(() => setUnreadCount(0));
   }, [userId]);
 
-  const handleChatClick = (receiverId, postType, petId) => {
-    const isAdoption = postType?.trim().toLowerCase() === "for adoption";
-    const initialMessage = isAdoption
-      ? `I would like to adopt your pet (${petId})!`
-      : "I have information about your lost pet!";
-    const type = isAdoption ? "adoption message" : "lost pet";
+const handleChatClick = (postOwnerId, type, petId) => {
+  const trimmedType = type.trim().toLowerCase();
 
-    navigate(`/chat/${receiverId}/${userId}/${petId}`, {
-      state: { initialMessage, type, petId },
-    });
-  };
+  if (trimmedType === "for adoption") {
+  navigate(`/chat/${postOwnerId}/${userId}/${petId}`, {
+  state: {
+    initialMessage: "I want to adopt this pet!",
+    type: "adoption message", // 🔥 REQUIRED
+    petId,
+  },
+});
+
+
+
+  } else {
+    navigate(`/chat/${postOwnerId}/${userId}/${petId}`);
+  }
+};
+
 
   const handleGoToPost = () => {
     navigate(`/user/addpost/${userId}`);
@@ -315,7 +323,7 @@ const UserHome = () => {
                       style={styles.postAction}
                       onClick={() => handleChatClick(post.appUser.appUserId, post.type, post.petId)}
                     >
-                      <FaComment /> {isAdoption ? "Adopt" : "Message"}
+                      <FaComment /> {isAdoption ? " Request Adopt" : "Message"}
                     </div>
                   )}
                 </div>

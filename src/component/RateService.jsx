@@ -4,18 +4,18 @@ import userService from "../service/userservice";
 import authService from "../service/authService";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
-// Dynamically add Tinos font
-const tinosFontLink = document.createElement("link");
-tinosFontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFontLink.rel = "stylesheet";
-document.head.appendChild(tinosFontLink);
+// Dynamically add Poppins font
+const poppinsFontLink = document.createElement("link");
+poppinsFontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+poppinsFontLink.rel = "stylesheet";
+document.head.appendChild(poppinsFontLink);
 
-// Color palette
-const PRIMARY_COLOR = "#14213D"; // navy
-const ACCENT_COLOR = "#FCA311"; // orange
-const BACKGROUND = "#FFFFFF";
-const MUTED = "#E5E5E5";
-const TEXT_COLOR = "#000000";
+// Colors
+const PRIMARY_COLOR = "#13B6B9"; // header & card bg base
+const ACCENT_COLOR = "#FFA100"; // buttons & icons orange
+const CARD_BG_OPACITY = "33"; // hex for 20% opacity (33 in hex = 20% opacity)
+const CARD_BG_COLOR = `${PRIMARY_COLOR}${CARD_BG_OPACITY}`; // 20% opacity background
+const TEXT_COLOR = "#000000"; // black text
 
 const RateService = () => {
   const { serviceId } = useParams();
@@ -93,23 +93,26 @@ const RateService = () => {
     <div
       className="container"
       style={{
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         maxWidth: 880,
         margin: "2rem auto",
         padding: "1.5rem 2rem",
-        backgroundColor: BACKGROUND,
+        backgroundColor: CARD_BG_COLOR,
         borderRadius: 12,
         boxShadow: `0 0 18px rgba(0,0,0,0.08)`,
         color: TEXT_COLOR,
       }}
     >
       <h2 style={{
-        color: PRIMARY_COLOR,
+        backgroundColor: PRIMARY_COLOR,
+        color: TEXT_COLOR,
         textAlign: "center",
         fontSize: "2rem",
         fontWeight: "bold",
         marginBottom: "1.5rem",
-        letterSpacing: 1
+        letterSpacing: 1,
+        padding: "0.5rem 0",
+        borderRadius: 8
       }}>
         Service Reviews
       </h2>
@@ -125,13 +128,13 @@ const RateService = () => {
         {[...Array(5)].map((_, i) => (
           <FaStar
             key={i}
-            color={i < Math.floor(averageRating) ? ACCENT_COLOR : MUTED}
+            color={i < Math.floor(averageRating) ? ACCENT_COLOR : "#E5E5E5"}
           />
         ))}
         <span style={{ fontWeight: 700 }}>({averageRating.toFixed(1)})</span>
       </div>
 
-      <section style={{ borderTop: `2px solid ${MUTED}`, paddingTop: 20, marginBottom: 40 }}>
+      <section style={{ borderTop: `2px solid #E5E5E5`, paddingTop: 20, marginBottom: 40 }}>
         <h3 style={{ color: ACCENT_COLOR, marginBottom: 12 }}>Write a Review</h3>
 
         <label style={{ fontWeight: "600", display: "block", marginBottom: 6 }}>
@@ -165,9 +168,9 @@ const RateService = () => {
             width: "100%",
             padding: 10,
             fontSize: 16,
-            fontFamily: "'Tinos', serif",
+            fontFamily: "'Poppins', sans-serif",
             borderRadius: 8,
-            border: `1.5px solid ${MUTED}`,
+            border: `1.5px solid #E5E5E5`,
             resize: "vertical",
             marginBottom: 12
           }}
@@ -178,7 +181,7 @@ const RateService = () => {
           onClick={handleAddReview}
           style={{
             backgroundColor: ACCENT_COLOR,
-            color: "#fff",
+            color: TEXT_COLOR,
             fontWeight: "700",
             padding: "10px 22px",
             borderRadius: 10,
@@ -200,9 +203,11 @@ const RateService = () => {
         ) : (
           reviews.map(rev => (
             <div key={rev.reviewId} style={{
-              borderBottom: `1px solid ${MUTED}`,
-              paddingBottom: 14,
-              marginBottom: 18
+              backgroundColor: CARD_BG_COLOR,
+              borderRadius: 8,
+              padding: 16,
+              marginBottom: 18,
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
             }}>
               <div style={{ marginBottom: 6 }}>
                 {[...Array(5)].map((_, j) =>
@@ -228,7 +233,7 @@ const RateService = () => {
                     onClick={() => handleDeleteReview(rev.reviewId)}
                     style={{
                       backgroundColor: PRIMARY_COLOR,
-                      color: "#fff",
+                      color: TEXT_COLOR,
                       border: "none",
                       padding: "6px 14px",
                       borderRadius: 6,

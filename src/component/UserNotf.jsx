@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userservice from "../service/userservice";
 
-// Inject Tinos font
-const tinosFontLink = document.createElement("link");
-tinosFontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFontLink.rel = "stylesheet";
-document.head.appendChild(tinosFontLink);
+// Inject Poppins font
+const poppinsFontLink = document.createElement("link");
+poppinsFontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+poppinsFontLink.rel = "stylesheet";
+document.head.appendChild(poppinsFontLink);
 
 const PRIMARY = "#14213D";
 const ACCENT = "#FCA311";
@@ -77,7 +77,7 @@ const UserNotf = () => {
   if (loading) {
     return (
       <div style={{
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         color: PRIMARY,
         fontSize: 18,
         textAlign: "center",
@@ -90,7 +90,7 @@ const UserNotf = () => {
 
   return (
     <div style={{
-      fontFamily: "'Tinos', serif",
+      fontFamily: "'Poppins', sans-serif",
       maxWidth: 700,
       margin: "2rem auto",
       backgroundColor: "#FFFFFF",
@@ -170,7 +170,7 @@ const UserNotf = () => {
                       padding: "6px 12px",
                       borderRadius: 20,
                       marginRight: 8,
-                      fontFamily: "'Tinos', serif",
+                      fontFamily: "'Poppins', sans-serif",
                     }}
                   >
                     Mark as Read
@@ -187,7 +187,7 @@ const UserNotf = () => {
                     fontWeight: "600",
                     padding: "6px 14px",
                     borderRadius: 20,
-                    fontFamily: "'Tinos', serif",
+                    fontFamily: "'Poppins', sans-serif",
                   }}
                   onMouseEnter={(e) => {
                     if (!actionLoading) {

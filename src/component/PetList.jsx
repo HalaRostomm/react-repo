@@ -22,12 +22,14 @@ import AddIcon from "@mui/icons-material/Add";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 
 // COLORS & FONT
-const PRIMARY = "#FCA311";
-const DARK = "#14213D";
+const PRIMARY = "#FFA100";
+const HEADER = "#13b6b9";
 const BG = "#E5E5E5";
 const TEXT = "#000000";
-const WHITE = "#FFFFFF";
-const FONT = "'Tinos', serif";
+const CARD_BG = "rgba(19, 182, 185, 0.2)";
+const OUT_OF_STOCK = "#808080"; // grey
+const AVAILABLE = "#13b6b9"; // blue ghame2
+const FONT = "'Poppins', sans-serif";
 
 // Styled Containers
 const Page = styled(Box)(({ theme }) => ({
@@ -45,12 +47,13 @@ const Header = styled(Box)(({ theme }) => ({
 }));
 
 const CardBox = styled(Card)(({ theme }) => ({
-  backgroundColor: WHITE,
+  backgroundColor: CARD_BG,
   borderRadius: 16,
   overflow: "hidden",
   transition: "transform 0.3s ease, box-shadow 0.3s ease",
   textAlign: "center",
   boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+  color: TEXT,
   "&:hover": {
     transform: "translateY(-5px)",
     boxShadow: "0 10px 16px rgba(0,0,0,0.12)",
@@ -73,7 +76,7 @@ const IconPlaceholder = styled(Box)(({ theme }) => ({
 
 const CategoryTag = styled(Chip)(({ theme }) => ({
   backgroundColor: PRIMARY,
-  color: WHITE,
+  color: "#fff",
   fontFamily: FONT,
   fontWeight: "bold",
   marginTop: theme.spacing(1),
@@ -81,7 +84,7 @@ const CategoryTag = styled(Chip)(({ theme }) => ({
 
 const AddPet = styled(Button)(({ theme }) => ({
   backgroundColor: PRIMARY,
-  color: WHITE,
+  color: "#fff",
   fontFamily: FONT,
   padding: theme.spacing(1.5, 3),
   fontWeight: "bold",
@@ -160,12 +163,7 @@ const PetList = ({ token }) => {
   if (loading) {
     return (
       <Page>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="60vh"
-        >
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
           <CircularProgress sx={{ color: PRIMARY }} size={60} />
         </Box>
       </Page>
@@ -175,43 +173,31 @@ const PetList = ({ token }) => {
   return (
     <>
       <style>
-        {`@import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');`}
+        {`@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');`}
       </style>
       <Page>
         <Header>
-          <Typography
-            variant="h3"
-            sx={{ fontFamily: FONT, color: DARK, display: "flex", alignItems: "center", gap: 1 }}
-          >
+          <Typography variant="h3" sx={{ fontFamily: FONT, color: HEADER, display: "flex", alignItems: "center", gap: 1 }}>
             <PetsRoundedIcon sx={{ fontSize: 34, color: PRIMARY }} />
             My Pets
           </Typography>
-         <AddPet onClick={() => navigate("/user/addpet")}>
-  + New to the Family! <FavoriteIcon sx={{ ml: 1 }} />
-</AddPet>
+          <AddPet onClick={() => navigate("/user/addpet")}>+ New to the Family! <FavoriteIcon sx={{ ml: 1 }} /></AddPet>
         </Header>
 
         {message.text && (
-          <Alert severity={message.type} sx={{ mb: 4 }}>
-            {message.text}
-          </Alert>
+          <Alert severity={message.type} sx={{ mb: 4 }}>{message.text}</Alert>
         )}
 
         {pets.length === 0 ? (
           <Box textAlign="center" mt={10}>
             <PetsRoundedIcon sx={{ fontSize: 80, color: PRIMARY, mb: 2 }} />
-            <Typography
-              variant="h5"
-              sx={{ fontFamily: FONT, color: TEXT, mb: 2 }}
-            >
+            <Typography variant="h5" sx={{ fontFamily: FONT, color: TEXT, mb: 2 }}>
               No Pets Found
             </Typography>
             <Typography variant="body1" sx={{ fontFamily: FONT, mb: 3 }}>
               Click below to add your first pet.
             </Typography>
-            <AddPet startIcon={<AddIcon />} onClick={() => navigate("/user/addpet")}>
-              Add Your First Pet
-            </AddPet>
+            <AddPet startIcon={<AddIcon />} onClick={() => navigate("/user/addpet")}>Add Your First Pet</AddPet>
           </Box>
         ) : (
           <Grid container spacing={4}>
@@ -219,33 +205,18 @@ const PetList = ({ token }) => {
               <Grid item xs={12} sm={6} md={4} key={pet.petId}>
                 <CardBox onClick={() => navigate(`/user/getpet/${pet.petId}`)}>
                   {pet.image ? (
-                    <PetImage
-                      component="img"
-                      image={`data:image/jpeg;base64,${pet.image}`}
-                      alt={pet.petName || "Pet"}
-                    />
+                    <PetImage component="img" image={`data:image/jpeg;base64,${pet.image}`} alt={pet.petName || "Pet"} />
                   ) : (
                     <IconPlaceholder>
                       <PetsRoundedIcon sx={{ fontSize: 80, color: "#bbb" }} />
                     </IconPlaceholder>
                   )}
                   <CardContent>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontFamily: FONT,
-                        color: DARK,
-                        fontWeight: "bold",
-                        mt: 1,
-                      }}
-                    >
+                    <Typography variant="h5" sx={{ fontFamily: FONT, color: TEXT, fontWeight: "bold", mt: 1 }}>
                       {pet.petName || "Unnamed Pet"}
                     </Typography>
-
                     {pet.petCategory && (
-                      <CategoryTag
-                        label={getCategoryName(pet.petCategory.categoryId)}
-                      />
+                      <CategoryTag label={getCategoryName(pet.petCategory.categoryId)} />
                     )}
                   </CardContent>
                 </CardBox>

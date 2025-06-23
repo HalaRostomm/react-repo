@@ -8,11 +8,12 @@ fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
 fontLink.rel = "stylesheet";
 document.head.appendChild(fontLink);
 
-const accentColor = "#FCA311";
-const primaryText = "#14213D";
+// Updated styling constants
+const accentColor = "#FFA100";
+const primaryText = "#000000";
 const background = "#E5E5E5";
-const headerColor = "#3FEDF1";
-const cardColor = "rgba(63, 237, 241, 0.22)";
+const headerColor = "#13B6B9";
+const cardColor = "rgba(19, 182, 185, 0.2)";
 
 const UserChats = ({ token }) => {
   const { appuserid } = useParams();
@@ -38,32 +39,30 @@ const UserChats = ({ token }) => {
 
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
-    return (
-      user.firstname.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.lastname.toLowerCase().includes(searchText.toLowerCase()) ||
-      fullName.includes(searchText.toLowerCase())
-    );
+    return fullName.includes(searchText.toLowerCase());
   });
 
   const openChatWithUser = (userId, petId) => {
-    navigate(`/chat/${userId}/${appuserid}/${petId}`, {
-      state: { token },
-    });
+    navigate(`/chat/${userId}/${appuserid}/${petId}`, { state: { token } });
   };
 
   return (
-    <div style={{ maxWidth: 900, margin: "2rem auto", fontFamily: "'Poppins', sans-serif", background: background, padding: "1rem" }}>
-      <header
-        style={{
-          backgroundColor: headerColor,
-          color: "#000000",
-          padding: "1rem",
-          textAlign: "center",
-          borderRadius: 6,
-          fontWeight: "bold",
-          fontSize: 24,
-        }}
-      >
+    <div style={{
+      maxWidth: 900,
+      margin: "2rem auto",
+      fontFamily: "'Poppins', sans-serif",
+      background: background,
+      padding: "1rem"
+    }}>
+      <header style={{
+        backgroundColor: headerColor,
+        color: primaryText,
+        padding: "1rem",
+        textAlign: "center",
+        borderRadius: 6,
+        fontWeight: 600,
+        fontSize: 24
+      }}>
         Messages
       </header>
 
@@ -81,31 +80,41 @@ const UserChats = ({ token }) => {
             backgroundColor: "#FFFFFF",
             fontSize: 16,
             outline: "none",
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Poppins', sans-serif"
           }}
         />
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: "center", marginTop: 40, fontSize: 16, color: "#666" }}>
+        <div style={{
+          textAlign: "center",
+          marginTop: 40,
+          fontSize: 16,
+          color: "#666"
+        }}>
           Loading chat users...
         </div>
       ) : filteredUsers.length === 0 ? (
-        <p style={{ textAlign: "center", color: "#999", fontSize: 16, marginTop: 40 }}>
+        <p style={{
+          textAlign: "center",
+          color: "#999",
+          fontSize: 16,
+          marginTop: 40
+        }}>
           No users have messaged you yet.
         </p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {filteredUsers.map((user) => {
             const avatarSrc =
-              user.image && user.image.length > 0
+              user.image?.length > 0
                 ? `data:image/jpeg;base64,${user.image}`
                 : null;
 
             return (
               <li
                 key={user.appUserId || user.id}
-                onClick={() => openChatWithUser(user.appUserId)}
+                onClick={() => openChatWithUser(user.appUserId, user.petId)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -115,7 +124,7 @@ const UserChats = ({ token }) => {
                   marginBottom: 16,
                   padding: 12,
                   cursor: "pointer",
-                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateX(5px)";
@@ -126,25 +135,27 @@ const UserChats = ({ token }) => {
                   e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
                 }}
               >
-                <div
-                  style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: "50%",
-                    backgroundColor: "#F0F0F0",
-                    overflow: "hidden",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginRight: 16,
-                    flexShrink: 0,
-                  }}
-                >
+                <div style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: "50%",
+                  backgroundColor: "#F0F0F0",
+                  overflow: "hidden",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: 16,
+                  flexShrink: 0
+                }}>
                   {avatarSrc ? (
                     <img
                       src={avatarSrc}
                       alt={`${user.firstname} ${user.lastname}`}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover"
+                      }}
                     />
                   ) : (
                     <svg
@@ -160,17 +171,17 @@ const UserChats = ({ token }) => {
                 </div>
 
                 <div style={{ flexGrow: 1 }}>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: 17,
-                      marginBottom: 4,
-                      color: primaryText,
-                    }}
-                  >
+                  <div style={{
+                    fontWeight: "600",
+                    fontSize: 17,
+                    marginBottom: 4,
+                    color: primaryText
+                  }}>
                     {user.firstname} {user.lastname}
                   </div>
-                  <div style={{ fontSize: 15, color: "#666" }}>Tap to view conversation</div>
+                  <div style={{ fontSize: 15, color: "#666" }}>
+                    Tap to view conversation
+                  </div>
                 </div>
 
                 <div style={{ color: accentColor }}>

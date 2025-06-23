@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import UserService from "../service/userservice";
 import {jwtDecode} from "jwt-decode";
 import { useNavigate, useParams } from "react-router-dom";
-import SideImage from "../assets/75357988d455baf369b9f28f77c2903d (1).jpg"; // Adjust path if needed
+import SideImage from "../assets/cb7406436111647efd94e16f849faedd.jpg"; // Adjust path if needed
 
 const MyPet = ({ token }) => {
   const { petId } = useParams();
@@ -192,10 +192,10 @@ const handleMarkAsLost = async (petId, userId) => {
    
  <>
  <style>{`
-  @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
   body {
-    font-family: 'Tinos', serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #E5E5E5;
     margin: 0;
     padding: 0;
@@ -203,9 +203,10 @@ const handleMarkAsLost = async (petId, userId) => {
   }
 
   .pet-container {
-    max-width: 1000px;
+   max-width: 600px;
     margin: 3rem auto;
-    padding: 2rem;
+  padding: 2rem 2rem;
+  
     background: #FFFFFF;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -213,19 +214,21 @@ const handleMarkAsLost = async (petId, userId) => {
   }
 
   h2 {
-    color: #14213D;
+    color: #13B6B9;
     font-size: 2.5rem;
     font-weight: bold;
-    margin-bottom: 2rem;
     text-align: center;
+    margin-bottom: 2rem;
   }
 
   .card {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    background: rgba(255, 255, 255, 0.7);
+   
     backdrop-filter: blur(8px);
+   
+      background: rgba(19, 182, 185, 0.2); /* 20% opacity */
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
@@ -238,7 +241,7 @@ const handleMarkAsLost = async (petId, userId) => {
 
   .card-title {
     font-size: 2rem;
-    color: #FCA311;
+   color: #13B6B9;
     margin-bottom: 1rem;
   }
 
@@ -289,38 +292,42 @@ const handleMarkAsLost = async (petId, userId) => {
     margin-bottom: 0.5rem;
   }
 
-  .btn {
+ .btn {
+    background-color: #FFA100;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
     padding: 0.6rem 1.2rem;
     font-size: 1rem;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     transition: background 0.2s ease-in-out;
   }
 
   .btn-success {
-    background-color: #14213D;
-    color: #FFFFFF;
+    background-color: #FFA100 !important;
+    color: #fff !important;
   }
 
   .btn-warning {
-    background-color: #FCA311;
-    color: #000000;
+   background-color: #FFA100 !important;
+    color: #fff !important;
   }
 
   .btn-info {
-    background-color: #0D6EFD;
-    color: #FFFFFF;
+    background-color: #FFA100 !important;
+    color: #fff !important;
   }
 
   .btn-danger {
-    background-color: #D00000;
-    color: #FFFFFF;
+  background-color: #FFA100 !important;
+    color: #fff !important;
   }
 
   .btn:hover {
-    opacity: 0.9;
+    background-color: #e39100;
     transform: translateY(-1px);
   }
 
@@ -347,7 +354,7 @@ const handleMarkAsLost = async (petId, userId) => {
 }
 
 .side-img {
-  width: 400px;
+  width: 500px;
   height: auto;
   border-radius: 24px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
@@ -378,11 +385,11 @@ const handleMarkAsLost = async (petId, userId) => {
 }
 
 .badge-pill {
-  background-color: #FCA311;
-  color: #14213D;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-weight: 600;
+  background-color: #13B6B9;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 500;
   font-size: 0.95rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   display: inline-block;

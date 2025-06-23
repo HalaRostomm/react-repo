@@ -191,10 +191,10 @@ const AddPet = ({ token }) => {
       <>
   <style>
     {`
-      @import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
+     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
       body, input, select, button, textarea {
-        font-family: 'Tinos', serif !important;
+        font-family: 'Poppins', sans-serif ;
         color: #000000;
       }
 
@@ -207,6 +207,7 @@ const AddPet = ({ token }) => {
 
       .card-header {
         background-color: #FCA311;
+         font-family: 'Poppins', sans-serif;
         color: #14213D;
         font-weight: bold;
         font-size: 1.5rem;

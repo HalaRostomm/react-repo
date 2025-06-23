@@ -172,10 +172,11 @@ const UpdatePet = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Economica&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 
         body, h1, h2, h3, h4, h5, h6, p, label, input, button, textarea {
-          font-family: 'Economica', sans-serif !important;
+          font-family: 'Poppins', sans-serif !important;
         }
 
         .card-header.bg-primary {

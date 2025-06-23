@@ -3,20 +3,20 @@ import userService from "../service/userservice";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import authService from "../service/authService";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
-// Inject Tinos font
-const tinosFontLink = document.createElement("link");
-tinosFontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFontLink.rel = "stylesheet";
-document.head.appendChild(tinosFontLink);
+// Inject Poppins font
+const poppinsFontLink = document.createElement("link");
+poppinsFontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+poppinsFontLink.rel = "stylesheet";
+document.head.appendChild(poppinsFontLink);
 
-// Color theme
+// Color theme updates
 const COLORS = {
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  BACKGROUND: "#FFFFFF",
-  TEXT: "#000000",
+  PRIMARY: "#13B6B9",    // header and card background base color
+  ACCENT: "#FFA100",     // buttons and star icons
+  BACKGROUND_OPACITY: "33", // opacity hex for 20% opacity (approx 33 hex)
+  TEXT: "#000000",       // black text
   BORDER: "#E5E5E5",
 };
 
@@ -108,7 +108,8 @@ const SpeciDr = () => {
     const stars = [];
     const full = Math.floor(rating);
     const half = rating - full >= 0.5;
-    for (let i = 0; i < full; i++) stars.push(<FaStar key={`f-${i}`} color={COLORS.ACCENT} />);
+    for (let i = 0; i < full; i++)
+      stars.push(<FaStar key={`f-${i}`} color={COLORS.ACCENT} />);
     if (half) stars.push(<FaStarHalfAlt key="h" color={COLORS.ACCENT} />);
     for (let i = 0; i < 5 - full - (half ? 1 : 0); i++)
       stars.push(<FaRegStar key={`e-${i}`} color={COLORS.BORDER} />);
@@ -123,10 +124,11 @@ const SpeciDr = () => {
     <div
       className="container"
       style={{
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         padding: "2rem",
         maxWidth: 1200,
         margin: "auto",
+        color: COLORS.TEXT,
       }}
     >
       <h2
@@ -162,10 +164,9 @@ const SpeciDr = () => {
               <div
                 key={doctor.appUserId}
                 style={{
-                  border: `2px solid ${COLORS.BORDER}`,
                   borderRadius: "15px",
                   padding: "1.5rem",
-                  backgroundColor: COLORS.BACKGROUND,
+                  backgroundColor: `${COLORS.PRIMARY}33`, // 20% opacity (33 hex)
                   display: "flex",
                   gap: "1.5rem",
                   alignItems: "center",
@@ -219,7 +220,7 @@ const SpeciDr = () => {
                   <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
                     <button
                       onClick={() => handleViewDetails(doctor.appUserId)}
-                      style={buttonStyle(COLORS.PRIMARY)}
+                      style={buttonStyle(COLORS.ACCENT)}
                     >
                       Appointments
                     </button>
@@ -231,7 +232,7 @@ const SpeciDr = () => {
                     </button>
                     <button
                       onClick={() => handleMessageDoctor(doctor.appUserId)}
-                      style={buttonStyle("#4CAF50")}
+                      style={buttonStyle(COLORS.ACCENT)}
                     >
                       Message
                     </button>
@@ -248,7 +249,7 @@ const SpeciDr = () => {
 
 const buttonStyle = (bgColor) => ({
   backgroundColor: bgColor,
-  color: "#fff",
+  color: "#000000",
   border: "none",
   borderRadius: "6px",
   padding: "0.5rem 1rem",
@@ -256,6 +257,8 @@ const buttonStyle = (bgColor) => ({
   cursor: "pointer",
   flex: 1,
   transition: "background-color 0.3s ease",
+  // Darken on hover
+  // We'll add inline events for hover in component if needed or add CSS classes in your project.
 });
 
 export default SpeciDr;

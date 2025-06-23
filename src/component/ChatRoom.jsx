@@ -50,19 +50,6 @@ const ChatContainer = styled(Paper)(({ theme }) => ({
   backgroundColor: '#f5f5f5',
 }));
 
-const MessageBubble = styled(Box)(({ theme, isCurrentUser }) => ({
-  maxWidth: '70%',
-  padding: theme.spacing(1.5, 2),
-  marginBottom: theme.spacing(1),
-  borderRadius: isCurrentUser 
-    ? '18px 18px 4px 18px' 
-    : '18px 18px 18px 4px',
-  backgroundColor: isCurrentUser ? '#FF8C00' : '#00B4D8', // Darker orange and teal
-  color: 'white',
-  alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
-  wordBreak: 'break-word',
-  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-}));
 
 
 const ChatHeader = styled(Box)(({ theme }) => ({
@@ -125,6 +112,21 @@ const [adoptedPetIds, setAdoptedPetIds] = useState([]);
 
 const actualPetId = petIdFromState || petId;
 
+const MessageBubble = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isCurrentUser'
+})(({ theme, isCurrentUser }) => ({
+  maxWidth: '70%',
+  padding: theme.spacing(1.5, 2),
+  marginBottom: theme.spacing(1),
+  borderRadius: isCurrentUser
+    ? '18px 18px 4px 18px'
+    : '18px 18px 18px 4px',
+  backgroundColor: isCurrentUser ? '#FF8C00' : '#00B4D8',
+  color: 'white',
+  alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
+  wordBreak: 'break-word',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}));
 useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -158,7 +160,19 @@ useEffect(() => {
     if (receiverId) fetchReceiverName();
   }, [receiverId]);
 
+useEffect(() => {
+  const storedConfirmed = JSON.parse(localStorage.getItem('confirmedMessageIds')) || [];
+  const storedAdopted = JSON.parse(localStorage.getItem('adoptedPetIds')) || [];
+  setConfirmedMessageIds(storedConfirmed);
+  setAdoptedPetIds(storedAdopted);
+}, []);
+useEffect(() => {
+  localStorage.setItem('confirmedMessageIds', JSON.stringify(confirmedMessageIds));
+}, [confirmedMessageIds]);
 
+useEffect(() => {
+  localStorage.setItem('adoptedPetIds', JSON.stringify(adoptedPetIds));
+}, [adoptedPetIds]);
 
   useEffect(() => {
   if (initialMessage && connected) {
@@ -181,17 +195,28 @@ console.log("Sending initial message:", { initialMessage, type });
   }, [initialMessage]);
 
   
+const loadHistory = async () => {
+  try {
+    if (senderId && receiverId) {
+      const response = await messageService.getHistory(senderId, receiverId);
+      setMessages(response.data);
 
-  const loadHistory = async () => {
-    try {
-      if (senderId && receiverId) {
-        const response = await messageService.getHistory(senderId, receiverId);
-        setMessages(response.data);
-      }
-    } catch (err) {
-      console.error("Failed to fetch chat history:", err);
+      // Extract confirmed message IDs from response
+      const backendConfirmedIds = response.data
+        .filter((msg) => msg.confirmed === true)
+        .map((msg) => msg.id);
+
+      // Merge with localStorage confirmed IDs
+      const storedConfirmed = JSON.parse(localStorage.getItem('confirmedMessageIds')) || [];
+      const mergedConfirmed = Array.from(new Set([...backendConfirmedIds, ...storedConfirmed]));
+
+      setConfirmedMessageIds(mergedConfirmed);
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch chat history:", err);
+  }
+};
+
 
   useEffect(() => {
     setMessages([]);
@@ -401,10 +426,12 @@ content: input.trim(),
           </Box>
         ) : (
           messages.map((msg) => {
-            const isCurrentUser = msg.senderId == senderId;
-            const isAdoptionRequest = 
-              msg.type === "adoption message" && 
-              String(userId) === String(msg.receiverId);
+  const isCurrentUser = msg.senderId == senderId;
+  const isAdoptionRequest = 
+    msg.type === "adoption message" && 
+    String(userId) === String(msg.receiverId);
+
+const isConfirmed = msg.confirmed === true || confirmedMessageIds.includes(msg.id);
 
             return (
               <Box 
@@ -433,57 +460,33 @@ content: input.trim(),
                   </Typography>
                 </Box>
 
-                <MessageBubble isCurrentUser={isCurrentUser}>
-                  {renderMessageContent(msg)}
-                </MessageBubble>
-
-                {isAdoptionRequest && (
-                  <Box sx={{ 
-                    display: 'flex', 
-                    gap: 1,
-                    mt: 1,
-                    alignSelf: 'flex-start'
-                  }}>
-                 {confirmedMessageIds.includes(msg.id) ? (
-  <AdoptionButton
-    variant="contained"
-    startIcon={<CheckCircle />}
-    disabled
-    sx={{
-      bgcolor: '#4CAF50',
-      color: 'white',
-      '&:hover': { bgcolor: '#4CAF50' }
-    }}
-  >
-    Confirmed
-  </AdoptionButton>
-) : (
-  <AdoptionButton
-    variant="contained"
-    startIcon={<CheckCircle />}
-    onClick={() => handleConfirmAdoption(msg.senderId, msg.petId, msg.id)}
-    sx={{
-      bgcolor: '#4CAF50',
-      '&:hover': { bgcolor: '#388E3C' }
-    }}
-  >
-    Confirm
-  </AdoptionButton>
-)}
-
-                    <AdoptionButton
-                      variant="contained"
-                      startIcon={<Cancel />}
-                      onClick={() => handleCancelAdoption(msg.petId)}
-                      sx={{
-                        bgcolor: '#F44336',
-                        '&:hover': { bgcolor: '#D32F2F' }
-                      }}
-                    >
-                      Cancel
-                    </AdoptionButton>
-                  </Box>
-                )}
+                  <MessageBubble isCurrentUser={isCurrentUser}>
+        {renderMessageContent(msg)}
+      </MessageBubble>
+  {isAdoptionRequest && (
+        <Box sx={{ display: 'flex', gap: 1, mt: 1, alignSelf: 'flex-start' }}>
+          {!isConfirmed && (
+            <Box sx={{ display: 'flex', gap: 1, mt: 1, alignSelf: 'flex-start' }}>
+              <AdoptionButton
+                variant="contained"
+                startIcon={<CheckCircle />}
+                onClick={() => handleConfirmAdoption(msg.senderId, msg.petId, msg.id)}
+                sx={{ bgcolor: '#4CAF50', '&:hover': { bgcolor: '#388E3C' } }}
+              >
+                Confirm
+              </AdoptionButton>
+              <AdoptionButton
+                variant="contained"
+                startIcon={<Cancel />}
+                onClick={() => handleCancelAdoption(msg.petId)}
+                sx={{ bgcolor: '#F44336', '&:hover': { bgcolor: '#D32F2F' } }}
+              >
+                Cancel
+              </AdoptionButton>
+            </Box>
+          )}
+        </Box>
+      )}
 
                 {isCurrentUser && (
                   <IconButton

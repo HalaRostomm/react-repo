@@ -3,17 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 
-// Inject Tinos font
-const tinosFont = document.createElement("link");
-tinosFont.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
-tinosFont.rel = "stylesheet";
-document.head.appendChild(tinosFont);
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 const COLORS = {
   BLACK: "#000000",
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  LIGHT: "#E5E5E5",
+  PRIMARY: "#13b6b9",   // changed from #14213D to #13b6b9 for header & card bg base
+  ACCENT: "#ffa100",    // orange for buttons and icons
+  LIGHT: "rgba(19, 182, 185, 0.2)", // card background with 20% opacity
   WHITE: "#FFFFFF",
 };
 
@@ -96,17 +95,17 @@ const ConfirmSpApp = () => {
       style={{
         maxWidth: "950px",
         marginTop: "3rem",
-        fontFamily: "'Tinos', serif",
-        color: COLORS.PRIMARY,
+        fontFamily: "'Poppins', sans-serif",
+        color: COLORS.BLACK,
       }}
     >
       <div
         style={{
-          backgroundColor: COLORS.WHITE,
-          border: `2px solid ${COLORS.ACCENT}`,
+          backgroundColor: COLORS.LIGHT,
           borderRadius: "12px",
           padding: "2rem",
           boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          border: `2px solid ${COLORS.ACCENT}`,
         }}
       >
         <h2
@@ -114,17 +113,22 @@ const ConfirmSpApp = () => {
           style={{
             fontWeight: 700,
             fontSize: "2rem",
-            color: COLORS.ACCENT,
+            color: COLORS.PRIMARY,
             borderBottom: `2px solid ${COLORS.LIGHT}`,
             paddingBottom: "1rem",
           }}
         >
+          {/* Icon with ACCENT color */}
+          <span style={{ color: COLORS.ACCENT, marginRight: "8px" }}>📝</span>
           Confirm Your Service Booking
         </h2>
 
         {loading ? (
-          <div className="text-center" style={{ fontWeight: "bold", color: COLORS.PRIMARY }}>
-            🔄 Loading...
+          <div
+            className="text-center"
+            style={{ fontWeight: "bold", color: COLORS.PRIMARY }}
+          >
+            <span style={{ color: COLORS.ACCENT, marginRight: "6px" }}>🔄</span> Loading...
           </div>
         ) : (
           <>
@@ -135,12 +139,22 @@ const ConfirmSpApp = () => {
                   marginBottom: "2rem",
                   borderBottom: `1px solid ${COLORS.LIGHT}`,
                   paddingBottom: "1rem",
+                  color: COLORS.BLACK,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>🙋 User Information</h4>
-                <p><strong>Name:</strong> {user.firstname} {user.lastname}</p>
-                <p><strong>Username:</strong> {user.username}</p>
-                <p><strong>Phone:</strong> {user.phone}</p>
+                <h4 style={{ color: COLORS.PRIMARY }}>
+                  <span style={{ color: COLORS.ACCENT, marginRight: "6px" }}>🙋</span>
+                  User Information
+                </h4>
+                <p>
+                  <strong>Name:</strong> {user.firstname} {user.lastname}
+                </p>
+                <p>
+                  <strong>Username:</strong> {user.username}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {user.phone}
+                </p>
                 {user.image && (
                   <img
                     src={`data:image/jpeg;base64,${user.image}`}
@@ -165,12 +179,22 @@ const ConfirmSpApp = () => {
                   marginBottom: "2rem",
                   borderBottom: `1px solid ${COLORS.LIGHT}`,
                   paddingBottom: "1rem",
+                  color: COLORS.BLACK,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>📅 Appointment Details</h4>
-                <p><strong>Date:</strong> {appointment.selectedDate}</p>
-                <p><strong>Time:</strong> {appointment.startTime} - {appointment.endTime}</p>
-                <p><strong>Price:</strong> ${appointment.price}</p>
+                <h4 style={{ color: COLORS.PRIMARY }}>
+                  <span style={{ color: COLORS.ACCENT, marginRight: "6px" }}>📅</span>
+                  Appointment Details
+                </h4>
+                <p>
+                  <strong>Date:</strong> {appointment.selectedDate}
+                </p>
+                <p>
+                  <strong>Time:</strong> {appointment.startTime} - {appointment.endTime}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${appointment.price}
+                </p>
               </section>
             )}
 
@@ -181,18 +205,30 @@ const ConfirmSpApp = () => {
                   marginBottom: "2rem",
                   borderBottom: `1px solid ${COLORS.LIGHT}`,
                   paddingBottom: "1rem",
+                  color: COLORS.BLACK,
                 }}
               >
-                <h4 style={{ color: COLORS.PRIMARY }}>🔧 Service Information</h4>
-                <p><strong>Service Name:</strong> {service.name}</p>
-                <p><strong>Description:</strong> {service.description}</p>
-                <p><strong>Category:</strong> {service.category}</p>
+                <h4 style={{ color: COLORS.PRIMARY }}>
+                  <span style={{ color: COLORS.ACCENT, marginRight: "6px" }}>🔧</span>
+                  Service Information
+                </h4>
+                <p>
+                  <strong>Service Name:</strong> {service.name}
+                </p>
+                <p>
+                  <strong>Description:</strong> {service.description}
+                </p>
+                <p>
+                  <strong>Category:</strong> {service.category}
+                </p>
               </section>
             )}
 
             {/* Pet Selection */}
-            <section style={{ marginBottom: "2rem" }}>
-              <label htmlFor="petSelect"><strong>Select Your Pet:</strong></label>
+            <section style={{ marginBottom: "2rem", color: COLORS.BLACK }}>
+              <label htmlFor="petSelect">
+                <strong>Select Your Pet:</strong>
+              </label>
               <select
                 id="petSelect"
                 className="form-control"
@@ -203,7 +239,8 @@ const ConfirmSpApp = () => {
                   padding: "0.5rem",
                   borderRadius: "6px",
                   border: `1px solid ${COLORS.PRIMARY}`,
-                  fontFamily: "'Tinos', serif",
+                  fontFamily: "'Poppins', sans-serif",
+                  color: COLORS.BLACK,
                 }}
               >
                 {pets.map((pet) => (
@@ -228,7 +265,14 @@ const ConfirmSpApp = () => {
                   fontSize: "1rem",
                   border: "none",
                   transition: "background-color 0.3s ease",
+                  userSelect: "none",
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#cc8300")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = COLORS.ACCENT)
+                }
               >
                 ✅ Confirm Booking
               </button>

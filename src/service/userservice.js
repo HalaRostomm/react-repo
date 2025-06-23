@@ -149,8 +149,8 @@ class UserService {
     makeFakePayment(userid, request) {
       return this.authAxios.post(`/pay/${userid}`, request);
     }
-    getAllPosts() {
-      return this.authAxios.get('/getposts');
+    getAllPosts(userId) {
+      return this.authAxios.get(`/getposts/${userId}`);
     }
   
     addFoundLostPost(userId, post) {

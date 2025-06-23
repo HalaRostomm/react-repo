@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import userservice from "../service/userservice";
 
-// Load Tinos font
+// Load Poppins font dynamically
 const fontLink = document.createElement("link");
-fontLink.href = "https://fonts.googleapis.com/css2?family=Tinos&display=swap";
+fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
 fontLink.rel = "stylesheet";
 document.head.appendChild(fontLink);
 
 const COLORS = {
-  PRIMARY: "#14213D",
-  ACCENT: "#FCA311",
-  LIGHT: "#E5E5E5",
+  PRIMARY: "#13b6b9",     // header background color
+  ACCENT: "#ffa100",      // buttons and icons orange
+  LIGHT_OPACITY_BG: "#13b6b933", // card background 20% opacity
   WHITE: "#FFFFFF",
   BLACK: "#000000",
 };
@@ -75,20 +75,34 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
         margin: "2.5rem auto",
         padding: "24px",
         borderRadius: "16px",
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLORS.LIGHT_OPACITY_BG, // 20% opacity background
         boxShadow: "0 6px 20px rgba(0, 0, 0, 0.08)",
-        fontFamily: "'Tinos', serif",
+        fontFamily: "'Poppins', sans-serif",
         border: `1.5px solid ${COLORS.PRIMARY}`,
+        color: COLORS.BLACK,
       }}
     >
-      <h2 style={{ marginBottom: "1.8rem", color: COLORS.PRIMARY, textAlign: "center" }}>
+      <h2
+        style={{
+          marginBottom: "1.8rem",
+          color: COLORS.BLACK,
+          textAlign: "center",
+          backgroundColor: COLORS.PRIMARY,
+          padding: "12px",
+          borderRadius: "12px",
+          userSelect: "none",
+        }}
+      >
         🐶 Create a Lost or Found Post
       </h2>
 
       <form onSubmit={handleSubmit}>
         {/* Type Selector */}
         <div style={{ marginBottom: "1.25rem" }}>
-          <label htmlFor="postType" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
+          <label
+            htmlFor="postType"
+            style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}
+          >
             Post Type
           </label>
           <select
@@ -100,10 +114,12 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
               width: "100%",
               padding: "10px",
               borderRadius: "10px",
-              border: `1px solid ${COLORS.LIGHT}`,
-              backgroundColor: COLORS.LIGHT,
+              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
+              backgroundColor: COLORS.WHITE,
               fontSize: "16px",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              color: COLORS.BLACK,
+              cursor: "pointer",
             }}
           >
             <option value="">📌 Select Type</option>
@@ -124,6 +140,7 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
               borderRadius: "8px",
               cursor: "pointer",
               fontWeight: 600,
+              userSelect: "none",
             }}
           >
             📷 Upload Images
@@ -158,7 +175,7 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
                   height: "90px",
                   objectFit: "cover",
                   borderRadius: "10px",
-                  border: `1px solid ${COLORS.LIGHT}`,
+                  border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
                 }}
               />
             ))}
@@ -177,12 +194,13 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
               width: "100%",
               padding: "14px",
               borderRadius: "12px",
-              border: `1px solid ${COLORS.LIGHT}`,
-              background: COLORS.LIGHT,
+              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
+              backgroundColor: COLORS.WHITE,
               fontSize: "16px",
               resize: "vertical",
               outline: "none",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              color: COLORS.BLACK,
             }}
           />
         </div>
@@ -200,7 +218,9 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
               borderRadius: "10px",
               fontSize: "16px",
               cursor: "pointer",
-              fontFamily: "'Tinos', serif",
+              fontFamily: "'Poppins', sans-serif",
+              userSelect: "none",
+              transition: "background-color 0.3s ease",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e4940f")}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
