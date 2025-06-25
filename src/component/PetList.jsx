@@ -29,7 +29,7 @@ const TEXT = "#000000";
 const CARD_BG = "rgba(19, 182, 185, 0.2)";
 const OUT_OF_STOCK = "#808080"; // grey
 const AVAILABLE = "#13b6b9"; // blue ghame2
-const FONT = "'Poppins', sans-serif";
+const FONT = "Poppins, sans-serif";
 
 // Styled Containers
 const Page = styled(Box)(({ theme }) => ({
@@ -200,29 +200,48 @@ const PetList = ({ token }) => {
             <AddPet startIcon={<AddIcon />} onClick={() => navigate("/user/addpet")}>Add Your First Pet</AddPet>
           </Box>
         ) : (
-          <Grid container spacing={4}>
-            {pets.map((pet) => (
-              <Grid item xs={12} sm={6} md={4} key={pet.petId}>
-                <CardBox onClick={() => navigate(`/user/getpet/${pet.petId}`)}>
-                  {pet.image ? (
-                    <PetImage component="img" image={`data:image/jpeg;base64,${pet.image}`} alt={pet.petName || "Pet"} />
-                  ) : (
-                    <IconPlaceholder>
-                      <PetsRoundedIcon sx={{ fontSize: 80, color: "#bbb" }} />
-                    </IconPlaceholder>
-                  )}
-                  <CardContent>
-                    <Typography variant="h5" sx={{ fontFamily: FONT, color: TEXT, fontWeight: "bold", mt: 1 }}>
-                      {pet.petName || "Unnamed Pet"}
-                    </Typography>
-                    {pet.petCategory && (
-                      <CategoryTag label={getCategoryName(pet.petCategory.categoryId)} />
-                    )}
-                  </CardContent>
-                </CardBox>
-              </Grid>
-            ))}
-          </Grid>
+        <Grid container spacing={4}>
+  {pets.map((pet) => (
+    <Grid item xs={12} sm={6} md={4} key={pet.petId}>
+      <CardBox sx={{ cursor: 'pointer' }}>
+        <Box onClick={() => navigate(`/user/getpet/${pet.petId}`)}>
+          {pet.image ? (
+            <PetImage 
+              component="img" 
+              image={`data:image/jpeg;base64,${pet.image}`} 
+              alt={pet.petName || "Pet"} 
+            />
+          ) : (
+            <IconPlaceholder>
+              <PetsRoundedIcon sx={{ fontSize: 80, color: "#bbb" }} />
+            </IconPlaceholder>
+          )}
+          <CardContent>
+            <Typography 
+              variant="h5" 
+              sx={{ fontFamily: FONT, color: TEXT, fontWeight: "bold", mt: 1 }}
+            >
+              {pet.petName || "Unnamed Pet"}
+            </Typography>
+     {pet.petCategory && (
+  <Box
+    sx={{ display: 'inline-block' }}
+    onClick={(e) => {
+      e.stopPropagation(); // Prevents CardBox click
+      navigate(`/user/getpet/${pet.petId}`);
+    }}
+  >
+    <CategoryTag label={getCategoryName(pet.petCategory.categoryId)} />
+  </Box>
+)}
+
+          </CardContent>
+        </Box>
+      </CardBox>
+    </Grid>
+  ))}
+</Grid>
+
         )}
       </Page>
     </>

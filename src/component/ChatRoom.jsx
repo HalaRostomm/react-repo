@@ -31,16 +31,16 @@ const darkPurple = '#6A0DAD';  // Dark purple for message bubbles
 const lightPurple = '#B399D4'; // Light purple for header
 const veryLightPurple = '#F0E6FF'; // Very light purple for background
 
-// Create a style object for Economica font
-const economicaFont = {
-  fontFamily: '"Economica", sans-serif',
+// Create a style object for Poppins font
+const poppinsFont = {
+  fontFamily: "Poppins, sans-serif",
   fontWeight: 'bold',
   letterSpacing: '0.5px'
 };
 
 
 const ChatContainer = styled(Paper)(({ theme }) => ({
-  fontFamily: '"Economica", sans-serif',
+  fontFamily: "Poppins, sans-serif",
   height: '80vh',
   display: 'flex',
   flexDirection: 'column',
@@ -109,7 +109,7 @@ const [error, setError] = useState(null);
   const [receiverName, setReceiverName] = useState('');
 const [confirmedMessageIds, setConfirmedMessageIds] = useState([]);
 const [adoptedPetIds, setAdoptedPetIds] = useState([]);
-
+const [receiverImage, setReceiverImage] = useState('');
 const actualPetId = petIdFromState || petId;
 
 const MessageBubble = styled(Box, {
@@ -151,6 +151,7 @@ useEffect(() => {
       try {
         const response = await userService.getUserById(receiverId);
         setReceiverName(response.data.firstname);
+            setReceiverImage(response.data.image); // Add this line
       } catch (err) {
         console.error("Failed to fetch receiver name:", err);
         setReceiverName('User');
@@ -394,7 +395,7 @@ content: input.trim(),
       );
     }
     return (
-      <Typography variant="body1" sx={{ fontFamily: '"Economica", sans-serif' }}>
+      <Typography variant="body1" sx={{ fontFamily: "Poppins, sans-serif" }}>
         {msg.content}
       </Typography>
     );
@@ -403,10 +404,14 @@ content: input.trim(),
  return (
     <ChatContainer elevation={3}>
       <ChatHeader>
-        <Avatar sx={{ bgcolor: '#FF8C00' }}>
-          {receiverName?.charAt(0).toUpperCase()}
-        </Avatar>
-        <Typography variant="h6" sx={{ fontFamily: '"Economica", sans-serif', fontWeight: 'bold' }}>
+       <Avatar 
+  sx={{ bgcolor: '#FF8C00' }}
+  src={receiverImage ? `data:image/jpeg;base64,${receiverImage}` : undefined}
+>
+  {!receiverImage && receiverName?.charAt(0).toUpperCase()}
+</Avatar>
+
+        <Typography variant="h6" sx={{ fontFamily: "Poppins, sans-serif", fontWeight: 'bold' }}>
           Chat with {receiverName}
         </Typography>
       </ChatHeader>
@@ -444,17 +449,20 @@ const isConfirmed = msg.confirmed === true || confirmedMessageIds.includes(msg.i
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                  {!isCurrentUser && (
-                    <Avatar sx={{ 
-                      width: 24, 
-                      height: 24, 
-                      mr: 1,
-                      bgcolor: '#00B4D8',
-                      fontSize: '0.75rem'
-                    }}>
-                      {msg.sender?.firstname?.charAt(0) || 'U'}
-                    </Avatar>
-                  )}
+             {!isCurrentUser && (
+  <Avatar
+    sx={{ width: 24, height: 24, mr: 1 }}
+    src={
+      String(msg.senderId) === String(receiverId) && receiverImage
+        ? `data:image/jpeg;base64,${receiverImage}`
+        : undefined
+    }
+  >
+    {(String(msg.senderId) !== String(receiverId) || !receiverImage) &&
+      (msg.sender?.firstname?.charAt(0).toUpperCase() || 'U')}
+  </Avatar>
+)}
+
                   <Typography variant="caption" sx={{ color: '#666' }}>
                     {isCurrentUser ? 'You' : msg.sender?.firstname || 'Unknown'}
                   </Typography>
@@ -521,7 +529,7 @@ const isConfirmed = msg.confirmed === true || confirmedMessageIds.includes(msg.i
             '& .MuiOutlinedInput-root': {
               borderRadius: '24px',
               backgroundColor: 'white',
-              fontFamily: '"Economica", sans-serif',
+              fontFamily: "Poppins, sans-serif",
             }
           }}
         />

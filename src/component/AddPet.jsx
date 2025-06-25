@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import UserService from "../service/userservice";
 import { jwtDecode } from "jwt-decode";
 import petImage from '../assets/dogs-and-cats.jpg';
-
+import { useNavigate } from "react-router-dom";
 const AddPet = ({ token }) => {
   const initialPetState = {
     petName: "",
@@ -26,7 +26,7 @@ const AddPet = ({ token }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newVaccineName, setNewVaccineName] = useState("");
   const [newVaccineDate, setNewVaccineDate] = useState("");
-
+const navigate = useNavigate();
   useEffect(() => {
     if (!token) return;
     try {
@@ -176,6 +176,7 @@ const AddPet = ({ token }) => {
       await UserService.addNewPet(userId, pet.categoryId, formattedData);
       setMessage({ text: "Pet added successfully!", type: "success" });
       setPet(initialPetState);
+      navigate("user/getpets");
     } catch (error) {
       console.error("Pet addition error:", error);
       setMessage({

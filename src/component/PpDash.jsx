@@ -130,14 +130,14 @@ const productChart = productsSales.map(entry => {
       borderRadius: '50%',
     },
     chartCard: {
-      flex: 1,
+       flex: '1 1 49%',
       minWidth: '300px',
-      maxWidth: '500px',
+      maxWidth: '600px',
       backgroundColor: '#ffffff',
       padding: 20,
       borderRadius: 12,
       boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-      marginBottom: '40px',
+      marginBottom: '10px',
     },
     chartTitle: {
       fontWeight: 800,
@@ -174,72 +174,79 @@ const productChart = productsSales.map(entry => {
 
       <div style={styles.container}>
         {error && <p style={{ color: 'red' }}>{error}</p>}
+<section style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+  {/* First Row */}
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between', marginBottom: 10 }}>
+    {/* Daily Income */}
+    <div style={styles.chartCard}>
+      <h3 style={styles.chartTitle}>📈 Daily Income</h3>
+      <div style={styles.chartContainer}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={incomeChart}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="income" stroke="#FF9800" strokeWidth={3} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
 
-        <section style={{ display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between' }}>
-          {/* Daily Income Line Chart */}
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>📈 Daily Income</h3>
-            <div style={styles.chartContainer}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={incomeChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="income" stroke="#FF9800" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+    {/* Ratings */}
+    <div style={styles.chartCard}>
+      <h3 style={styles.chartTitle}>⭐ Product Ratings</h3>
+      <div style={styles.chartContainer}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={ratingsChart}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="rating" />
+            <YAxis domain={[0, 5]} />
+            <Tooltip />
+            <Bar dataKey="count" fill="#FF9800" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  </div>
 
-          {/* Product Ratings Histogram */}
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>⭐ Product Ratings</h3>
-            <div style={styles.chartContainer}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={ratingsChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="rating" />
-                  <YAxis domain={[0, 5]} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#FF9800" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+  {/* Second Row */}
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between' }}>
+    {/* Product Sales */}
+    <div style={styles.chartCard}>
+      <h3 style={styles.chartTitle}>📦 Product Sales</h3>
+      <div style={styles.chartContainer}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={productChart}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="product" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="sales" fill="#FF9800" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
 
-          {/* Product Sales Histogram */}
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>📦 Product Sales</h3>
-            <div style={styles.chartContainer}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={productChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="product" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="sales" fill="#FF9800" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+    {/* User Sales */}
+    <div style={styles.chartCard}>
+      <h3 style={styles.chartTitle}>👤 User Sales</h3>
+      <div style={styles.chartContainer}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={userSalesChart}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="user" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#FF9800" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  </div>
+</section>
 
-          {/* User Sales Histogram */}
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>👤 User Sales</h3>
-            <div style={styles.chartContainer}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={userSalesChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="user" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#FF9800" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </section>
+
       </div>
     </>
   );
