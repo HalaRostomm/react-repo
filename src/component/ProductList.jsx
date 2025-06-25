@@ -11,6 +11,7 @@ import {
   FaEdit,
   FaPowerOff,
 } from "react-icons/fa";
+import ppservice from "../service/ppservice";
 
 const ProductList = ({ token }) => {
   const [products, setProducts] = useState([]);
@@ -20,7 +21,7 @@ const ProductList = ({ token }) => {
   const [updatingProductId, setUpdatingProductId] = useState(null);
   const [averageRatings, setAverageRatings] = useState({});
   const navigate = useNavigate();
-
+ const [categories, setCategories] = useState([]);
   useEffect(() => {
     if (!token) return;
     try {
@@ -52,6 +53,37 @@ const ProductList = ({ token }) => {
     fetchProducts();
   }, [userId]);
 
+
+ useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await ppservice.getProductCategories();
+       const formatted = response.data.map((item) => ({
+          id: item.category_category_id,
+          mscategory: item.mscategory,
+        }));
+        setCategories(formatted);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+
+const getCategoryName = (categoryId) => {
+  // assuming categories is your categories list with .id fields
+  const cat = categories.find(c => c.id === categoryId);
+  if (!cat) return "Unknown";
+  
+  if (typeof cat.mscategory === "object" && cat.mscategory !== null) {
+    return Object.values(cat.mscategory).join(", ");
+  }
+  
+  return cat.mscategory || "Unknown";
+};
+
+
   useEffect(() => {
     document.body.style.backgroundColor = "#ffffff";
     return () => {
@@ -74,8 +106,8 @@ const ProductList = ({ token }) => {
     }
   };
 
-  const handleUpdate = (productId, categoryId) => {
-    navigate(`/pp/updateproduct/${productId}/${categoryId}`);
+  const handleUpdate = (categoryId, productId) => {
+    navigate(`/pp/updateproduct/${categoryId}/${productId}`);
   };
 
   const toggleActiveStatus = async (product) => {
@@ -115,8 +147,8 @@ const ProductList = ({ token }) => {
     for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={"empty" + i} color="#FF9800" />);
     return stars;
   };
-
   return (
+
     <div
       style={{
         fontFamily: "'Poppins', sans-serif",
@@ -135,7 +167,9 @@ const ProductList = ({ token }) => {
       {error && <p style={{ color: "#c62828", textAlign: "center" }}>{error}</p>}
 
       {products.length === 0 ? (
+        
         <p style={{ textAlign: "center", fontStyle: "italic" }}>No products found.</p>
+        
       ) : (
         <div style={{ textAlign: "right", marginBottom: "1.5rem" }}>
           <button
@@ -164,6 +198,7 @@ const ProductList = ({ token }) => {
       >
         {products.map((product) => {
           const rating = averageRatings[product.productId];
+console.log("productCategory for product", product.productId, ":", product.productCategory);
 
           return (
             <div
@@ -209,13 +244,38 @@ const ProductList = ({ token }) => {
               <p style={{ fontSize: "0.9rem", color: "#000000" }}>
                 <strong>Description:</strong> {product.description}
               </p>
+<p>
+  <strong>Category:</strong>{" "}
+  {(() => {
+    const cat = product.productCategory;
 
-              <p>
-                <strong>Category:</strong>{" "}
-                {product.productCategory && product.productCategory.mscategory
-                  ? Object.values(product.productCategory.mscategory).join(", ")
-                  : "Loading category..."}
-              </p>
+    if (!cat) return "Loading category...";
+
+    // If productCategory is a number, treat it as categoryId
+    if (typeof cat === "number") {
+      return getCategoryName(cat);
+    }
+
+    // If productCategory is an object
+    if (typeof cat === "object") {
+      if (cat.categoryId) {
+        return getCategoryName(cat.categoryId);
+      }
+
+      // fallback to mscategory if it exists and is string or object
+      if (cat.mscategory) {
+        if (typeof cat.mscategory === "object") {
+          return Object.values(cat.mscategory).join(", ");
+        }
+        return cat.mscategory;
+      }
+    }
+
+    return "Unknown category";
+  })()}
+</p>
+
+
 
               <h4
                 style={{
@@ -246,7 +306,7 @@ const ProductList = ({ token }) => {
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.6rem" }}>
                 <button
                   onClick={() =>
-                    handleUpdate(product.productId, product.productCategory?.categoryId)
+                    handleUpdate( product.productCategory?.categoryId, product.productId)
                   }
                   style={{
                     flex: 1,

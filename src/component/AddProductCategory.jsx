@@ -25,7 +25,7 @@ const AddProductCategory = () => {
       };
       await adminService.addNewProductCategory(formattedData);
       setMessage("✅ Category added successfully!");
-      setTimeout(() => navigate("/getproductcategories"), 1500);
+      setTimeout(() => navigate("/admin/getproductcategories"), 1500);
     } catch (error) {
       setMessage(
         `❌ Failed to add category: ${

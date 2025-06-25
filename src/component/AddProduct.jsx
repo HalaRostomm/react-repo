@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import ProductService from "../service/ppservice";
 import {
   FaUpload,
@@ -57,9 +58,9 @@ const AddProduct = ({ token }) => {
   const [userId, setUserId] = useState(null);
   const [product, setProduct] = useState();
 
-  const colorOptions = ["Red", "Green", "Blue", "Yellow", "Black", "White"].map(color => ({ label: color, value: color.toLowerCase() }));
+  const colorOptions = ["Regular","Red", "Green", "Blue", "Yellow", "Black", "White"].map(color => ({ label: color, value: color.toLowerCase() }));
   const sizeOptions = ["Small", "Medium", "Large", "Regular"].map(size => ({ label: size, value: size.toLowerCase() }));
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!token) return;
     try {
@@ -113,6 +114,7 @@ const AddProduct = ({ token }) => {
     try {
       await ProductService.addNewProduct(selectedCategoryId, userId, data);
       alert("✅ Product added successfully!");
+      navigate("/pp/getallproducts");
     } catch (err) {
       console.error(err);
       alert("❌ Failed to add product");

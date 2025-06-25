@@ -122,9 +122,9 @@ const DoctorList = () => {
         {/* Message */}
         {message && (
           <div
-            className={`alert text-center fw-semibold`}
+            className="alert text-center fw-semibold"
             style={{
-              margin: "0",
+              margin: 0,
               borderRadius: 0,
               color: messageType === "danger" ? "#721c24" : "#155724",
               backgroundColor: messageType === "danger" ? "#f8d7da" : "#d4edda",
@@ -166,7 +166,7 @@ const DoctorList = () => {
                 size={40}
                 style={{
                   color: "#000",
-                  animation: "pawBounce 1s infinite ease-in-out"
+                  animation: "pawBounce 1s infinite ease-in-out",
                 }}
               />
             </div>

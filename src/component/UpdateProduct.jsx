@@ -7,7 +7,8 @@ const UpdateProduct = () => {
   const { categoryId, productId } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const colors = {
     primary: "#FF9800",
     background: "#FFFFFF",
@@ -57,8 +58,19 @@ const UpdateProduct = () => {
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
+
   const handleImageChange = (e) => {
-    setProduct((prev) => ({ ...prev, image: e.target.files[0] }));
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result.split(",")[1];
+        setImageFile(file);
+        setImagePreview(reader.result);
+        setProduct(prev => ({ ...prev, image: base64 }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handlePriceStockChange = (e) => {
@@ -87,7 +99,7 @@ const UpdateProduct = () => {
       image: product.image,
     };
 
-    ProductService.updateProduct(productId, categoryId, updatedProduct)
+    ProductService.updateProduct(categoryId, productId, updatedProduct)
       .then(() => {
         setMessage("✅ Product updated successfully!");
         navigate("/pp/getallproducts");
@@ -147,13 +159,9 @@ const UpdateProduct = () => {
 
         <div style={{ marginBottom: "1rem" }}>
           <label style={{ fontWeight: "600", color: colors.text }}><FaImage /> Product Image (optional):</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageChange}
-            style={{ marginTop: 6, fontFamily }}
-          />
-        </div>
+         <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginBottom: 12 }} />
+        {imagePreview && <img src={imagePreview} alt="preview" style={{ maxWidth: '100%', marginBottom: 16, borderRadius: 8 }} />}
+      </div>
 
         {Object.keys(product.priceByColorAndSize).map((key) => (
           <div key={key} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "center" }}>
