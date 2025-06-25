@@ -166,28 +166,26 @@ const getCategoryName = (categoryId) => {
 
       {error && <p style={{ color: "#c62828", textAlign: "center" }}>{error}</p>}
 
-      {products.length === 0 ? (
-        
-        <p style={{ textAlign: "center", fontStyle: "italic" }}>No products found.</p>
-        
-      ) : (
-        <div style={{ textAlign: "right", marginBottom: "1.5rem" }}>
-          <button
-            onClick={() => navigate("/pp/addproduct")}
-            style={{
-              backgroundColor: "#FF9800",
-              border: "none",
-              color: "#ffffff",
-              padding: "0.6rem 1.2rem",
-              borderRadius: "6px",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            ➕ Add Product
-          </button>
-        </div>
-      )}
+     <div style={{ textAlign: "right", marginBottom: "1.5rem" }}>
+  <button
+    onClick={() => navigate("/pp/addproduct")}
+    style={{
+      backgroundColor: "#FF9800",
+      border: "none",
+      color: "#ffffff",
+      padding: "0.6rem 1.2rem",
+      borderRadius: "6px",
+      fontWeight: "600",
+      cursor: "pointer",
+    }}
+  >
+    ➕ Add Product
+  </button>
+</div>
+
+{products.length === 0 && (
+  <p style={{ textAlign: "center", fontStyle: "italic" }}>No products found.</p>
+)}
 
       <div
         style={{

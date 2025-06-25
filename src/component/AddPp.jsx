@@ -55,7 +55,7 @@ const AddPp = () => {
     const companyId = productProvider.company?.companyId;
 
     try {
-      await AdminService.addNewPP(productProvider, companyId);
+      await AdminService.addNewPP(companyId, productProvider);
       setMessage("✅ Product Provider added successfully!");
       setProductProvider({
         username: "",

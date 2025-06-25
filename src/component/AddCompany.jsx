@@ -24,7 +24,7 @@ const AddCompany = () => {
       .then(() => {
         setMessage("✅ Company added successfully!");
         setMessageType("success");
-        setTimeout(() => navigate("/getallcompanies"), 1500);
+        setTimeout(() => navigate("/admin/getallcompanies"), 1500);
       })
       .catch((error) => {
         setMessage("❌ Failed to add company. Please try again.");
