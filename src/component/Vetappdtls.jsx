@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 import dayjs from "dayjs";
-
+import {jwtDecode} from "jwt-decode";
 const Vetappdtls = () => {
   const { id } = useParams();
   const [appointment, setAppointment] = useState(null);
@@ -35,6 +35,30 @@ const Vetappdtls = () => {
     fetchAppointment();
   }, [id]);
 
+const [userId, setUserId] = useState(null);
+
+useEffect(() => {
+  const loadUser = async () => {
+    const token = await authService.getToken();
+    if (token) {
+      const decoded = jwtDecode(token);
+      if (decoded.appUserId) setUserId(decoded.appUserId);
+    }
+  };
+  loadUser();
+}, []);
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     if (
       appointment?.doctor?.address &&
@@ -59,6 +83,43 @@ const Vetappdtls = () => {
       fetchAddressFromCoordinates();
     }
   }, [appointment]);
+
+
+const handleUnbookAppointment = async () => {
+  const confirmed = window.confirm("Are you sure you want to cancel this appointment?");
+  if (!confirmed) return;
+
+  try {
+    const token = await authService.getToken();
+    const response = await userService.unbookAppointment(appointment.appointmentId, token);
+
+    if (response.ok) {
+      alert("Appointment cancelled successfully.");
+      navigate(`/user/getuserappointments`);
+    } else {
+      const errorData = await response.json();
+      console.error("Server responded with error:", errorData);
+      throw new Error("Unbooking failed");
+    }
+  } catch (error) {
+    console.error("Unbooking error:", error);
+    alert("Failed to cancel the appointment.");
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   if (loading) return <p style={styles.loading}>Loading appointment details...</p>;
   if (message) return <div style={styles.alert}>{message}</div>;
@@ -104,6 +165,12 @@ const Vetappdtls = () => {
             >
               Reschedule Appointment
             </button>
+             <button
+        onClick={handleUnbookAppointment}
+        style={{ ...styles.rescheduleButton, backgroundColor: "#ff4d4d", marginLeft: "12px" }}
+      >
+        Cancel Appointment
+      </button>
           </div>
         )}
       </div>

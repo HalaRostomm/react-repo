@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate,  useLocation } from "react-router-dom";
 import userservice from "../service/userservice";
+import { jwtDecode } from "jwt-decode";
 
 // Load Poppins font dynamically
 const fontLink = document.createElement("link");
@@ -9,19 +10,76 @@ fontLink.rel = "stylesheet";
 document.head.appendChild(fontLink);
 
 const COLORS = {
-  PRIMARY: "#13b6b9",     // header background color
-  ACCENT: "#ffa100",      // buttons and icons orange
-  LIGHT_OPACITY_BG: "#13b6b933", // card background 20% opacity
+  PRIMARY: "#13b6b9",
+  ACCENT: "#ffa100",
+  LIGHT_OPACITY_BG: "#13b6b933",
   WHITE: "#FFFFFF",
   BLACK: "#000000",
 };
 
 const AddLostFoundPost = ({ onPostAdded, token }) => {
-  const { userId } = useParams();
+  const [userId, setUserId] = useState(null);
+  const [lostPostId, setLostPostId] = useState(null);
   const [content, setContent] = useState("");
   const [type, setType] = useState("");
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const petId = location.state?.petId;
+
+
+
+
+const handleMarkAsLost = async (petId, postId) => {
+  try {
+    await userservice.markAsLost(petId, postId);
+  } catch (error) {
+    console.error("Failed to mark pet as lost:", error);
+    alert(error.response?.data?.message || "❌ Failed to mark pet as lost.");
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+  // Decode token and get userId
+  useEffect(() => {
+    if (!token) return;
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.appUserId) setUserId(decoded.appUserId);
+    } catch (error) {
+      console.error("Token decoding error:", error);
+    }
+  }, [token]);
+
+  // Clean up blob URLs
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
+
+  // Convert file to base64 (without prefix)
+  const convertToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result.split(",")[1]; // remove "data:image/...;base64,"
+        resolve(result);
+      };
+      reader.onerror = (error) => reject(error);
+    });
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -30,22 +88,19 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
     setImagePreviews(previews);
   };
 
-  const convertToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (error) => reject(error);
-    });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content.trim()) {
       alert("Please enter a description.");
       return;
     }
+    if (!type) {
+      alert("Please select a post type.");
+      return;
+    }
 
     try {
+      setLoading(true);
       const base64Images = await Promise.all(images.map(convertToBase64));
       const postData = {
         content,
@@ -54,17 +109,38 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
       };
 
       const response = await userservice.addFoundLostPost(userId, postData, token);
-      if (response.status === 200) {
-        onPostAdded?.();
-        alert("📢 Post submitted successfully!");
-        setContent("");
-        setImages([]);
-        setImagePreviews([]);
-        setType("");
+
+   if (response.status === 200) {
+  const newPostId = response.data?.id || response.data?.postId || parseInt(response.data) || null;
+
+  setLostPostId(newPostId);
+  alert(`📢 Post submitted successfully! LostPostId: ${newPostId}`);
+  onPostAdded?.();
+
+  // ✅ Call markAsLost with petId and postId
+if (petId && newPostId) {
+  await handleMarkAsLost(petId, newPostId);
+}
+
+
+  // Reset
+  setContent("");
+  setType("");
+  setImages([]);
+  setImagePreviews([]);
+
+  navigate("/user/getpets", { state: { lostPostId: newPostId } });
+  return newPostId;
+
+
+      } else {
+        alert("❌ Failed to submit post.");
       }
     } catch (err) {
       console.error("Post failed:", err);
-      alert("❌ Failed to submit post.");
+      alert("❌ Error submitting post.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +151,7 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
         margin: "2.5rem auto",
         padding: "24px",
         borderRadius: "16px",
-        backgroundColor: COLORS.LIGHT_OPACITY_BG, // 20% opacity background
+        backgroundColor: COLORS.LIGHT_OPACITY_BG,
         boxShadow: "0 6px 20px rgba(0, 0, 0, 0.08)",
         fontFamily: "'Poppins', sans-serif",
         border: `1.5px solid ${COLORS.PRIMARY}`,
@@ -99,10 +175,7 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
       <form onSubmit={handleSubmit}>
         {/* Type Selector */}
         <div style={{ marginBottom: "1.25rem" }}>
-          <label
-            htmlFor="postType"
-            style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}
-          >
+          <label htmlFor="postType" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
             Post Type
           </label>
           <select
@@ -228,6 +301,25 @@ const AddLostFoundPost = ({ onPostAdded, token }) => {
             📢 Post Now
           </button>
         </div>
+        <div style={{ textAlign: "left", marginTop: "1rem" }}>
+  <button
+    type="button"
+    onClick={() => navigate("/user/getpets")}
+    style={{
+      backgroundColor: "#ccc",
+      color: "#000",
+      fontWeight: "600",
+      padding: "8px 20px",
+      border: "none",
+      borderRadius: "10px",
+      fontSize: "14px",
+      cursor: "pointer",
+      fontFamily: "'Poppins', sans-serif",
+    }}
+  >
+    🔙 Return Without Posting
+  </button>
+</div>
       </form>
     </div>
   );

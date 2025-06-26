@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 
+const ALLERGY_OPTIONS = [
+  "Pollen", "Dust", "Mold spores", "Household cleaning products",
+  "Perfumes", "Beef", "Chicken", "Eggs", "Shampoos or grooming products"
+];
+
+const MEDICAL_CONDITION_OPTIONS = [
+  "Diabetes", "Arthritis", "Heart Disease", "IVDD",
+  "Fractures", "strains", "Pneumonia", "Anemia"
+];
+
+const VACCINE_OPTIONS = [
+  "Rabies", "Parvo", "Distemper", "DHPP / DA2PP", "Leptospirosis", "FVRCP"
+];
 const UpdatePet = () => {
   const { petId, categoryId } = useParams();
   const navigate = useNavigate();
@@ -402,13 +415,17 @@ const UpdatePet = () => {
                     <h4>Vaccination Record</h4>
                     <div className="row g-2 align-items-end mb-3 vaccination-row">
                       <div className="col-md-5">
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Vaccine Name"
-                          value={newVaccineName}
-                          onChange={(e) => setNewVaccineName(e.target.value)}
-                        />
+                        <select
+  className="form-select"
+  value={newVaccineName}
+  onChange={(e) => setNewVaccineName(e.target.value)}
+>
+  <option value="">Select Vaccine</option>
+  {VACCINE_OPTIONS.map((vaccine, idx) => (
+    <option key={idx} value={vaccine}>{vaccine}</option>
+  ))}
+</select>
+
                       </div>
                       <div className="col-md-5">
                         <input
@@ -452,40 +469,92 @@ const UpdatePet = () => {
 
                   <div className="mb-3 mt-4">
                     <label className="form-label">Medical Conditions</label>
-                    <textarea
-                      className="form-control"
-                      name="medicalConditions"
-                      value={pet.medicalConditions.join(", ")} // Show as comma-separated
-                      onChange={(e) =>
-                        setPet((prev) => ({
-                          ...prev,
-                          medicalConditions: e.target.value
-                            .split(",")
-                            .map((item) => item.trim())
-                            .filter((item) => item.length > 0),
-                        }))
-                      }
-                      rows={3}
-                    />
+                   {pet.medicalConditions.map((cond, i) => (
+  <div key={i} className="mb-2 d-flex align-items-center">
+    <select
+      className="form-select me-2"
+      value={cond}
+      onChange={(e) =>
+        setPet((prev) => {
+          const updated = [...prev.medicalConditions];
+          updated[i] = e.target.value;
+          return { ...prev, medicalConditions: updated };
+        })
+      }
+    >
+      <option value="">Select Condition</option>
+      {MEDICAL_CONDITION_OPTIONS.map((opt, idx) => (
+        <option key={idx} value={opt}>{opt}</option>
+      ))}
+    </select>
+    <button
+      type="button"
+      className="btn btn-sm btn-danger"
+      onClick={() =>
+        setPet((prev) => {
+          const updated = [...prev.medicalConditions];
+          updated.splice(i, 1);
+          return { ...prev, medicalConditions: updated };
+        })
+      }
+    >
+      Remove
+    </button>
+  </div>
+))}
+<button
+  type="button"
+  className="btn btn-sm btn-outline-secondary"
+  onClick={() => setPet((prev) => ({ ...prev, medicalConditions: [...prev.medicalConditions, ""] }))}
+>
+  Add Condition
+</button>
+
                   </div>
 
                   <div className="mb-3">
                     <label className="form-label">Allergies</label>
-                    <textarea
-                      className="form-control"
-                      name="allergies"
-                      value={pet.allergies.join(", ")}
-                      onChange={(e) =>
-                        setPet((prev) => ({
-                          ...prev,
-                          allergies: e.target.value
-                            .split(",")
-                            .map((item) => item.trim())
-                            .filter((item) => item.length > 0),
-                        }))
-                      }
-                      rows={3}
-                    />
+                   {pet.allergies.map((allergy, i) => (
+  <div key={i} className="mb-2 d-flex align-items-center">
+    <select
+      className="form-select me-2"
+      value={allergy}
+      onChange={(e) =>
+        setPet((prev) => {
+          const updated = [...prev.allergies];
+          updated[i] = e.target.value;
+          return { ...prev, allergies: updated };
+        })
+      }
+    >
+      <option value="">Select Allergy</option>
+      {ALLERGY_OPTIONS.map((opt, idx) => (
+        <option key={idx} value={opt}>{opt}</option>
+      ))}
+    </select>
+    <button
+      type="button"
+      className="btn btn-sm btn-danger"
+      onClick={() =>
+        setPet((prev) => {
+          const updated = [...prev.allergies];
+          updated.splice(i, 1);
+          return { ...prev, allergies: updated };
+        })
+      }
+    >
+      Remove
+    </button>
+  </div>
+))}
+<button
+  type="button"
+  className="btn btn-sm btn-outline-secondary"
+  onClick={() => setPet((prev) => ({ ...prev, allergies: [...prev.allergies, ""] }))}
+>
+  Add Allergy
+</button>
+
                   </div>
 
                   <div className="row">

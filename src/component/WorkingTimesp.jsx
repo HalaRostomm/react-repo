@@ -47,22 +47,40 @@ const WorkingTimesp = () => {
         setAppointments(bookedAppointments);
 
         const bookedDaysData = (await spService.getBookedAppointments(id)).data || [];
+const now = new Date();
 
-        const uniqueBookedDays = [
-          ...new Set(
-            bookedDaysData
-              .map((day) => {
-                if (day.selectedDate) {
-                  const date = new Date(day.selectedDate);
-                  const dayName = date.toLocaleString("en-us", { weekday: "long" });
-                  return dayName.toLowerCase();
-                }
-                return null;
-              })
-              .filter((d) => d)
-          ),
-        ];
-        setBookedDays(uniqueBookedDays);
+const futureBookedDays = [
+  ...new Set(
+    bookedDaysData
+      .filter((appt) => {
+        if (!appt.selectedDate || !appt.startTime) return false;
+
+        console.log("🧪 Raw startTime:", appt.startTime);
+        console.log("🧪 Raw selectedDate:", appt.selectedDate);
+
+        const start24h = convertTo24Hour(appt.startTime); // convert AM/PM to 24h
+        const fullDateTimeStr = `${appt.selectedDate}T${start24h}`;
+
+        const appointmentStart = new Date(fullDateTimeStr);
+        console.log("⏰ Appointment Start (parsed):", appointmentStart.toString());
+        console.log("🔄 Now:", now.toString());
+
+        return appointmentStart.getTime() > now.getTime();
+      })
+      .map((appt) => {
+        const start24h = convertTo24Hour(appt.startTime);
+        const appointmentStart = new Date(`${appt.selectedDate}T${start24h}`);
+        return appointmentStart.toLocaleString("en-us", { weekday: "long" }).toLowerCase();
+      })
+  ),
+];
+
+console.log("📌 Future Booked Days (blocked):", futureBookedDays);
+setBookedDays(futureBookedDays);
+
+
+
+       
       } catch (err) {
         console.error("Error initializing:", err);
         toast.error("Failed to load availability or appointments.");
@@ -81,6 +99,24 @@ const WorkingTimesp = () => {
     const h = hour % 12 || 12;
     return `${h}:${minute.toString().padStart(2, "0")} ${period}`;
   };
+  function convertTo24Hour(time12h) {
+  const [time, modifier] = time12h.split(' '); // e.g. "09:30", "AM"
+  let [hours, minutes] = time.split(':');
+
+  if (hours === '12') {
+    hours = '00';
+  }
+
+  if (modifier.toUpperCase() === 'PM') {
+    hours = parseInt(hours, 10) + 12;
+  }
+
+  // Make sure hours and minutes are two digits
+  hours = hours.toString().padStart(2, '0');
+  minutes = minutes.padStart(2, '0');
+
+  return `${hours}:${minutes}`;
+}
 
   const handleTimeSave = async () => {
     if (startTime && endTime && selectedDay) {

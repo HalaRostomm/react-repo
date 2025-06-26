@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -100,6 +100,8 @@ const PetList = ({ token }) => {
   const [message, setMessage] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const lostPostId = location.state?.lostPostId;
 
   useEffect(() => {
     if (!token) {

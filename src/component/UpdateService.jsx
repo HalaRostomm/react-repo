@@ -36,7 +36,8 @@ const UpdateService = () => {
       .updateService(id, service)
       .then(() => {
         setMessage("✅ Service updated successfully!");
-        navigate("/");
+        navigate(`/sp/getservices/${service.serviceProvider.appUserId}`);
+
       })
       .catch((error) => {
         setMessage("❌ Failed to update service. Please try again.");

@@ -4,6 +4,23 @@ import UserService from "../service/userservice";
 import { jwtDecode } from "jwt-decode";
 import petImage from '../assets/dogs-and-cats.jpg';
 import { useNavigate } from "react-router-dom";
+
+
+
+const ALLERGY_OPTIONS = [
+  "Pollen", "Dust", "Mold spores", "Household cleaning products",
+  "Perfumes", "Beef", "Chicken", "Eggs", "Shampoos or grooming products"
+];
+
+const MEDICAL_CONDITION_OPTIONS = [
+  "Diabetes", "Arthritis", "Heart Disease", "IVDD",
+  "Fractures", "strains", "Pneumonia", "Anemia"
+];
+
+const VACCINE_OPTIONS = [
+  "Rabies", "Parvo", "Distemper", "DHPP / DA2PP", "Leptospirosis", "FVRCP"
+];
+
 const AddPet = ({ token }) => {
   const initialPetState = {
     petName: "",
@@ -176,7 +193,7 @@ const navigate = useNavigate();
       await UserService.addNewPet(userId, pet.categoryId, formattedData);
       setMessage({ text: "Pet added successfully!", type: "success" });
       setPet(initialPetState);
-      navigate("user/getpets");
+      navigate("/user/getpets");
     } catch (error) {
       console.error("Pet addition error:", error);
       setMessage({
@@ -461,13 +478,17 @@ const navigate = useNavigate();
                  <h4><i className="fas fa-syringe form-section-icon"></i>Vaccination Record</h4>
                   <div className="row g-2 align-items-end mb-3">
                     <div className="col-md-5">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Vaccine Name"
-                        value={newVaccineName}
-                        onChange={(e) => setNewVaccineName(e.target.value)}
-                      />
+                     <select
+  className="form-select"
+  value={newVaccineName}
+  onChange={(e) => setNewVaccineName(e.target.value)}
+>
+  <option value="">Select Vaccine</option>
+  {VACCINE_OPTIONS.map((vaccine, idx) => (
+    <option key={idx} value={vaccine}>{vaccine}</option>
+  ))}
+</select>
+
                     </div>
                     <div className="col-md-5">
                       <input
@@ -513,11 +534,17 @@ const navigate = useNavigate();
                  <h4><i className="fas fa-heartbeat form-section-icon"></i>Medical Conditions</h4>
                   {pet.medicalConditions.map((cond, i) => (
                     <div key={i} className="mb-2 d-flex align-items-center">
-                      <input
-                        className="form-control me-2"
-                        value={cond}
-                        onChange={(e) => handleListChange("medicalConditions", i, e.target.value)}
-                      />
+                     <select
+  className="form-select me-2"
+  value={cond}
+  onChange={(e) => handleListChange("medicalConditions", i, e.target.value)}
+>
+  <option value="">Select Condition</option>
+  {MEDICAL_CONDITION_OPTIONS.map((opt, idx) => (
+    <option key={idx} value={opt}>{opt}</option>
+  ))}
+</select>
+
                       <button
                         type="button"
                         className="btn btn-sm btn-danger"
@@ -541,11 +568,17 @@ const navigate = useNavigate();
                 <h4><i className="fas fa-allergies form-section-icon"></i>Allergies</h4>
                   {pet.allergies.map((allergy, i) => (
                     <div key={i} className="mb-2 d-flex align-items-center">
-                      <input
-                        className="form-control me-2"
-                        value={allergy}
-                        onChange={(e) => handleListChange("allergies", i, e.target.value)}
-                      />
+                     <select
+  className="form-select me-2"
+  value={allergy}
+  onChange={(e) => handleListChange("allergies", i, e.target.value)}
+>
+  <option value="">Select Allergy</option>
+  {ALLERGY_OPTIONS.map((opt, idx) => (
+    <option key={idx} value={opt}>{opt}</option>
+  ))}
+</select>
+
                       <button
                         type="button"
                         className="btn btn-sm btn-danger"

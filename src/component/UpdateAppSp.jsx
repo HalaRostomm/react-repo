@@ -447,20 +447,7 @@ navigate(`/sp/getappointments/${serviceId}`);
           <p style={{ textAlign: "center" }}>Loading appointment data...</p>
         ) : (
           <form onSubmit={handleSubmit}>
-            <label style={labelStyle} htmlFor="price">
-              Price
-            </label>
-            <input
-              id="price"
-              type="number"
-              min="0"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              onFocus={() => setFocusedInput("price")}
-              onBlur={() => setFocusedInput(null)}
-              style={focusedInput === "price" ? inputFocusStyle : inputStyle}
-              required
-            />
+           
 
             <label style={labelStyle} htmlFor="date">
               Date

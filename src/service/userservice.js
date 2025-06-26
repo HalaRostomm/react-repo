@@ -157,12 +157,12 @@ class UserService {
       return this.authAxios.post(`/addfoundlostpost/${userId}`, post);
     }
   
-    markAsLost(petId) {
-      return this.authAxios.put(`/markaslost/${petId}`);
+    markAsLost(petId, postId) {
+      return this.authAxios.put(`/markaslost/${petId}/${postId}`);
     }
   
-    markAsFound(petId) {
-      return this.authAxios.put(`/markasfound/${petId}`);
+    markAsFound(petId, postId) {
+      return this.authAxios.put(`/markasfound/${petId}/${postId}`);
     }
   
     deletePost(postId) {
@@ -185,12 +185,12 @@ class UserService {
       return this.authAxios.post(`/addforadoptionpost/${userId}`, post);
     }
   
-    markPetForAdoption(petId) {
-      return this.authAxios.put(`/foradoption/${petId}`);
+    markPetForAdoption(petId, postId) {
+      return this.authAxios.put(`/foradoption/${petId}/${postId}`);
     }
   
-    cancelForAdoption(petId) {
-      return this.authAxios.put(`/cancelforadoption/${petId}`);
+    cancelForAdoption(petId, postId) {
+      return this.authAxios.put(`/cancelforadoption/${petId}/${postId}`);
     }
   
     addNewPost(userId, post) {

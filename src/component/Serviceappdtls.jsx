@@ -34,6 +34,42 @@ const Serviceappdtls = () => {
     fetchAppointment();
   }, [id]);
 
+
+const handleUnbookAppointment = async () => {
+  const confirmed = window.confirm("Are you sure you want to cancel this appointment?");
+  if (!confirmed) return;
+
+  try {
+    const token = await authService.getToken();
+    const response = await userService.unbookAppointment(appointment.appointmentId, token);
+
+    if (response.ok) {
+      alert("Appointment cancelled successfully.");
+      navigate(`/user/getuserappointments`);
+    } else {
+      const errorData = await response.json();
+      console.error("Server responded with error:", errorData);
+      throw new Error("Unbooking failed");
+    }
+  } catch (error) {
+    console.error("Unbooking error:", error);
+    alert("Failed to cancel the appointment.");
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   if (loading) return <p style={styles.loading}>Loading appointment details...</p>;
   if (message) return <div style={styles.alert}>{message}</div>;
   if (!appointment) return <p>No appointment details found.</p>;
@@ -61,7 +97,7 @@ const Serviceappdtls = () => {
             <DataRow label="Time" value={`${appointment.startTime} - ${appointment.endTime}`} />
             <DataRow label="Selected Date" value={appointment.selectedDate} />
             <DataRow label="Type" value={appointment.type} />
-            <DataRow label="Price" value={`${appointment.price} $`} />
+            
             <DataRow label="Service Name" value={appointment.service?.name} />
             <DataRow label="Pet Name" value={appointment.pet?.petName} />
           </tbody>
@@ -79,6 +115,12 @@ const Serviceappdtls = () => {
             >
               Reschedule Appointment
             </button>
+            <button
+        onClick={handleUnbookAppointment}
+        style={{ ...styles.rescheduleButton, backgroundColor: "#ff4d4d", marginLeft: "12px" }}
+      >
+        Cancel Appointment
+      </button>
           </div>
         )}
       </div>

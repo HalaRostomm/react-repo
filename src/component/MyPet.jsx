@@ -125,7 +125,7 @@ const renderImage = (base64) => {
         await UserService.deletePet(id);
         setPet(null);
         setMessage({ text: "Pet deleted successfully", type: "success" });
-        navigate("/user/mypets"); 
+        navigate("/user/getpets"); 
       }
     } catch (error) {
       console.error("Failed to delete pet:", error);
@@ -141,41 +141,19 @@ const renderImage = (base64) => {
     navigate(`/user/updatepet/${id}/${categoryId}`);
   };
 
- const handleMarkForAdoption = async (petId, userId) => {
-  try {
-    await UserService.markPetForAdoption(petId);
-    setPetStatus("For Adoption");
-    navigate(`/user/addforadoptionpost/${userId}`, { state: { petId } });
-  } catch (error) {
-    console.error("Failed to mark pet for adoption:", error);
-    setMessage({
-      text: error.response?.data?.message || "Failed to mark pet for adoption.",
-      type: "error",
-    });
-  }
+const handleNavigateToAdoptionPost = (petId, userId) => {
+  navigate(`/user/addforadoptionpost/${userId}`, { state: { petId } });
 };
 
-const handleMarkAsLost = async (petId, userId) => {
-  const confirmPost = window.confirm("Do you want to create a Lost Post?");
-  try {
-    await UserService.markAsLost(petId);
-    setPetStatus("Lost");
 
-    if (confirmPost) {
-      navigate(`/user/addfoundlostpost/${userId}`, { state: { petId } });
-    }
-  } catch (error) {
-    console.error("Failed to mark pet as lost:", error);
-    setMessage({
-      text: error.response?.data?.message || "Failed to mark pet as lost.",
-      type: "error",
-    });
-  }
+const handleNavigateToLostPost = (petId, userId) => {
+  navigate(`/user/addfoundlostpost/${userId}`, { state: { petId } });
 };
 
-  const handleMarkAsFound = async (id) => {
+
+  const handleMarkAsFound = async (petId, postId) => {
   try {
-    await UserService.markAsFound(id);
+    await UserService.markAsFound(pet.petId, pet.lostPostId);
     setPetStatus("Adopted");
   } catch (error) {
     console.error("Failed to mark pet as found:", error);
@@ -542,22 +520,23 @@ const handleMarkAsLost = async (petId, userId) => {
 
   {/* ACTION BUTTONS */}
 <div className="d-flex flex-wrap gap-2 justify-content-start mb-3">
-  <button
-    className="btn btn-success"
-    onClick={() => handleMarkForAdoption(pet.petId, userId)}
-    disabled={petStatus === "For Adoption"}
-  >
-    🐾 {petStatus === "For Adoption" ? "For Adoption" : "Mark for Adoption"}
-  </button>
+ <button
+  className="btn btn-success"
+  onClick={() => handleNavigateToAdoptionPost(pet.petId, userId)}
+>
+  🐾Mark for Adoption
+</button>
 
   {petStatus === "Lost" ? (
-    <button className="btn btn-info" onClick={() => handleMarkAsFound(pet.petId)}>
+    <button className="btn btn-info" onClick={() => handleMarkAsFound(pet.petId , pet.lostPostId)}>
       🔍 Mark as Found
     </button>
   ) : (
-    <button className="btn btn-warning" onClick={() => handleMarkAsLost(pet.petId, userId)}>
-      📍 Mark as Lost
-    </button>
+ <button className="btn btn-warning" onClick={() => handleNavigateToLostPost(pet.petId, userId)}>
+  📍 Mark as Lost
+</button>
+
+
   )}
 </div>
 

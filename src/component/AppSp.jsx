@@ -311,7 +311,7 @@ const AppSp = () => {
       </div>
 
       <div style={styles.infoSection}>
-        <p><span style={styles.label}>💵 Price:</span> ${appointment.price.toFixed(2)}</p>
+       
         <p>
           <span style={styles.label}>📌 Status:</span>{" "}
           {appointment.booked ? (

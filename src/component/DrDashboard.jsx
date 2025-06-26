@@ -144,25 +144,29 @@ function DrDashboard() {
     navigate(`/doctor/getnotifications/${doctorId}`);
   const handleChat = (doctorId) => navigate(`/doctor/chats/${doctorId}`);
   const updateDate = (date) => filterByDate(appointments, date);
+const events = appointments
+  .filter((app) => 
+    app.booked &&                      // ✅ only include booked appointments
+    app?.selectedDate && 
+    app?.startTime && 
+    app?.endTime
+  )
+  .map((app) => {
+    const start = new Date(`${app.selectedDate}T${app.startTime}`);
+    const end = new Date(`${app.selectedDate}T${app.endTime}`);
 
-  const events = appointments
-    .filter((app) => app?.selectedDate && app?.startTime && app?.endTime)
-    .map((app) => {
-      const start = new Date(`${app.selectedDate}T${app.startTime}`);
-      const end = new Date(`${app.selectedDate}T${app.endTime}`);
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      console.warn('Invalid event dates', app);
+      return null;
+    }
 
-      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-        console.warn('Invalid event dates', app);
-        return null;
-      }
-
-      return {
-        title: app.petName || 'Appointment',
-        start,
-        end,
-      };
-    })
-    .filter((event) => event !== null);
+    return {
+      title: app.petName || 'Appointment',
+      start,
+      end,
+    };
+  })
+  .filter((event) => event !== null);
 
   if (loading) {
     return (
@@ -281,7 +285,7 @@ function DrDashboard() {
                         className="p-2"
                         style={{ fontSize: '0.8rem', fontFamily: "'Poppins', sans-serif" }}
                       >
-                        {a.startTime} – {a.petName}
+                        {a.startTime} – {a.endTime}
                       </Badge>
                     ))}
                   </div>

@@ -221,7 +221,7 @@ const [ spId, setspId]= useState("");
     e.preventDefault();
     setAlert(null);
 
-    if (!price || !selectedDate || !startTime || !endTime) {
+    if ( !selectedDate || !startTime || !endTime) {
       setAlert({ type: "error", message: "Please fill all fields" });
       return;
     }
@@ -273,22 +273,7 @@ const [ spId, setspId]= useState("");
       <div style={styles.card}>
         <h2 style={styles.heading}>Add Appointment</h2>
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={styles.label}>Price:</label>
-            <input
-              type="number"
-              min="0"
-              required
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              onFocus={() => setFocusedInput("price")}
-              onBlur={() => setFocusedInput(null)}
-              style={{
-                ...styles.input,
-                ...(focusedInput === "price" ? styles.inputFocus : {}),
-              }}
-            />
-          </div>
+         
 
           <div style={{ marginBottom: 16 }}>
             <label style={styles.label}>Date:</label>

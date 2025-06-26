@@ -104,7 +104,7 @@ const AppDtlsSp = () => {
       <Section title="🗓️ Appointment">
         <p>📅 Date: {appointment.selectedDate} ({new Date(appointment.selectedDate).toLocaleDateString("en-US", { weekday: "long" })})</p>
         <p>⏰ Time: {appointment.startTime} - {appointment.endTime}</p>
-        <p>💲 Price: ${appointment.price}</p>
+       
       </Section>
 
       <Section title="👤 Owner Information">

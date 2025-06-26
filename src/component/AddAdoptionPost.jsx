@@ -1,29 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import userservice from "../service/userservice";
-
-// Inject Poppins font dynamically
-const fontLink = document.createElement("link");
-fontLink.href = "https://fonts.googleapis.com/css2?family=Poppins&display=swap";
-fontLink.rel = "stylesheet";
-document.head.appendChild(fontLink);
-
+import {jwtDecode} from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 const COLORS = {
   BLACK: "#000000",
-  PRIMARY: "#13b6b9",      // changed to your new header color
-  ACCENT: "#ffa100",       // orange for buttons and icons
-  LIGHT_OPACITY_BG: "#13b6b933",  // 20% opacity of #13b6b9
+  PRIMARY: "#13b6b9",
+  ACCENT: "#ffa100",
+  LIGHT_OPACITY_BG: "#13b6b933",
   WHITE: "#FFFFFF",
 };
 
 const AddAdoptionPost = ({ onPostAdded, token }) => {
-  const { userId } = useParams();
+  const { userId: paramUserId } = useParams();
   const location = useLocation();
   const petId = location.state?.petId;
-
+const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+const [adoptionPostId, setAdoptionPostId] = useState(null);
+
+  const [message, setMessage] = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(paramUserId);
+
+
+
+
+const handleMarkPetForAdoption = async (petId, postId) => {
+  try {
+    await userservice.markPetForAdoption(petId, postId);
+  } catch (error) {
+    console.error("Failed to mark pet for adoption:", error);
+    alert(error.response?.data?.message || "❌ Failed to mark pet for adoption.");
+  }
+};
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (!token) {
+      setMessage({ text: "No token provided", type: "error" });
+      setLoading(false);
+      return;
+    }
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.appUserId) {
+        setUserId(decoded.appUserId);
+      } else {
+        setMessage({ text: "Invalid token structure - missing appUserId", type: "error" });
+      }
+    } catch (error) {
+      console.error("Token decoding error:", error);
+      setMessage({ text: "Invalid token", type: "error" });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -41,35 +85,56 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
     });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!content.trim()) {
-      alert("Please enter a message.");
-      return;
-    }
+  if (!content.trim()) {
+    alert("Please enter a message.");
+    return;
+  }
 
-    try {
-      const base64Images = await Promise.all(images.map(convertToBase64));
-      const postData = {
-        content,
-        images: base64Images,
-        type: "For Adoption CD",
-        petId,
-      };
+  setLoading(true);
+  setMessage({ text: "", type: "" });
 
-      const response = await userservice.addForAdoptionPost(userId, postData, token);
-      if (response.status === 200) {
-        onPostAdded?.();
-        alert("🎉 Adoption post created!");
-        setContent("");
-        setImages([]);
-        setImagePreviews([]);
-      }
-    } catch (err) {
-      console.error("Post failed:", err);
-      alert("Failed to submit post.");
-    }
-  };
+  try {
+    const base64Images = await Promise.all(images.map(convertToBase64));
+    const postData = {
+      content,
+      images: base64Images,
+      type: "For Adoption",
+      petId,
+    };
+
+    const response = await userservice.addForAdoptionPost(userId, postData, token);
+    if (response.status === 200) {
+     const newPostId = response.data?.id || response.data?.postId || parseInt(response.data) || null;
+   
+     setAdoptionPostId(newPostId);
+     alert(`📢 Post submitted successfully! AdoptionPostId: ${newPostId}`);
+     onPostAdded?.();
+   
+     // ✅ Call markPetForAdoption with petId and postId
+    if (petId && newPostId) {
+  await handleMarkPetForAdoption(petId, newPostId);
+}
+
+   // Reset
+   setContent("");
+   setImages([]);
+   setImagePreviews([]);
+
+     navigate("/user/getpets", { state: { adoptionPostId: newPostId } });
+     return newPostId;
+
+       } else {
+         alert("❌ Failed to submit post.");
+       }
+  } catch (err) {
+    console.error("Post failed:", err);
+    alert("Failed to submit post.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
@@ -78,7 +143,7 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
         margin: "2rem auto",
         padding: "24px",
         borderRadius: "16px",
-        backgroundColor: COLORS.LIGHT_OPACITY_BG, // 20% opacity background
+        backgroundColor: COLORS.LIGHT_OPACITY_BG,
         boxShadow: "0 6px 25px rgba(0,0,0,0.1)",
         fontFamily: "'Poppins', sans-serif",
         border: `1.5px solid ${COLORS.PRIMARY}`,
@@ -88,8 +153,8 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
       <h2
         style={{
           marginBottom: "1.5rem",
-          backgroundColor: COLORS.PRIMARY, // header bg color
-          color: COLORS.BLACK,             // black text
+          backgroundColor: COLORS.PRIMARY,
+          color: COLORS.BLACK,
           textAlign: "center",
           fontWeight: "700",
           padding: "0.75rem",
@@ -100,8 +165,20 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
         🐾 Put a Pet Up for Adoption
       </h2>
 
+      {message.text && (
+        <div
+          style={{
+            color: message.type === "error" ? "red" : "green",
+            marginBottom: "1rem",
+            fontWeight: "600",
+            textAlign: "center",
+          }}
+        >
+          {message.text}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
-        {/* Upload Button */}
         <div style={{ marginBottom: "1.25rem" }}>
           <label
             htmlFor="fileInput"
@@ -125,10 +202,10 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
             multiple
             onChange={handleImageChange}
             style={{ display: "none" }}
+            aria-label="Upload pet photos"
           />
         </div>
 
-        {/* Preview Images */}
         {imagePreviews.length > 0 && (
           <div
             style={{
@@ -156,7 +233,6 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
           </div>
         )}
 
-        {/* Textarea */}
         <div style={{ marginBottom: "1.2rem" }}>
           <textarea
             value={content}
@@ -176,13 +252,14 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
               fontFamily: "'Poppins', sans-serif",
               color: COLORS.BLACK,
             }}
+            aria-label="Pet description"
           />
         </div>
 
-        {/* Submit Button */}
         <div style={{ textAlign: "right" }}>
           <button
             type="submit"
+            disabled={loading}
             style={{
               backgroundColor: COLORS.ACCENT,
               color: COLORS.BLACK,
@@ -191,16 +268,35 @@ const AddAdoptionPost = ({ onPostAdded, token }) => {
               border: "none",
               borderRadius: "10px",
               fontSize: "16px",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               transition: "background-color 0.3s ease",
               userSelect: "none",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e5940f")}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
+            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = "#e5940f")}
+            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = COLORS.ACCENT)}
           >
-            📢 Post for Adoption
+            📢 {loading ? "Posting..." : "Post for Adoption"}
           </button>
         </div>
+        <div style={{ textAlign: "left", marginTop: "1rem" }}>
+  <button
+    type="button"
+    onClick={() => navigate("/user/getpets")}
+    style={{
+      backgroundColor: "#ccc",
+      color: "#000",
+      fontWeight: "600",
+      padding: "8px 20px",
+      border: "none",
+      borderRadius: "10px",
+      fontSize: "14px",
+      cursor: "pointer",
+      fontFamily: "'Poppins', sans-serif",
+    }}
+  >
+    🔙 Return Without Posting
+  </button>
+</div>
       </form>
     </div>
   );

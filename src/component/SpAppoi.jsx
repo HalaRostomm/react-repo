@@ -209,7 +209,7 @@ const SpAppoi = () => {
                   <td>{appointment.selectedDate}</td>
                   <td>{appointment.startTime}</td>
                   <td>{appointment.endTime}</td>
-                  <td>{appointment.price} $</td>
+                  <td>{appointment.service?.price} $</td>
                   <td>
                     <button
                       onClick={() =>

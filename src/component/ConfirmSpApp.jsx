@@ -193,7 +193,7 @@ const ConfirmSpApp = () => {
                   <strong>Time:</strong> {appointment.startTime} - {appointment.endTime}
                 </p>
                 <p>
-                  <strong>Price:</strong> ${appointment.price}
+                  <strong>Price:</strong> ${appointment.service?.price}
                 </p>
               </section>
             )}
@@ -219,8 +219,11 @@ const ConfirmSpApp = () => {
                   <strong>Description:</strong> {service.description}
                 </p>
                 <p>
-                  <strong>Category:</strong> {service.category}
-                </p>
+  <strong>Category:</strong>{" "}
+  {service.serviceCategory?.MSCategory
+    ? Object.values(service.serviceCategory.MSCategory).join(", ")
+    : "Unknown"}
+</p>
               </section>
             )}
 
