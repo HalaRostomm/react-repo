@@ -122,7 +122,7 @@ const UpdatePet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    if (!token) return navigate("/login");
+    
 
     try {
       // Exclude petUserId before update
