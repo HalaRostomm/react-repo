@@ -61,7 +61,7 @@ useEffect(() => {
   }, [token]);
 
 
-
+  console.log("Token:", token);
 
 
 
@@ -152,6 +152,7 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
+   
     if (!token) return navigate("/login");
 
     try {
