@@ -78,8 +78,8 @@ const ServiceList = () => {
     }
   };
 
-  const updateService = (id) => {
-    navigate(`/sp/updateservice/${id}`);
+  const updateService = (categoryId, id) => {
+    navigate(`/sp/updateservice/${categoryId}/${id}`);
   };
 
   const addService = () => {
@@ -168,7 +168,7 @@ const renderStars = (rating) => {
                       </button>
                       <button
                         style={{ ...styles.actionButton, ...styles.warning }}
-                        onClick={() => updateService(service.serviceId)}
+                        onClick={() => updateService(service.serviceCategory?.categoryId , service.serviceId)}
                       >
                         Update
                       </button>

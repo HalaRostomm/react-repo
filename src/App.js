@@ -302,7 +302,7 @@ function App() {
       <Route path='/user/updatepet/:petId/:categoryId'  element={<UpdatePet token={localStorage.getItem("jwt_token")}/>}></Route>
       <Route path='/sp/getallservices' element={<ServiceList token={localStorage.getItem("jwt_token")}/>}></Route>
       <Route path='/sp/addservice' element={<AddService token={localStorage.getItem("jwt_token")}/>}></Route>
-      <Route path='/sp/updateservice/:id' element={<UpdateService token={localStorage.getItem("jwt_token")}/>}></Route>
+      <Route path='/sp/updateservice/:categoryId/:id' element={<UpdateService token={localStorage.getItem("jwt_token")}/>}></Route>
 
 
 

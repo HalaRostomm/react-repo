@@ -16,7 +16,14 @@ const UpdatePost = () => {
     const fetchPost = async () => {
       try {
         const response = await userService.getPostById(postId);
-        setPostData(response.data);
+        const post = response.data;
+
+        // ✅ FIX: Remove authorities to prevent deserialization error
+        if (post.appUser && post.appUser.authorities) {
+          delete post.appUser.authorities;
+        }
+
+        setPostData(post);
       } catch (err) {
         console.error('Failed to fetch post:', err);
       }
@@ -32,17 +39,16 @@ const UpdatePost = () => {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     Promise.all(
-      files.map(
-        (file) =>
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              const base64String = reader.result.split(',')[1];
-              resolve(base64String);
-            };
-            reader.onerror = (error) => reject(error);
-          })
+      files.map((file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            const base64String = reader.result.split(',')[1];
+            resolve(base64String);
+          };
+          reader.onerror = (error) => reject(error);
+        })
       )
     )
       .then((base64Images) => {
@@ -60,11 +66,11 @@ const UpdatePost = () => {
     e.preventDefault();
     try {
       await userService.updatePost(postId, postData);
-      alert('Post updated successfully');
+      alert('✅ Post updated successfully');
       navigate('/user/profile');
     } catch (err) {
-      console.error('Failed to update post:', err);
-      alert('Failed to update post.');
+      console.error('❌ Failed to update post:', err);
+      alert('❌ Failed to update post.');
     }
   };
 
@@ -72,24 +78,14 @@ const UpdatePost = () => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-        * {
-          font-family: 'Poppins', sans-serif;
-        }
-
-        .update-post-container {
-          max-width: 700px;
-          margin: 3rem auto;
-          padding: 1rem;
-        }
-
+        * { font-family: 'Poppins', sans-serif; }
+        .update-post-container { max-width: 700px; margin: 3rem auto; padding: 1rem; }
         .update-post-card {
-          background-color: rgba(19, 182, 185, 0.2); /* #13B6B9 with 20% opacity */
+          background-color: rgba(19, 182, 185, 0.2);
           padding: 2rem;
           border-radius: 10px;
           box-shadow: 0 0 10px rgba(19, 182, 185, 0.2);
         }
-
         .update-post-header {
           background-color: #13B6B9;
           color: white;
@@ -100,26 +96,19 @@ const UpdatePost = () => {
           font-size: 1.8rem;
           font-weight: 600;
         }
-
-        .form-group {
-          margin-bottom: 1.5rem;
-        }
-
+        .form-group { margin-bottom: 1.5rem; }
         .form-group label {
           display: block;
           font-weight: 600;
           margin-bottom: 0.5rem;
           color: #000;
         }
-
-        textarea,
-        input[type='file'] {
+        textarea, input[type='file'] {
           width: 100%;
           padding: 0.6rem;
           border-radius: 5px;
           border: 1px solid #ccc;
         }
-
         .update-btn {
           background-color: #FFA100;
           color: black;
@@ -131,7 +120,6 @@ const UpdatePost = () => {
           cursor: pointer;
           transition: background 0.3s ease;
         }
-
         .update-btn:hover {
           background-color: #e89500;
         }
@@ -154,7 +142,12 @@ const UpdatePost = () => {
 
             <div className="form-group">
               <label>Upload Images:</label>
-              <input type="file" multiple accept="image/*" onChange={handleFileChange} />
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileChange}
+              />
             </div>
 
             <button type="submit" className="update-btn">

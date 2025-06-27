@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import spService from "../service/spservice";
-
+import { jwtDecode } from "jwt-decode";
+import authService from "../service/authService";
 const UpdateService = () => {
-  const { id } = useParams();
+  const { categoryId, id } = useParams();
   const [service, setService] = useState({
     serviceId: "",
     name: "",
@@ -13,37 +14,57 @@ const UpdateService = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    spService
-      .getServiceById(id)
-      .then((response) => {
-        setService(response.data);
-      })
-      .catch((error) => {
-        setMessage("❌ Failed to load service details. Please try again.");
-        console.error("Error fetching service details:", error);
-      });
-  }, [id]);
+  const [userId, setUserId] = useState(null);
+
+ const fetchAppUserId = async () => {
+    try {
+      const token = await authService.getToken();
+      if (!token) throw new Error("Token not found");
+      const decodedToken = jwtDecode(token);
+      if (!decodedToken.appUserId) throw new Error("User ID not in token");
+      setUserId(decodedToken.appUserId);
+    } catch (error) {
+      setMessage(`❌ ${error.message}`);
+    }
+  };
+ useEffect(() => {
+  fetchAppUserId(); // fetch and set the userId on component mount
+
+  spService
+    .getServiceById(id)
+    .then((response) => {
+      setService(response.data);
+    })
+    .catch((error) => {
+      setMessage("❌ Failed to load service details. Please try again.");
+      console.error("Error fetching service details:", error);
+    });
+}, [id]);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setService((prev) => ({ ...prev, [name]: value }));
   };
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    spService
-      .updateService(id, service)
-      .then(() => {
-        setMessage("✅ Service updated successfully!");
-        navigate(`/sp/getservices/${service.serviceProvider.appUserId}`);
+  // Create a shallow copy of service without serviceProvider
+  const { serviceProvider, ...cleanedService } = service;
 
-      })
-      .catch((error) => {
-        setMessage("❌ Failed to update service. Please try again.");
-        console.error("Error updating service:", error);
-      });
-  };
+  spService
+    .updateService(categoryId, id, cleanedService)
+    .then(() => {
+      setMessage("✅ Service updated successfully!");
+      navigate(`/sp/getservices/${userId}`);
+    })
+    .catch((error) => {
+      setMessage("❌ Failed to update service. Please try again.");
+      console.error("Error updating service:", error);
+    });
+};
+
+
 
   const styles = {
     container: {

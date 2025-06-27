@@ -44,7 +44,7 @@ const UpdateProduct = () => {
           ...data,
           priceByColorAndSize: priceMap,
           stockByColorAndSize: stockMap,
-          image: null,
+          image: data.image,
         });
       })
       .catch((err) => {
@@ -87,6 +87,20 @@ const UpdateProduct = () => {
       return updated;
     });
   };
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onloadend = () => {
+    const base64 = reader.result.split(",")[1];
+    setProduct((prev) => ({
+      ...prev,
+      image: base64,
+    }));
+  };
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -157,8 +171,15 @@ const UpdateProduct = () => {
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={{ fontWeight: "600", color: colors.text }}><FaImage /> Product Image (optional):</label>
+      {product.image && (
+  <img
+    src={`data:image/jpeg;base64,${product.image}`}
+    alt="Product Preview"
+    style={{ width: "200px", height: "auto", marginBottom: "1rem" }}
+  />
+)}
+  <div style={{ marginBottom: "1rem" }}>
+          <label style={{ fontWeight: "600", color: colors.text }}><FaImage /> Choose New Image:</label>
          <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginBottom: 12 }} />
         {imagePreview && <img src={imagePreview} alt="preview" style={{ maxWidth: '100%', marginBottom: 16, borderRadius: 8 }} />}
       </div>

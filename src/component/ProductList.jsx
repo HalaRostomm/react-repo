@@ -303,9 +303,15 @@ console.log("productCategory for product", product.productId, ":", product.produ
 
               <div style={{ display: "flex", justifyContent: "space-between", gap: "0.6rem" }}>
                 <button
-                  onClick={() =>
-                    handleUpdate( product.productCategory?.categoryId, product.productId)
-                  }
+                 onClick={() =>
+  handleUpdate(
+    typeof product.productCategory === "object"
+      ? product.productCategory?.categoryId
+      : product.productCategory,
+    product.productId
+  )
+}
+
                   style={{
                     flex: 1,
                     backgroundColor: "#FF9800",

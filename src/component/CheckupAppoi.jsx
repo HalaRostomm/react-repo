@@ -84,27 +84,31 @@ const CheckupAppoi = () => {
     return apptDate < now;
   });
 
-  const handleConfirm = async (appointmentId, isAttended) => {
-    if (!token) return;
-    try {
-      if (!isAttended) {
-        await DoctorService.updateMissedAppointment(appointmentId, token);
-        setAppointments((prev) =>
-          prev.map((appt) =>
-            appt.appointmentId === appointmentId
-              ? { ...appt, status: "missed" }
-              : appt
-          )
-        );
-      }
-      const petId = appointments.find((appt) => appt.appointmentId === appointmentId)?.pet;
-      if (!petId) return;
-      navigate(`/doctor/passedappointmentdetails/${petId}/${appointmentId}`);
-    } catch (err) {
-      console.error("Update error:", err);
-      alert("Failed to update appointment status");
+ const handleConfirm = async (appointmentId, isAttended) => {
+  if (!token) return;
+  try {
+    if (!isAttended) {
+      await DoctorService.updateMissedAppointment(appointmentId, token);
+      setAppointments((prev) =>
+        prev.map((appt) =>
+          appt.appointmentId === appointmentId
+            ? { ...appt, status: "missed" }
+            : appt
+        )
+      );
     }
-  };
+
+    const appointment = appointments.find((appt) => appt.appointmentId === appointmentId);
+    const petId = appointment?.pet?.petId;
+    if (!petId) return;
+
+    navigate(`/doctor/passedappointmentdetails/${petId}/${appointmentId}`);
+  } catch (err) {
+    console.error("Update error:", err);
+    alert("Failed to update appointment status");
+  }
+};
+
 
   if (loading) {
     return <p style={styles.loading}>Loading appointments...</p>;
@@ -147,7 +151,8 @@ const CheckupAppoi = () => {
                   </button>
                   <button
                     style={styles.yesButton}
-                    onClick={() => handleConfirm(appt.appointmentId, true)}
+                   onClick={() => handleConfirm(appt.appointmentId, true)}
+
                   >
                     Mark Attended
                   </button>
@@ -257,4 +262,4 @@ const styles = {
 
 export default CheckupAppoi;
 // import React, { useEffect, useState } from "react";
-// import { ToastContainer } from "react-toastify";                       `
+// import { ToastContainer } from "react-toastify";                     

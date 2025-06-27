@@ -93,13 +93,13 @@ const handleUnbookAppointment = async () => {
     const token = await authService.getToken();
     const response = await userService.unbookAppointment(appointment.appointmentId, token);
 
-    if (response.ok) {
+    // Axios response check (no .ok)
+    if (response.status === 200) {
       alert("Appointment cancelled successfully.");
-      navigate(`/user/getuserappointments`);
+    navigate(`/user/getuserappointments/${userId}`);
     } else {
-      const errorData = await response.json();
-      console.error("Server responded with error:", errorData);
-      throw new Error("Unbooking failed");
+      console.error("Unexpected response status:", response.status);
+      alert("Failed to cancel appointment.");
     }
   } catch (error) {
     console.error("Unbooking error:", error);

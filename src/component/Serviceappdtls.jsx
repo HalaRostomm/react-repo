@@ -3,13 +3,25 @@ import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
 import authService from "../service/authService";
 import dayjs from "dayjs";
-
+import {jwtDecode} from "jwt-decode";
 const Serviceappdtls = () => {
   const { id } = useParams();
   const [appointment, setAppointment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+const [userId, setUserId] = useState(null);
+
+useEffect(() => {
+  const loadUser = async () => {
+    const token = await authService.getToken();
+    if (token) {
+      const decoded = jwtDecode(token);
+      if (decoded.appUserId) setUserId(decoded.appUserId);
+    }
+  };
+  loadUser();
+}, []);
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -43,13 +55,13 @@ const handleUnbookAppointment = async () => {
     const token = await authService.getToken();
     const response = await userService.unbookAppointment(appointment.appointmentId, token);
 
-    if (response.ok) {
+    // Axios response check (no .ok)
+    if (response.status === 200) {
       alert("Appointment cancelled successfully.");
-      navigate(`/user/getuserappointments`);
+    navigate(`/user/getuserappointments/${userId}`);
     } else {
-      const errorData = await response.json();
-      console.error("Server responded with error:", errorData);
-      throw new Error("Unbooking failed");
+      console.error("Unexpected response status:", response.status);
+      alert("Failed to cancel appointment.");
     }
   } catch (error) {
     console.error("Unbooking error:", error);
