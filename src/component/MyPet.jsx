@@ -68,19 +68,6 @@ const [petStatus, setPetStatus] = useState("");
   }, []);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   // Fetch pet by petId param
   useEffect(() => {
     const fetchPet = async () => {
