@@ -31,7 +31,7 @@ const UpdateProfileUser = () => {
     location: "",
     image: "",
   });
-
+ const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,19 +71,28 @@ const UpdateProfileUser = () => {
     };
     reader.readAsDataURL(file);
   };
-
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) return;
+const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setErrorMessage("Geolocation not supported.");
+      return;
+    }
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const locationStr = `${coords.longitude}, ${coords.latitude}`;
-        setUser((prev) => ({
-          ...prev,
-          location: locationStr,
-          address: locationStr,
-        }));
+      async ({ coords }) => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}`
+          );
+          const data = await res.json();
+          setUser((prev) => ({
+            ...prev,
+            address: data.display_name,
+            location: data.display_name,
+          }));
+        } catch {
+          setErrorMessage("Unable to fetch location.");
+        }
       },
-      () => alert("Permission denied.")
+      () => setErrorMessage("Location permission denied.")
     );
   };
 
@@ -214,7 +223,7 @@ const UpdateProfileUser = () => {
           <div style={styles.formGroup}>
             <label style={styles.label}><FaMapMarkerAlt /> Address</label>
             <input type="text" name="address" value={user.address} onChange={handleInputChange} style={styles.input} required />
-            <button type="button" onClick={getCurrentLocation} style={{ ...styles.button, backgroundColor: "#000000", fontSize: "0.9rem", marginTop: "0.5rem" }}>
+            <button type="button" onClick={getCurrentLocation} style={{ ...styles.button, backgroundColor: "#ffffff", fontSize: "0.9rem", marginTop: "0.5rem" }}>
               <FaLocationArrow /> Use My Location
             </button>
           </div>

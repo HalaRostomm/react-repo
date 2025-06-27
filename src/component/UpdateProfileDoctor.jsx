@@ -100,7 +100,7 @@ const UpdateProfileDoctor = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          const locationString = `${longitude}, ${latitude}`;
+          const locationString = `${latitude}, ${longitude}`;
           setDoctor((prevDoctor) => ({
             ...prevDoctor,
             location: locationString,

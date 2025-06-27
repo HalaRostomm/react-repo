@@ -94,10 +94,7 @@ const handleMarkAsLost = async (petId, postId) => {
       alert("Please enter a description.");
       return;
     }
-    if (!type) {
-      alert("Please select a post type.");
-      return;
-    }
+    
 
     try {
       setLoading(true);
@@ -125,7 +122,7 @@ if (petId && newPostId) {
 
   // Reset
   setContent("");
-  setType("");
+
   setImages([]);
   setImagePreviews([]);
 
@@ -169,37 +166,12 @@ if (petId && newPostId) {
           userSelect: "none",
         }}
       >
-        🐶 Create a Lost or Found Post
+        🐶 Create a Lost Post
       </h2>
 
       <form onSubmit={handleSubmit}>
         {/* Type Selector */}
-        <div style={{ marginBottom: "1.25rem" }}>
-          <label htmlFor="postType" style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
-            Post Type
-          </label>
-          <select
-            id="postType"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "10px",
-              borderRadius: "10px",
-              border: `1px solid ${COLORS.LIGHT_OPACITY_BG}`,
-              backgroundColor: COLORS.WHITE,
-              fontSize: "16px",
-              fontFamily: "'Poppins', sans-serif",
-              color: COLORS.BLACK,
-              cursor: "pointer",
-            }}
-          >
-            <option value="">📌 Select Type</option>
-            <option value="Lost-Found-CD">🐾 Lost</option>
-            <option value="Found-CD">📍 Found</option>
-          </select>
-        </div>
+        
 
         {/* Upload Photos */}
         <div style={{ marginBottom: "1.25rem" }}>

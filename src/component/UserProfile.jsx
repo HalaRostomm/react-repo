@@ -33,15 +33,7 @@ const UserProfile = () => {
     fetchUserProfile();
   }, []);
 
-  useEffect(() => {
-    if (userInfo.address?.includes(',')) {
-      const [lng, lat] = userInfo.address.split(',').map(Number);
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-        .then(r => r.json())
-        .then(d => setResolvedAddress(d.display_name))
-        .catch(() => setResolvedAddress(userInfo.address));
-    }
-  }, [userInfo]);
+ 
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
@@ -302,7 +294,7 @@ const UserProfile = () => {
             ['Email', userInfo.username],
             ['Gender', userInfo.gender],
             ['Phone', userInfo.phone],
-            ['Address', resolvedAddress],
+            ['Address', userInfo.address],
           ].map(([label, val]) => (
             <div key={label} style={styles.infoItem}>
               <span style={styles.label}>{label}:</span>

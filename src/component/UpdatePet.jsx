@@ -47,10 +47,7 @@ const UpdatePet = () => {
       }
 
       const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
+      
 
       try {
         const response = await userService.getPetById(petId, token);

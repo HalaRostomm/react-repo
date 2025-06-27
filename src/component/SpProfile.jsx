@@ -21,23 +21,7 @@ const SpProfile = () => {
     fetchUserProfile();
   }, []);
 
-  useEffect(() => {
-    if (userInfo && userInfo.address && userInfo.address.includes(',')) {
-      const [longitude, latitude] = userInfo.address.split(',').map(Number);
-      const fetchAddressFromCoordinates = async () => {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await response.json();
-          setResolvedAddress(data.display_name);
-        } catch (error) {
-          setResolvedAddress('Address: ' + userInfo.address);
-        }
-      };
-      fetchAddressFromCoordinates();
-    }
-  }, [userInfo]);
+  
   useEffect(() => {
   document.body.style.backgroundColor = "#E7ECEF";
   return () => {
@@ -194,7 +178,7 @@ const SpProfile = () => {
               <p><FaUser /><strong>{userInfo.firstname} {userInfo.lastname}</strong></p>
               <p><FaEnvelope />{userInfo.username}</p>
               <p><FaPhone />{userInfo.phone}</p>
-              <p><FaMapMarkerAlt />{resolvedAddress || 'Loading address...'}</p>
+              <p><FaMapMarkerAlt />{userInfo.address || 'Loading address...'}</p>
             </div>
           </div>
 

@@ -93,23 +93,29 @@ const UpdateProfilePp = () => {
       };
     }
   };
-
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => {
-          const locationString = `${coords.longitude}, ${coords.latitude}`;
-          setPp((prevPp) => ({
-            ...prevPp,
-            location: locationString,
-            address: locationString,
-          }));
-        },
-        () => setErrorMessage("Location permission denied.")
-      );
-    } else {
-      setErrorMessage("Geolocation is not supported.");
+ const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setErrorMessage("Geolocation not supported.");
+      return;
     }
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}`
+          );
+          const data = await res.json();
+          setPp((prev) => ({
+            ...prev,
+            address: data.display_name,
+            location: data.display_name,
+          }));
+        } catch {
+          setErrorMessage("Unable to fetch location.");
+        }
+      },
+      () => setErrorMessage("Location permission denied.")
+    );
   };
 
   const handleSubmit = (e) => {

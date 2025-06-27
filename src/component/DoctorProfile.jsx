@@ -114,7 +114,7 @@ const DoctorProfile = () => {
 
   useEffect(() => {
     if (doctorInfo?.address?.includes(',')) {
-      const [longitude, latitude] = doctorInfo.address.split(',').map(Number);
+      const [ latitude, longitude] = doctorInfo.address.split(',').map(Number);
       const fetchAddress = async () => {
         try {
           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);

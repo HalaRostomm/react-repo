@@ -67,6 +67,20 @@ const [petStatus, setPetStatus] = useState("");
     fetchCategories();
   }, []);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // Fetch pet by petId param
   useEffect(() => {
     const fetchPet = async () => {
@@ -163,6 +177,23 @@ const handleNavigateToLostPost = (petId, userId) => {
     });
   }
 };
+
+
+
+const handleCancelAdoption = async (petId, postId) => {
+  try {
+    await UserService.cancelForAdoption(petId, postId);
+    setPet((prev) => ({ ...prev, forAdoption: false }));
+    setMessage({ text: "Adoption canceled successfully.", type: "success" });
+  } catch (error) {
+    console.error("Failed to cancel adoption:", error);
+    setMessage({
+      text: error.response?.data?.message || "Failed to cancel adoption.",
+      type: "error",
+    });
+  }
+};
+
 
   if (loading) return <div className="text-center mt-5">Loading pet...</div>;
 
@@ -520,12 +551,18 @@ const handleNavigateToLostPost = (petId, userId) => {
 
   {/* ACTION BUTTONS */}
 <div className="d-flex flex-wrap gap-2 justify-content-start mb-3">
- <button
+<button
   className="btn btn-success"
-  onClick={() => handleNavigateToAdoptionPost(pet.petId, userId)}
+  onClick={() =>
+    pet.forAdoption
+      ? handleCancelAdoption(pet.petId, pet.adoptPostId)
+      : handleNavigateToAdoptionPost(pet.petId, userId)
+  }
 >
-  🐾Mark for Adoption
+  🐾 {pet.forAdoption ? "Cancel Adoption" : "Mark for Adoption"}
 </button>
+
+
 
   {petStatus === "Lost" ? (
     <button className="btn btn-info" onClick={() => handleMarkAsFound(pet.petId , pet.lostPostId)}>

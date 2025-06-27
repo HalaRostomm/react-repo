@@ -31,23 +31,7 @@ const PpProfile = () => {
     fetchUserProfile();
   }, []);
 
-  useEffect(() => {
-    if (userInfo?.address?.includes(',')) {
-      const [longitude, latitude] = userInfo.address.split(',').map(Number);
-      const fetchAddressFromCoordinates = async () => {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = await response.json();
-          setResolvedAddress(data.display_name);
-        } catch {
-          setResolvedAddress('Address: ' + userInfo.address);
-        }
-      };
-      fetchAddressFromCoordinates();
-    }
-  }, [userInfo]);
+ 
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
@@ -175,7 +159,7 @@ const PpProfile = () => {
                 <FaPhone /> <strong>Phone:</strong> {userInfo.phone}
               </p>
               <p style={styles.text}>
-                <FaMapMarkerAlt /> <strong>Address:</strong> {resolvedAddress}
+                <FaMapMarkerAlt /> <strong>Address:</strong> {userInfo.address}
               </p>
 
               <div style={styles.buttonGroup}>
