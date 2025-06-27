@@ -83,7 +83,7 @@ const [petStatus, setPetStatus] = useState("");
        if (response.data) {
   setPet(response.data);
   setPetStatus(response.data.status || ""); // e.g., Lost, Adopted, For Adoption
-
+console.log("Pet data fetched successfully:", response.data);
         } else {
           setMessage({ text: "Pet not found", type: "info" });
         }
@@ -533,7 +533,7 @@ const handleCancelAdoption = async (petId, postId) => {
     {/* RIGHT COLUMN: IMAGE */}
     <div style={{ flex: "1 1 30%", minWidth: "150px", textAlign: "right" }}>
       {renderImage(pet.image)}
-    </div>
+    </div>  
   </div>
 
   {/* ACTION BUTTONS */}

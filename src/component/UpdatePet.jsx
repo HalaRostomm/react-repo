@@ -43,7 +43,9 @@ const UpdatePet = () => {
 
 useEffect(() => {
     if (!token) {
-      setMessage({ text: "No token provided", type: "error" });
+     setMessage("❌ No token provided");
+
+
       setLoading(false);
       return;
     }
@@ -52,11 +54,11 @@ useEffect(() => {
       if (decoded.appUserId) {
         setUserId(decoded.appUserId);
       } else {
-        setMessage({ text: "Invalid token structure - missing appUserId", type: "error" });
+        setMessage("Invalid token structure - missing appUserId" );
       }
     } catch (error) {
       console.error("Token decoding error:", error);
-      setMessage({ text: "Invalid token", type: "error" });
+      setMessage("Invalid token");
     }
   }, [token]);
 
@@ -76,7 +78,6 @@ useEffect(() => {
         return;
       }
 
-    
 
 
       try {
@@ -353,15 +354,16 @@ useEffect(() => {
                 Update Pet Information
               </div>
               <div className="card-body">
-                {message && (
-                  <div
-                    className={`alert ${
-                      message.includes("✅") ? "alert-success" : "alert-danger"
-                    } text-center`}
-                  >
-                    {message}
-                  </div>
-                )}
+               {typeof message === "string" && message && (
+  <div
+    className={`alert ${
+      message.includes("✅") ? "alert-success" : "alert-danger"
+    } text-center`}
+  >
+    {message}
+  </div>
+)}
+
 
                 <form onSubmit={handleSubmit}>
                   <div className="row">
