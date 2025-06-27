@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import userService from "../service/userservice";
-
+import {jwtDecode} from "jwt-decode";
 const ALLERGY_OPTIONS = [
   "Pollen", "Dust", "Mold spores", "Household cleaning products",
   "Perfumes", "Beef", "Chicken", "Eggs", "Shampoos or grooming products"
@@ -18,6 +18,7 @@ const VACCINE_OPTIONS = [
 const UpdatePet = () => {
   const { petId, categoryId } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token"); // ✅ add this line
 
   const [error, setError] = useState(null);
   const [newVaccineName, setNewVaccineName] = useState("");
@@ -36,6 +37,35 @@ const UpdatePet = () => {
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+ const [userId, setUserId] = useState(null);
+
+
+
+useEffect(() => {
+    if (!token) {
+      setMessage({ text: "No token provided", type: "error" });
+      setLoading(false);
+      return;
+    }
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.appUserId) {
+        setUserId(decoded.appUserId);
+      } else {
+        setMessage({ text: "Invalid token structure - missing appUserId", type: "error" });
+      }
+    } catch (error) {
+      console.error("Token decoding error:", error);
+      setMessage({ text: "Invalid token", type: "error" });
+    }
+  }, [token]);
+
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -46,8 +76,8 @@ const UpdatePet = () => {
         return;
       }
 
-      const token = localStorage.getItem("token");
-      
+    
+
 
       try {
         const response = await userService.getPetById(petId, token);
@@ -122,7 +152,7 @@ const UpdatePet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    
+    if (!token) return navigate("/login");
 
     try {
       // Exclude petUserId before update
