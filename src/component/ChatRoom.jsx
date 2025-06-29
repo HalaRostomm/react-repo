@@ -111,6 +111,7 @@ const [confirmedMessageIds, setConfirmedMessageIds] = useState([]);
 const [adoptedPetIds, setAdoptedPetIds] = useState([]);
 const [receiverImage, setReceiverImage] = useState('');
 const actualPetId = petIdFromState || petId;
+const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false);
 
 const MessageBubble = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'isCurrentUser'
@@ -175,26 +176,7 @@ useEffect(() => {
   localStorage.setItem('adoptedPetIds', JSON.stringify(adoptedPetIds));
 }, [adoptedPetIds]);
 
-  useEffect(() => {
-  if (initialMessage && connected) {
-    const message = {
-      senderId,
-      receiverId,
-      content: initialMessage,
-    petId: actualPetId ? Number(actualPetId) : null,
-
-      type: type || "text", // <---- ⚠️ This might fallback to "text"
-    };
-console.log("Sending initial message:", { initialMessage, type });
-
-    sendMessageWS(message);
-  }
-}, [initialMessage, connected, type, petIdFromState]);
-
-  useEffect(() => {
-    if (initialMessage) setInput("");
-  }, [initialMessage]);
-
+ 
   
 const loadHistory = async () => {
   try {
@@ -220,8 +202,7 @@ const loadHistory = async () => {
 
 
   useEffect(() => {
-    setMessages([]);
-    loadHistory();
+    
 
     const onMessageReceived = (newMessage) => {
       if (
@@ -232,12 +213,43 @@ const loadHistory = async () => {
       }
     };
 
-    connectWebSocket(onMessageReceived, () => setConnected(true), () => setConnected(false));
+ connectWebSocket(
+  (newMessage) => {
+    if (
+      (newMessage.senderId === senderId && newMessage.receiverId === receiverId) ||
+      (newMessage.senderId === receiverId && newMessage.receiverId === senderId)
+    ) {
+      setMessages((prev) => [...prev, newMessage]);
+    }
+  },
+  async () => {
+    setConnected(true);
 
-    return () => {
-      disconnectWebSocket();
-      setConnected(false);
-    };
+    // ✅ Send initial message first
+    if (initialMessage && !hasSentInitialMessage) {
+      const message = {
+        senderId,
+        receiverId,
+        content: initialMessage,
+        petId: actualPetId ? Number(actualPetId) : null,
+        type: type || "text",
+      };
+
+      setMessages((prev) => [
+        ...prev,
+        { ...message, id: Math.random(), sender: { firstname: "You" } },
+      ]);
+
+      sendMessageWS(message);
+      setHasSentInitialMessage(true);
+    }
+
+    // ✅ Then load history (to avoid overwriting initial message)
+    await loadHistory();
+  },
+  () => setConnected(false)
+);
+
   }, [senderId, receiverId]);
 
 
