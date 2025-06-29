@@ -59,7 +59,7 @@ const SideDoctor = () => {
         {DoctorImage && (
           <div className="sidebar-header">
             <img src={DoctorImage} alt="Doctor" className="sidebar-avatar" />
-            <p>{DoctorName}</p>
+            <p>Dr. {DoctorName}</p>
           </div>
         )}
 

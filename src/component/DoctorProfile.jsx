@@ -192,7 +192,7 @@ const DoctorProfile = () => {
         />
         <Box>
           <Typography variant="h4" component="h1" style={{ fontWeight: 700 }}>
-            Dr. {doctorInfo.username.split('@')[0]}
+            Dr. {doctorInfo.firstname} {doctorInfo.lastname}
           </Typography>
           <Typography variant="subtitle1" style={{ color: COLORS.primary }}>
             {doctorInfo.specialization}

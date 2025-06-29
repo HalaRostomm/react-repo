@@ -86,8 +86,8 @@ const UrgentDrList = ({ token }) => {
         const data = res.data;
 
         data.sort((a, b) => {
-          const [lngA, latA] = a.address.split(",").map(Number);
-          const [lngB, latB] = b.address.split(",").map(Number);
+          const [latA, lngA] = a.address.split(",").map(Number);
+          const [latB, lngB] = b.address.split(",").map(Number);
           const distA = getDistanceFromLatLonInKm(userLocation[0], userLocation[1], latA, lngA);
           const distB = getDistanceFromLatLonInKm(userLocation[0], userLocation[1], latB, lngB);
           return distA - distB;
@@ -120,7 +120,7 @@ const UrgentDrList = ({ token }) => {
       const newAddresses = {};
       await Promise.all(
         doctors.map(async (doc) => {
-          const [lng, lat] = doc.address.split(",").map(Number);
+          const [lat, lng] = doc.address.split(",").map(Number);
           newAddresses[doc.id || doc.firstname + doc.lastname] = await reverseGeocode(lat, lng);
         })
       );
@@ -228,7 +228,7 @@ const UrgentDrList = ({ token }) => {
                 center={
                   doctors.length > 0
                     ? (() => {
-                        const [lng, lat] = doctors[0].address.split(",").map(Number);
+                        const [lat, lng] = doctors[0].address.split(",").map(Number);
                         return [lat, lng];
                       })()
                     : [0, 0]
@@ -241,7 +241,7 @@ const UrgentDrList = ({ token }) => {
                   center={
                     doctors.length > 0
                       ? (() => {
-                          const [lng, lat] = doctors[0].address.split(",").map(Number);
+                          const [lat, lng] = doctors[0].address.split(",").map(Number);
                           return [lat, lng];
                         })()
                       : [0, 0]
@@ -256,7 +256,7 @@ const UrgentDrList = ({ token }) => {
                   <Popup>Your Location</Popup>
                 </Marker>
                 {doctors.map((doc) => {
-                  const [lng, lat] = doc.address.split(",").map(Number);
+                  const [lat, lng] = doc.address.split(",").map(Number);
                   const docKey = doc.id || doc.firstname + doc.lastname;
                   const address = addresses[docKey] || "Loading location...";
                   return (
