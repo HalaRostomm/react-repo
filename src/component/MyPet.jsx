@@ -540,6 +540,8 @@ const handleCancelAdoption = async (petId, postId) => {
 <div className="d-flex flex-wrap gap-2 justify-content-start mb-3">
 <button
   className="btn btn-success"
+  disabled={petStatus === "Lost"}
+  title={petStatus === "Lost" ? "Cannot mark as adoption while pet is lost" : ""}
   onClick={() =>
     pet.forAdoption
       ? handleCancelAdoption(pet.petId, pet.adoptPostId)
@@ -551,17 +553,24 @@ const handleCancelAdoption = async (petId, postId) => {
 
 
 
-  {petStatus === "Lost" ? (
-    <button className="btn btn-info" onClick={() => handleMarkAsFound(pet.petId , pet.lostPostId)}>
-      🔍 Mark as Found
-    </button>
-  ) : (
- <button className="btn btn-warning" onClick={() => handleNavigateToLostPost(pet.petId, userId)}>
-  📍 Mark as Lost
-</button>
+{petStatus === "Lost" ? (
+  <button
+    className="btn btn-info"
+    onClick={() => handleMarkAsFound(pet.petId, pet.lostPostId)}
+  >
+    🔍 Mark as Found
+  </button>
+) : (
+  <button
+    className="btn btn-warning"
+    disabled={pet.forAdoption}
+    title={pet.forAdoption ? "Cannot mark as lost while pet is marked for adoption" : ""}
+    onClick={() => handleNavigateToLostPost(pet.petId, userId)}
+  >
+    📍 Mark as Lost
+  </button>
+)}
 
-
-  )}
 </div>
 
 <div className="d-flex flex-wrap gap-2">
