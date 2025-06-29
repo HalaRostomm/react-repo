@@ -357,6 +357,18 @@ content: input.trim(),
     alert("Adoption confirmed!");
     setConfirmedMessageIds((prev) => [...prev, msgId]);
     setAdoptedPetIds((prev) => [...prev, petId]);
+    const confirmationMessage = {
+  senderId: userId,
+  receiverId: adopterId,
+  content: "Adoption Confirmed, Pet is yours!",
+  petId,
+  type: "text",
+};
+sendMessageWS(confirmationMessage);
+setMessages((prev) => [
+  ...prev,
+  { ...confirmationMessage, id: Math.random(), sender: { firstname: "You" } },
+]);
   } catch (err) {
     console.error("Failed to confirm adoption:", err);
     alert("Error confirming adoption.");
