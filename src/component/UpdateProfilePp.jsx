@@ -94,29 +94,32 @@ const UpdateProfilePp = () => {
     }
   };
  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      setErrorMessage("Geolocation not supported.");
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}`
-          );
-          const data = await res.json();
-          setPp((prev) => ({
-            ...prev,
-            address: data.display_name,
-            location: data.display_name,
-          }));
-        } catch {
-          setErrorMessage("Unable to fetch location.");
-        }
-      },
-      () => setErrorMessage("Location permission denied.")
-    );
-  };
+  if (!navigator.geolocation) {
+    setErrorMessage("Geolocation not supported.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async ({ coords }) => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}`
+        );
+        const data = await res.json();
+        setPp((prev) => ({
+          ...prev,
+          address: data.display_name, // full human-readable address
+          location: data.display_name,
+        }));
+        setErrorMessage(null); // clear any previous errors
+      } catch {
+        setErrorMessage("Unable to fetch location.");
+      }
+    },
+    () => setErrorMessage("Location permission denied.")
+  );
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
