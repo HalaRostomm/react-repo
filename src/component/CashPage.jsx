@@ -46,7 +46,7 @@ const CashPage = () => {
 
       if (response.status === 200) {
         alert("✅ Order placed successfully!");
-        navigate('/user/orders');
+        navigate(`/user/order/${userid}`);
       } else {
         alert(`❌ Failed: ${response.data?.message}`);
       }

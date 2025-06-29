@@ -32,18 +32,15 @@ const SpChats = ({ token }) => {
 
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
-    return (
-      user.firstname.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.lastname.toLowerCase().includes(searchText.toLowerCase()) ||
-      fullName.includes(searchText.toLowerCase())
-    );
+    return fullName.includes(searchText.toLowerCase());
   });
-
   const openChatWithUser = (userId, petId) => {
     navigate(`/chat/${userId}/${spId}/${petId}`, {
       state: { token },
     });
   };
+
+
 
   return (
     <div

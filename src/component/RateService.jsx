@@ -66,7 +66,7 @@ const RateService = () => {
     if (!userId) return setMessage("Please login to submit review.");
     if (userReview.rating === 0) return setMessage("Please select a rating.");
     try {
-      await userService.rateDoctor(userId, serviceId, userReview);
+      await userService.rateService(userId, serviceId, userReview);
       await fetchReviews();
       await fetchAverageRating();
       setUserReview({ rating: 0, comment: '' });
